@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:clean": "npm run clean && npm run build",
+    "clean": "rm -rf dist .vite node_modules/.vite tsconfig*.tsbuildinfo",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckSquare, Download, RefreshCw, Search, ChevronRight, Edit3, Clock, User, Sparkles, AlertCircle, CheckCircle2, HelpCircle, XCircle, FileText } from 'lucide-react';
+import { CheckSquare, Download, RefreshCw, Search, ChevronDown, Edit3, Clock, User, Sparkles, AlertCircle, CheckCircle2, HelpCircle, XCircle, FileText, Filter, TrendingUp, SkipForward, Circle } from 'lucide-react';
 import type { TestCase, TestStatus, TestCaseType, TestPriority } from '@/lib/types';
 import type { EnhancedTestCase } from '@/lib/enhanced-qa-types';
 import { useQAStore } from '@/store/qa-store';
@@ -42,6 +42,7 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
   const [filterPriority, setFilterPriority] = useState<TestPriority | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedTests, setExpandedTests] = useState<Set<string>>(new Set());
+  const [showFilters, setShowFilters] = useState(false);
 
   const progress = getProgress(testCases);
 
@@ -97,7 +98,6 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
     setExpandedTests(newExpanded);
   };
 
-
   const priorityLabels: Record<TestPriority, string> = {
     P0: 'Critical - Test these first!',
     P1: 'High - Important to test',
@@ -106,145 +106,151 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
   };
 
   return (
-    <div className="space-y-12">
-      {/* Header with Progress */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
-        <div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-[var(--color-text-primary)] flex items-center gap-5 mb-4">
-            <div className="icon-container w-14 h-14" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}>
-              <CheckSquare className="w-7 h-7 text-white" />
-            </div>
-            Test Checklist
-          </h2>
-          <p className="text-xl text-[var(--color-text-secondary)] leading-relaxed">
-            Follow the steps for each test and mark your results. Your progress is saved automatically!
-          </p>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-4 lg:gap-6 flex-wrap">
-          <button 
-            onClick={handleExportJSON} 
-            className="btn btn-ghost px-6 py-3 lg:px-8 lg:py-4 text-base lg:text-lg gap-3"
-            title="Export test results as JSON file"
-          >
-            <Download className="w-5 h-5 lg:w-6 lg:h-6" />
-            <span>Export JSON</span>
-          </button>
-          <button 
-            onClick={handleExportCSV} 
-            className="btn btn-ghost px-6 py-3 lg:px-8 lg:py-4 text-base lg:text-lg gap-3"
-            title="Export test results as CSV file"
-          >
-            <Download className="w-5 h-5 lg:w-6 lg:h-6" />
-            <span>Export CSV</span>
-          </button>
-          <button
-            onClick={resetAllTests}
-            className="btn bg-red-500/10 text-red-400 border-2 border-red-500/30 hover:bg-red-500/20 px-6 py-3 lg:px-8 lg:py-4 text-base lg:text-lg gap-3 transition-all"
-            title="Reset all test statuses to 'Not Started'"
-          >
-            <RefreshCw className="w-5 h-5 lg:w-6 lg:h-6" />
-            <span>Reset All</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="card-base p-10 lg:p-12 border-2 shadow-xl bg-gradient-to-br from-[var(--color-bg-secondary)] to-[var(--color-bg-primary)]">
-        <div className="flex items-center justify-between mb-8">
+    <div className="space-y-6">
+      {/* Header Section - Clean & Modern */}
+      <div className="bg-[var(--color-bg-secondary)] rounded-2xl border border-[var(--color-border)]" style={{ padding: '32px' }}>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[var(--color-primary)]/10 flex items-center justify-center">
-              <CheckSquare className="w-6 h-6 text-[var(--color-primary)]" />
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+              <CheckSquare className="w-8 h-8 text-white" />
             </div>
-            <span className="text-xl lg:text-2xl font-semibold text-[var(--color-text-primary)]">Testing Progress</span>
+            <div>
+              <h2 className="text-3xl font-bold text-[var(--color-text-primary)] mb-2">
+                Test Checklist
+              </h2>
+              <p className="text-base text-[var(--color-text-secondary)]">
+                {testCases.length} tests available
+              </p>
+            </div>
           </div>
-          <span className="text-lg lg:text-xl text-[var(--color-text-secondary)] font-medium">
-            {progress.completed} of {progress.total} tests completed
-          </span>
-        </div>
-        <div className="progress-bar h-8 lg:h-10 rounded-full shadow-inner border-2 border-[var(--color-border)] overflow-hidden">
-          <div 
-            className="progress-fill h-full rounded-full transition-all duration-500 ease-out shadow-lg" 
-            style={{ width: `${progress.percentage}%` }} 
-          />
-        </div>
-        <div className="flex justify-between mt-8">
-          <span className="text-lg lg:text-xl text-[var(--color-text-muted)] font-medium">0%</span>
-          <span className="text-5xl lg:text-6xl font-bold gradient-text drop-shadow-lg">{progress.percentage}%</span>
-          <span className="text-lg lg:text-xl text-[var(--color-text-muted)] font-medium">100%</span>
-        </div>
-      </div>
 
-      {/* Filters */}
-      <div className="bg-gradient-to-br from-[var(--color-bg-primary)] to-[var(--color-bg-tertiary)] rounded-2xl p-8 lg:p-10 border-2 border-[var(--color-border)] shadow-lg">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-[var(--color-primary)]/10 flex items-center justify-center">
-            <Search className="w-5 h-5 text-[var(--color-primary)]" />
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={handleExportJSON} 
+              className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
+              style={{ padding: '16px 32px' }}
+            >
+              <Download className="w-5 h-5" />
+              <span>JSON</span>
+            </button>
+            <button 
+              onClick={handleExportCSV} 
+              className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
+              style={{ padding: '16px 32px' }}
+            >
+              <Download className="w-5 h-5" />
+              <span>CSV</span>
+            </button>
+            <button
+              onClick={resetAllTests}
+              className="text-base font-medium text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl hover:bg-red-500/20 transition-all flex items-center gap-2"
+              style={{ padding: '16px 32px' }}
+            >
+              <RefreshCw className="w-5 h-5" />
+              <span>Reset</span>
+            </button>
           </div>
-          <h3 className="text-lg lg:text-xl font-semibold text-[var(--color-text-primary)] uppercase tracking-widest">Filter Tests</h3>
         </div>
-        <div className="flex flex-wrap gap-6">
-          {/* Search */}
-          <div className="relative flex-1 min-w-[280px]">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-[var(--color-text-muted)]" />
-            <input
-              type="text"
-              placeholder="Search for tests (e.g., 'cart', 'options')..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="input-base pl-16 h-14 text-lg"
+
+        {/* Progress Section - Clean Design */}
+        <div className="pt-8 border-t border-[var(--color-border)]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <TrendingUp className="w-6 h-6 text-emerald-400" />
+              <span className="text-lg font-semibold text-[var(--color-text-primary)]">Testing Progress</span>
+            </div>
+            <span className="text-base font-medium text-[var(--color-text-secondary)]">
+              {progress.completed} / {progress.total} completed
+            </span>
+          </div>
+          <div className="relative h-4 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden mb-4">
+            <div 
+              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full transition-all duration-700 ease-out"
+              style={{ width: `${progress.percentage}%` }} 
             />
           </div>
-
-          {/* Status Filter */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-[var(--color-text-secondary)] mb-2">Status</label>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as TestStatus | 'all')}
-              className="input-base w-auto cursor-pointer min-w-[160px] h-14 text-lg"
-            >
-              <option value="all">All Status</option>
-              {statusOptions.map(status => (
-                <option key={status} value={status}>{status}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Type Filter */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-[var(--color-text-secondary)] mb-2">Type</label>
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value as TestCaseType | 'all')}
-              className="input-base w-auto cursor-pointer min-w-[160px] h-14 text-lg"
-            >
-              <option value="all">All Types</option>
-              <option value="Functional">Functional</option>
-              <option value="Integration">Integration</option>
-              <option value="Accessibility">Accessibility</option>
-              <option value="Performance">Performance</option>
-              <option value="Security">Security</option>
-            </select>
-          </div>
-
-          {/* Priority Filter */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-[var(--color-text-secondary)] mb-2">Priority</label>
-            <select
-              value={filterPriority}
-              onChange={(e) => setFilterPriority(e.target.value as TestPriority | 'all')}
-              className="input-base w-auto cursor-pointer min-w-[160px] h-14 text-lg"
-            >
-              <option value="all">All Priorities</option>
-              <option value="P0">Critical (P0)</option>
-              <option value="P1">High (P1)</option>
-              <option value="P2">Medium (P2)</option>
-              <option value="P3">Low (P3)</option>
-            </select>
+          <div className="text-center">
+            <span className="text-4xl font-bold text-[var(--color-text-primary)]">{progress.percentage}%</span>
           </div>
         </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]" style={{ padding: '32px' }}>
+        <div className="flex flex-col sm:flex-row gap-5">
+          <div className="relative flex-1 flex items-center">
+            <Search className="absolute left-4 w-5 h-5 text-[var(--color-text-muted)] pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search tests..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ paddingLeft: '48px', paddingTop: '16px', paddingBottom: '16px', paddingRight: '20px' }}
+              className="w-full text-base bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/50 transition-all"
+            />
+          </div>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center justify-center gap-2 text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all"
+            style={{ padding: '16px 32px' }}
+          >
+            <Filter className="w-5 h-5" />
+            <span>Filters</span>
+            <ChevronDown className={cn("w-5 h-5 transition-transform", showFilters && "rotate-180")} />
+          </button>
+        </div>
+
+        {showFilters && (
+          <div className="mt-5 pt-5 border-t border-[var(--color-border)] grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div>
+              <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-2 uppercase tracking-wider">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as TestStatus | 'all')}
+                className="w-full text-base bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/50 transition-all cursor-pointer"
+                style={{ padding: '16px 20px' }}
+              >
+                <option value="all">All Status</option>
+                {statusOptions.map(status => (
+                  <option key={status} value={status}>{status}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-2 uppercase tracking-wider">Type</label>
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value as TestCaseType | 'all')}
+                className="w-full text-base bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/50 transition-all cursor-pointer"
+                style={{ padding: '16px 20px' }}
+              >
+                <option value="all">All Types</option>
+                <option value="Functional">Functional</option>
+                <option value="Integration">Integration</option>
+                <option value="Accessibility">Accessibility</option>
+                <option value="Performance">Performance</option>
+                <option value="Security">Security</option>
+                <option value="UI">UI</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--color-text-muted)] mb-2 uppercase tracking-wider">Priority</label>
+              <select
+                value={filterPriority}
+                onChange={(e) => setFilterPriority(e.target.value as TestPriority | 'all')}
+                className="w-full text-base bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)]/50 transition-all cursor-pointer"
+                style={{ padding: '16px 20px' }}
+              >
+                <option value="all">All Priorities</option>
+                <option value="P0">Critical (P0)</option>
+                <option value="P1">High (P1)</option>
+                <option value="P2">Medium (P2)</option>
+                <option value="P3">Low (P3)</option>
+              </select>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Test Cases by Priority */}
@@ -253,20 +259,22 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
         if (tests.length === 0) return null;
 
         return (
-          <div key={priority} className="space-y-8">
-            <div className="bg-gradient-to-r from-[var(--color-bg-primary)] to-[var(--color-bg-tertiary)] rounded-2xl p-8 lg:p-10 border-2 border-[var(--color-border)] shadow-lg">
-              <div className="flex items-center gap-5 mb-4">
-                <TestPriorityBadge priority={priority} />
-                <span className="text-xl lg:text-2xl font-semibold text-[var(--color-text-primary)]">
+          <div key={priority} className="space-y-6">
+            {/* Priority Header - Clean Design */}
+            <div className="flex items-center gap-4 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-xl" style={{ padding: '24px' }}>
+              <TestPriorityBadge priority={priority} />
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-[var(--color-text-primary)] mb-1">
                   {priorityLabels[priority]}
-                </span>
+                </h3>
+                <p className="text-xs text-[var(--color-text-muted)]">
+                  {tests.length} test{tests.length > 1 ? 's' : ''}
+                </p>
               </div>
-              <p className="text-base lg:text-lg text-[var(--color-text-secondary)] ml-2 font-medium">
-                {tests.length} test{tests.length > 1 ? 's' : ''} in this priority level
-              </p>
             </div>
 
-            <div className="space-y-6">
+            {/* Test Cases */}
+            <div className="space-y-3">
               {tests.map(testCase => (
                 <TestCaseRow
                   key={testCase.id}
@@ -283,13 +291,14 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
         );
       })}
 
+      {/* Empty State */}
       {filteredTests.length === 0 && (
-        <div className="text-center py-24 lg:py-32 bg-[var(--color-bg-primary)] rounded-2xl border border-[var(--color-border)] px-8">
-          <Search className="w-24 h-24 lg:w-32 lg:h-32 text-[var(--color-text-muted)] mx-auto mb-8 opacity-50" />
-          <h3 className="text-2xl lg:text-3xl font-semibold text-[var(--color-text-primary)] mb-4">
+        <div className="text-center py-16 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
+          <Search className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
+          <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
             No tests found
           </h3>
-          <p className="text-lg lg:text-xl text-[var(--color-text-secondary)] mb-10 leading-relaxed">
+          <p className="text-sm text-[var(--color-text-secondary)] mb-6">
             Try adjusting your filters to see more tests
           </p>
           <button
@@ -299,7 +308,7 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
               setFilterPriority('all');
               setSearchQuery('');
             }}
-            className="btn btn-ghost text-lg lg:text-xl px-8 py-4"
+            className="px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-bg-card)] transition-all"
           >
             Clear All Filters
           </button>
@@ -340,9 +349,8 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
     }
   };
 
-  // Quick toggle between Pass/Not Started when clicking the checkbox
   const handleCheckboxClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent row toggle
+    e.stopPropagation();
     if (currentStatus === 'Pass') {
       onStatusChange('Not Started');
     } else {
@@ -350,183 +358,222 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
     }
   };
 
+  const getStatusStyles = (status: TestStatus) => {
+    switch (status) {
+      case 'Pass':
+        return 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400';
+      case 'Fail':
+        return 'bg-red-500/10 border-red-500/30 text-red-400';
+      case 'In Progress':
+        return 'bg-blue-500/10 border-blue-500/30 text-blue-400';
+      case 'Blocked':
+        return 'bg-orange-500/10 border-orange-500/30 text-orange-400';
+      case 'Skip':
+        return 'bg-gray-500/10 border-gray-500/30 text-gray-400';
+      default:
+        return 'bg-[var(--color-bg-primary)] border-[var(--color-border)] text-[var(--color-text-muted)]';
+    }
+  };
 
   return (
-    <div className={cn(
-      'bg-[var(--color-bg-tertiary)] border-2 border-[var(--color-border)] rounded-2xl overflow-hidden transition-all shadow-lg hover:shadow-xl',
-      isExpanded && 'ring-4 ring-[var(--color-primary)]/30 border-[var(--color-primary)] shadow-2xl shadow-[var(--color-primary)]/20'
-    )}>
-      {/* Row Header */}
+    <div 
+      className={cn(
+        'bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-xl overflow-hidden transition-all shadow-sm hover:shadow-md',
+        isExpanded && 'ring-2 ring-[var(--color-primary)]/20 shadow-lg'
+      )}
+      style={{ marginBottom: '12px' }}
+    >
+      {/* Row Header - Clean Design */}
       <div 
-        className="flex items-center gap-6 p-8 lg:p-10 cursor-pointer hover:bg-[var(--color-bg-card)] transition-all duration-200 rounded-t-2xl"
+        className="flex items-center gap-4 cursor-pointer hover:bg-[var(--color-bg-primary)]/50 transition-colors"
+        style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '24px', paddingRight: '24px' }}
         onClick={onToggle}
       >
-        {/* Clickable Checkbox */}
+        {/* Status Checkbox */}
         <button
           onClick={handleCheckboxClick}
           className={cn(
-            'w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all border-2 shadow-lg hover:scale-105',
+            'w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 transition-all border-2',
             currentStatus === 'Pass' 
-              ? 'bg-emerald-500 border-emerald-500 hover:bg-emerald-600 shadow-emerald-500/50' 
+              ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/30' 
               : currentStatus === 'Fail'
-              ? 'bg-red-500/20 border-red-500 hover:bg-red-500/30 shadow-red-500/30'
+              ? 'bg-red-500/20 border-red-500 text-red-400'
               : currentStatus === 'In Progress'
-              ? 'bg-blue-500/20 border-blue-500 hover:bg-blue-500/30 shadow-blue-500/30'
-              : 'bg-transparent border-[var(--color-border)] hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 hover:shadow-[var(--color-primary)]/20'
+              ? 'bg-blue-500/20 border-blue-500 text-blue-400'
+              : currentStatus === 'Blocked'
+              ? 'bg-orange-500/20 border-orange-500 text-orange-400'
+              : currentStatus === 'Skip'
+              ? 'bg-gray-500/20 border-gray-500 text-gray-400'
+              : 'bg-[var(--color-bg-primary)] border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)]/5'
           )}
           title={currentStatus === 'Pass' ? 'Mark as Not Started' : 'Mark as Pass'}
         >
           {currentStatus === 'Pass' ? (
-            <CheckSquare className="w-6 h-6 text-white" />
+            <CheckSquare className="w-5 h-5" />
           ) : currentStatus === 'Fail' ? (
-            <span className="text-red-500 font-bold text-lg">✕</span>
+            <XCircle className="w-5 h-5" />
           ) : currentStatus === 'In Progress' ? (
-            <span className="w-4 h-4 rounded-full bg-blue-500 animate-pulse" />
+            <div className="w-3 h-3 rounded-full bg-current animate-pulse" />
           ) : (
-            <span className="w-4 h-4 rounded-full border-2 border-[var(--color-text-muted)]" />
+            <div className="w-3 h-3 rounded-full border-2 border-current" />
           )}
         </button>
         
         {/* Content */}
-        <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center gap-4">
-          {/* Badges row */}
-          <div className="flex items-center gap-4 flex-wrap">
-            <code className="text-sm lg:text-base font-mono text-[var(--color-text-muted)] bg-[var(--color-bg-primary)] px-4 py-2.5 rounded-lg border-2 border-[var(--color-border)] shadow-md">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <code className="text-xs font-mono text-[var(--color-text-muted)] bg-[var(--color-bg-primary)] px-2.5 py-1 rounded border border-[var(--color-border)]">
               {testCase.id}
             </code>
             <TestTypeBadge type={testCase.type as TestCaseType} />
             {testCase.automatable && (
-              <span className="inline-flex items-center gap-2 px-4 py-2 text-sm lg:text-base font-semibold bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/30 rounded-full shadow-md">
-                <Sparkles className="w-4 h-4 lg:w-5 lg:h-5" />
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded">
+                <Sparkles className="w-3 h-3" />
                 Auto
               </span>
             )}
           </div>
-          
-          {/* Title */}
-          <div className="sm:flex-1">
-            <h4 className="text-lg lg:text-xl font-semibold text-[var(--color-text-primary)] mb-2 leading-tight">
-              {testCase.title}
-            </h4>
-            <p className="text-sm text-[var(--color-text-muted)] hidden sm:block">
-              Click to see test steps
-            </p>
-          </div>
+          <h4 className="text-base font-semibold text-[var(--color-text-primary)] leading-snug">
+            {testCase.title}
+          </h4>
         </div>
 
-        {/* Right side - Quick actions and chevron */}
-        <div className="flex items-center gap-4 flex-shrink-0">
-          {/* Quick Status Buttons (visible on hover or always on mobile) */}
-          <div className="hidden sm:flex items-center gap-3">
+        {/* Right side */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Quick Action Buttons - Hidden on mobile, visible on desktop */}
+          <div className="hidden sm:flex items-center gap-2">
             <button
-              onClick={(e) => { e.stopPropagation(); onStatusChange('Pass'); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onStatusChange('Pass');
+              }}
               className={cn(
-                'w-14 h-14 rounded-xl flex items-center justify-center transition-all text-xl font-bold shadow-lg',
-                currentStatus === 'Pass' 
-                  ? 'bg-emerald-500 text-white shadow-emerald-500/50 hover:bg-emerald-600 hover:scale-105' 
-                  : 'bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-2 border-emerald-500/30 hover:border-emerald-500/50 hover:scale-105'
+                'w-8 h-8 rounded-lg flex items-center justify-center transition-all text-xs font-bold',
+                currentStatus === 'Pass'
+                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                  : 'bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border border-emerald-500/30'
               )}
               title="Mark as Pass"
             >
-              ✓
+              <CheckCircle2 className="w-4 h-4" />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); onStatusChange('Fail'); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onStatusChange('Fail');
+              }}
               className={cn(
-                'w-14 h-14 rounded-xl flex items-center justify-center transition-all text-xl font-bold shadow-lg',
-                currentStatus === 'Fail' 
-                  ? 'bg-red-500 text-white shadow-red-500/50 hover:bg-red-600 hover:scale-105' 
-                  : 'bg-red-500/10 text-red-500 hover:bg-red-500/20 border-2 border-red-500/30 hover:border-red-500/50 hover:scale-105'
+                'w-8 h-8 rounded-lg flex items-center justify-center transition-all text-xs font-bold',
+                currentStatus === 'Fail'
+                  ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                  : 'bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/30'
               )}
               title="Mark as Fail"
             >
-              ✕
+              <XCircle className="w-4 h-4" />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); onStatusChange('Skip'); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onStatusChange('Skip');
+              }}
               className={cn(
-                'w-14 h-14 rounded-xl flex items-center justify-center transition-all text-xl font-bold shadow-lg',
-                currentStatus === 'Skip' 
-                  ? 'bg-gray-500 text-white shadow-gray-500/50 hover:bg-gray-600 hover:scale-105' 
-                  : 'bg-gray-500/10 text-gray-500 hover:bg-gray-500/20 border-2 border-gray-500/30 hover:border-gray-500/50 hover:scale-105'
+                'w-8 h-8 rounded-lg flex items-center justify-center transition-all text-xs font-bold',
+                currentStatus === 'Skip'
+                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  : 'bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 border border-amber-500/30'
               )}
               title="Mark as Skip"
             >
-              −
+              <SkipForward className="w-4 h-4" />
             </button>
           </div>
-
-          <TestStatusBadge status={currentStatus} />
-          <div className={cn(
-            'w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg hover:scale-110',
-            isExpanded 
-              ? 'bg-[var(--color-primary)] rotate-90 shadow-[var(--color-primary)]/50' 
-              : 'bg-[var(--color-bg-primary)] border-2 border-[var(--color-border)] hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)]/10'
-          )}>
-            <ChevronRight className={cn(
-              'w-7 h-7 transition-colors',
-              isExpanded ? 'text-white' : 'text-[var(--color-text-muted)]'
-            )} />
+          
+          <div className="flex items-center gap-2">
+            {/* Status Icon */}
+            {currentStatus === 'Pass' && (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            )}
+            {currentStatus === 'Fail' && (
+              <XCircle className="w-4 h-4 text-red-400" />
+            )}
+            {currentStatus === 'Skip' && (
+              <SkipForward className="w-4 h-4 text-amber-400" />
+            )}
+            {currentStatus === 'In Progress' && (
+              <div className="w-3 h-3 rounded-full bg-blue-400 animate-pulse" />
+            )}
+            {currentStatus === 'Blocked' && (
+              <AlertCircle className="w-4 h-4 text-orange-400" />
+            )}
+            {currentStatus === 'Not Started' && (
+              <Circle className="w-4 h-4 text-slate-400" />
+            )}
+            <TestStatusBadge status={currentStatus} />
           </div>
+          <ChevronDown className={cn(
+            'w-5 h-5 text-[var(--color-text-muted)] transition-transform',
+            isExpanded && 'rotate-180 text-[var(--color-primary)]'
+          )} />
         </div>
       </div>
 
-      {/* Expanded Content */}
+      {/* Expanded Content - Clean Layout */}
       {isExpanded && (
-        <div className="px-8 lg:px-10 py-8 lg:py-10 border-t border-[var(--color-border)] space-y-10 bg-[var(--color-bg-card)]/30">
+        <div className="px-6 py-6 border-t border-[var(--color-border)] bg-[var(--color-bg-primary)] space-y-6">
           {/* Enhanced Test Case Overview */}
           {isEnhanced && (
-            <div className="bg-gradient-to-br from-[var(--color-bg-primary)] to-[var(--color-primary)]/5 rounded-2xl p-8 lg:p-10 border-2 border-[var(--color-primary)]/30 shadow-xl">
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <div className="bg-gradient-to-br from-[var(--color-bg-secondary)] to-[var(--color-primary)]/5 rounded-xl p-6 border border-[var(--color-primary)]/20">
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h5 className="text-lg lg:text-xl font-semibold text-[var(--color-text-muted)] mb-3 uppercase tracking-wider">
+                  <h5 className="text-xs font-semibold text-[var(--color-text-muted)] mb-3 uppercase tracking-wider">
                     What You're Testing
                   </h5>
-                  <p className="text-xl lg:text-2xl text-[var(--color-text-primary)] leading-relaxed font-semibold">
+                  <p className="text-base text-[var(--color-text-primary)] leading-relaxed font-medium">
                     {testCase.whatYoureTesting}
                   </p>
                 </div>
                 <div>
-                  <h5 className="text-lg lg:text-xl font-semibold text-[var(--color-text-muted)] mb-3 uppercase tracking-wider">
+                  <h5 className="text-xs font-semibold text-[var(--color-text-muted)] mb-3 uppercase tracking-wider">
                     Why This Matters
                   </h5>
-                  <p className="text-xl lg:text-2xl text-[var(--color-text-secondary)] leading-relaxed">
+                  <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
                     {testCase.whyItMatters}
                   </p>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-4 pt-6 border-t-2 border-[var(--color-border)]">
-                <div className="flex items-center gap-3 bg-[var(--color-bg-tertiary)] px-5 py-3 rounded-xl border-2 border-[var(--color-border)]">
-                  <Clock className="w-5 h-5 text-amber-400" />
-                  <span className="text-base lg:text-lg font-semibold text-[var(--color-text-primary)]">
-                    Time: {testCase.estimatedTime}
+              <div className="flex flex-wrap gap-3 pt-5 border-t border-[var(--color-border)]">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[var(--color-bg-tertiary)] rounded-lg border border-[var(--color-border)]">
+                  <Clock className="w-4 h-4 text-amber-400" />
+                  <span className="text-sm font-medium text-[var(--color-text-primary)]">
+                    {testCase.estimatedTime}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 bg-[var(--color-bg-tertiary)] px-5 py-3 rounded-xl border-2 border-[var(--color-border)]">
-                  <HelpCircle className="w-5 h-5 text-blue-400" />
-                  <span className="text-base lg:text-lg font-semibold text-[var(--color-text-primary)]">
-                    Complexity: {testCase.complexity}
+                <div className="flex items-center gap-2 px-3 py-2 bg-[var(--color-bg-tertiary)] rounded-lg border border-[var(--color-border)]">
+                  <HelpCircle className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm font-medium text-[var(--color-text-primary)]">
+                    {testCase.complexity}
                   </span>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Prerequisites (Enhanced) */}
+          {/* Prerequisites */}
           {isEnhanced && testCase.prerequisites && (
-            <div className="bg-gradient-to-br from-amber-500/10 to-[var(--color-bg-primary)] rounded-2xl p-8 lg:p-10 border-2 border-amber-500/30 shadow-lg">
-              <h5 className="text-2xl lg:text-3xl font-bold text-[var(--color-text-primary)] mb-6 flex items-center gap-4">
-                <Clock className="w-8 h-8 text-amber-400" />
+            <div className="bg-amber-500/5 rounded-xl p-6 border border-amber-500/20">
+              <h5 className="text-base font-semibold text-[var(--color-text-primary)] mb-5 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-amber-400" />
                 What You Need Before Starting
               </h5>
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
-                  <h6 className="text-lg lg:text-xl font-semibold text-[var(--color-text-primary)] mb-4">
-                    Materials & Setup:
+                  <h6 className="text-sm font-semibold text-[var(--color-text-primary)] mb-4 uppercase tracking-wider">
+                    Materials & Setup
                   </h6>
                   <ul className="space-y-3">
                     {testCase.prerequisites.whatYouNeed.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-4 text-base lg:text-lg text-[var(--color-text-secondary)] bg-[var(--color-bg-tertiary)] p-4 rounded-lg border border-[var(--color-border)]">
+                      <li key={idx} className="flex items-start gap-3 text-base text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] p-4 rounded-lg border border-[var(--color-border)] leading-relaxed">
                         <CheckCircle2 className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
                         <span>{item}</span>
                       </li>
@@ -535,14 +582,14 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
                 </div>
                 {testCase.prerequisites.requiredTestData && (
                   <div>
-                    <h6 className="text-lg lg:text-xl font-semibold text-[var(--color-text-primary)] mb-4">
-                      Test Data to Use:
+                    <h6 className="text-sm font-semibold text-[var(--color-text-primary)] mb-4 uppercase tracking-wider">
+                      Test Data to Use
                     </h6>
-                    <div className="bg-[var(--color-bg-tertiary)] rounded-xl p-6 border-2 border-[var(--color-border)]">
+                    <div className="bg-[var(--color-bg-secondary)] rounded-lg p-5 border border-[var(--color-border)]">
                       {Object.entries(testCase.prerequisites.requiredTestData).map(([key, value]) => (
                         <div key={key} className="mb-3 last:mb-0">
-                          <span className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">{key}:</span>
-                          <code className="ml-3 text-base lg:text-lg text-[var(--color-text-primary)] font-mono bg-[var(--color-bg-primary)] px-3 py-1 rounded border border-[var(--color-border)]">
+                          <span className="text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">{key}:</span>
+                          <code className="ml-3 text-sm text-[var(--color-text-primary)] font-mono bg-[var(--color-bg-primary)] px-3 py-1.5 rounded border border-[var(--color-border)]">
                             {value}
                           </code>
                         </div>
@@ -554,137 +601,146 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
             </div>
           )}
 
-          {/* Status Selector */}
-          <div className="bg-[var(--color-bg-primary)] rounded-xl p-8 lg:p-10 border-2 border-[var(--color-border)] shadow-lg">
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[var(--color-primary)]/10 flex items-center justify-center">
-                  <CheckSquare className="w-6 h-6 text-[var(--color-primary)]" />
-                </div>
-                <span className="text-lg lg:text-xl text-[var(--color-text-primary)] font-semibold">Mark Test Result:</span>
-              </div>
-              <p className="text-base lg:text-lg text-[var(--color-text-muted)] leading-relaxed">
-                Choose the status that matches what happened when you tested
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {statusOptions.map(status => {
-                  const isSelected = currentStatus === status;
-                  return (
-                    <button
-                      key={status}
-                      onClick={() => onStatusChange(status)}
-                      className={cn(
-                        'px-6 py-5 text-base lg:text-lg rounded-xl transition-all font-semibold text-left flex items-center gap-3 min-h-[70px] border-2 shadow-md hover:scale-105',
-                        isSelected
-                          ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/50 ring-2 ring-[var(--color-primary)]/30'
-                          : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] border-[var(--color-border)] hover:bg-[var(--color-bg-card)] hover:border-[var(--color-primary)]/30 hover:shadow-lg'
-                      )}
-                    >
-                      {isSelected && <CheckSquare className="w-6 h-6 flex-shrink-0" />}
-                      <span className="flex-1">{status}</span>
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Status Selector - Clean Design */}
+          <div className={cn("rounded-xl border", getStatusStyles(currentStatus))} style={{ padding: '32px' }}>
+            <div className="flex items-center gap-3 mb-5">
+              <CheckSquare className="w-6 h-6" />
+              <label htmlFor={`test-status-${testCase.id}`} className="text-lg font-semibold text-[var(--color-text-primary)]">
+                Mark Test Result
+              </label>
             </div>
+            <p className="text-base text-[var(--color-text-secondary)] mb-5 leading-relaxed">
+              Choose the status that matches what happened when you tested
+            </p>
+            <select
+              id={`test-status-${testCase.id}`}
+              value={currentStatus}
+              onChange={(e) => onStatusChange(e.target.value as TestStatus)}
+              className={cn(
+                'w-full text-base font-medium bg-[var(--color-bg-primary)] border rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all appearance-none cursor-pointer',
+                'hover:bg-[var(--color-bg-tertiary)]',
+                currentStatus === 'Pass' && 'border-emerald-500/50 bg-emerald-500/10 text-emerald-100',
+                currentStatus === 'Fail' && 'border-red-500/50 bg-red-500/10 text-red-100',
+                currentStatus === 'In Progress' && 'border-blue-500/50 bg-blue-500/10 text-blue-100',
+                currentStatus === 'Blocked' && 'border-orange-500/50 bg-orange-500/10 text-orange-100',
+                currentStatus === 'Skip' && 'border-gray-500/50 bg-gray-500/10 text-gray-100',
+                currentStatus === 'Not Started' && 'border-[var(--color-border)] text-[var(--color-text-primary)]'
+              )}
+              style={{
+                color: 'var(--color-text-primary)',
+                padding: '16px 20px',
+              }}
+            >
+              {statusOptions.map(status => (
+                <option 
+                  key={status} 
+                  value={status}
+                  className="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] text-base py-2"
+                  style={{
+                    backgroundColor: 'var(--color-bg-primary)',
+                    color: 'var(--color-text-primary)',
+                    fontSize: '1rem',
+                  }}
+                >
+                  {status}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Test Steps - Enhanced or Regular */}
+          {/* Test Steps - Clean Design */}
           <div>
-            <h5 className="text-xl lg:text-2xl font-semibold text-[var(--color-text-primary)] mb-8 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[var(--color-primary)]/10 flex items-center justify-center">
-                <ChevronRight className="w-6 h-6 text-[var(--color-primary)]" />
+            <h5 className="text-lg font-semibold text-[var(--color-text-primary)] mb-6 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center">
+                <ChevronDown className="w-5 h-5 text-[var(--color-primary)]" />
               </div>
               {isEnhanced ? 'Step-by-Step Instructions' : 'How to Test This'}
             </h5>
-            <div className="space-y-6">
+            <div className="space-y-5">
               {isEnhanced && testCase.detailedSteps ? (
-                // Enhanced detailed steps
                 testCase.detailedSteps.map((step, idx) => (
-                  <div key={idx} className="bg-[var(--color-bg-primary)] rounded-2xl p-8 lg:p-10 border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:shadow-xl transition-all">
-                    <div className="flex gap-6 lg:gap-8">
-                      <div className="step-indicator text-2xl lg:text-3xl flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 font-bold shadow-lg">
+                  <div key={idx} className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]" style={{ padding: '20px' }}>
+                    <div className="flex gap-5">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white flex items-center justify-center font-bold text-base shadow-lg">
                         {step.stepNumber}
                       </div>
-                      <div className="flex-1 space-y-6">
-                        <div>
-                          <h6 className="text-xl lg:text-2xl font-bold text-[var(--color-text-primary)] mb-4">
-                            {step.instruction}
-                          </h6>
-                          <div className="bg-[var(--color-bg-tertiary)] rounded-xl p-6 border-2 border-[var(--color-border)] mb-4">
-                            <p className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-3">
-                              How to Do It:
+                      <div className="flex-1 space-y-5">
+                        <h6 className="text-base font-semibold text-[var(--color-text-primary)] leading-relaxed">
+                          {step.instruction}
+                        </h6>
+                        <div className="bg-[var(--color-bg-primary)] rounded-lg p-5 border border-[var(--color-border)]">
+                          <p className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-3">
+                            How to Do It
+                          </p>
+                          <ol className="space-y-3">
+                            {step.howToDoIt.map((item, i) => (
+                              <li key={i} className="text-base text-[var(--color-text-secondary)] leading-relaxed flex items-start gap-3">
+                                <span className="text-[var(--color-primary)] font-bold mt-0.5 flex-shrink-0">{i + 1}.</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                        <div className="bg-emerald-500/10 rounded-lg p-5 border border-emerald-500/20">
+                          <p className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3">
+                            What You Should See
+                          </p>
+                          <p className="text-base text-[var(--color-text-primary)] leading-relaxed">
+                            {step.whatYouShouldSee}
+                          </p>
+                        </div>
+                        {step.howToKnowItWorked && step.howToKnowItWorked.length > 0 && (
+                          <div className="bg-blue-500/10 rounded-lg p-5 border border-blue-500/20">
+                            <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-3">
+                              How to Know It Worked
                             </p>
-                            <ol className="space-y-2">
-                              {step.howToDoIt.map((item, i) => (
-                                <li key={i} className="text-base lg:text-lg text-[var(--color-text-secondary)] leading-relaxed flex items-start gap-3">
-                                  <span className="text-[var(--color-primary)] font-bold mt-0.5">{i + 1}.</span>
+                            <ul className="space-y-2.5">
+                              {step.howToKnowItWorked.map((item, i) => (
+                                <li key={i} className="text-base text-[var(--color-text-primary)] leading-relaxed flex items-start gap-3">
+                                  <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
                                   <span>{item}</span>
                                 </li>
                               ))}
-                            </ol>
+                            </ul>
                           </div>
-                          <div className="bg-emerald-500/10 rounded-xl p-6 border-2 border-emerald-500/30">
-                            <p className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3">
-                              What You Should See:
+                        )}
+                        {step.commonMistakes && step.commonMistakes.length > 0 && (
+                          <div className="bg-amber-500/10 rounded-lg p-5 border border-amber-500/20">
+                            <p className="text-sm font-semibold text-amber-400 uppercase tracking-wider mb-3">
+                              Common Mistakes
                             </p>
-                            <p className="text-base lg:text-lg text-[var(--color-text-primary)] leading-relaxed">
-                              {step.whatYouShouldSee}
-                            </p>
+                            <ul className="space-y-3">
+                              {step.commonMistakes.map((mistake, i) => (
+                                <li key={i} className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                                  <span className="font-semibold text-[var(--color-text-primary)]">Problem: </span>
+                                  {mistake.mistake}
+                                  <br className="mb-1.5" />
+                                  <span className="font-semibold text-emerald-400">Solution: </span>
+                                  {mistake.solution}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
-                          {step.howToKnowItWorked && step.howToKnowItWorked.length > 0 && (
-                            <div className="bg-blue-500/10 rounded-xl p-6 border-2 border-blue-500/30">
-                              <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-3">
-                                How to Know It Worked:
-                              </p>
-                              <ul className="space-y-2">
-                                {step.howToKnowItWorked.map((item, i) => (
-                                  <li key={i} className="text-base lg:text-lg text-[var(--color-text-primary)] leading-relaxed flex items-start gap-3">
-                                    <span className="text-emerald-400 mt-0.5">{item}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                          {step.commonMistakes && step.commonMistakes.length > 0 && (
-                            <div className="bg-amber-500/10 rounded-xl p-6 border-2 border-amber-500/30">
-                              <p className="text-sm font-semibold text-amber-400 uppercase tracking-wider mb-3">
-                                Common Mistakes:
-                              </p>
-                              <ul className="space-y-3">
-                                {step.commonMistakes.map((mistake, i) => (
-                                  <li key={i} className="text-base lg:text-lg text-[var(--color-text-secondary)]">
-                                    <span className="font-semibold text-[var(--color-text-primary)]">Problem: </span>
-                                    {mistake.mistake}
-                                    <br />
-                                    <span className="font-semibold text-emerald-400">Solution: </span>
-                                    {mistake.solution}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                // Regular test steps
                 ('testSteps' in testCase && testCase.testSteps ? testCase.testSteps : []).map((step, idx) => (
-                  <div key={idx} className="flex gap-6 lg:gap-8 bg-[var(--color-bg-primary)] rounded-xl p-8 lg:p-10 border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:shadow-lg transition-all duration-200">
-                    <div className="step-indicator text-xl lg:text-2xl flex-shrink-0 w-14 h-14 lg:w-16 lg:h-16 font-bold shadow-md">
+                  <div key={idx} className="flex gap-5 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]" style={{ padding: '20px' }}>
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white flex items-center justify-center font-bold text-base shadow-lg">
                       {step.step}
                     </div>
-                    <div className="flex-1 space-y-6">
+                    <div className="flex-1 space-y-4">
                       <div>
-                        <span className="text-sm text-[var(--color-text-muted)] font-bold uppercase tracking-widest mb-3 block">What to Do</span>
-                        <p className="text-lg lg:text-xl text-[var(--color-text-primary)] leading-relaxed">{makeFriendly(step.instruction)}</p>
+                        <span className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-2 block">What to Do</span>
+                        <p className="text-base text-[var(--color-text-primary)] leading-relaxed">{makeFriendly(step.instruction)}</p>
                       </div>
                       <div className="pt-4 border-t border-[var(--color-border)]">
-                        <span className="text-sm text-[var(--color-text-muted)] font-bold uppercase tracking-widest mb-3 block">What Should Happen</span>
-                        <p className="text-lg lg:text-xl text-[var(--color-text-secondary)] leading-relaxed flex items-start gap-3">
-                          <span className="text-emerald-400 mt-1 text-xl">✓</span>
+                        <span className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-2 block">What Should Happen</span>
+                        <p className="text-base text-[var(--color-text-secondary)] leading-relaxed flex items-start gap-2">
+                          <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
                           <span>{makeFriendly(step.expectedResult)}</span>
                         </p>
                       </div>
@@ -695,26 +751,26 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
             </div>
           </div>
 
-          {/* Success Criteria (Enhanced) */}
+          {/* Success Criteria */}
           {isEnhanced && testCase.successCriteria && (
-            <div className="bg-gradient-to-br from-emerald-500/10 to-[var(--color-bg-primary)] rounded-2xl p-8 lg:p-10 border-2 border-emerald-500/30 shadow-xl">
-              <h5 className="text-2xl lg:text-3xl font-bold text-[var(--color-text-primary)] mb-6 flex items-center gap-4">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+            <div className="bg-emerald-500/5 rounded-xl p-6 border border-emerald-500/20">
+              <h5 className="text-base font-semibold text-[var(--color-text-primary)] mb-5 flex items-center gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                 {testCase.successCriteria.title}
               </h5>
               <div className="space-y-4">
                 {testCase.successCriteria.checklist.map((criterion, idx) => (
-                  <div key={idx} className="bg-[var(--color-bg-tertiary)] rounded-xl p-6 border-2 border-emerald-500/20">
-                    <div className="flex items-start gap-4 mb-3">
-                      <CheckCircle2 className="w-6 h-6 text-emerald-400 mt-0.5 flex-shrink-0" />
-                      <h6 className="text-lg lg:text-xl font-bold text-[var(--color-text-primary)] flex-1">
+                  <div key={idx} className="bg-[var(--color-bg-secondary)] rounded-lg p-5 border border-emerald-500/20">
+                    <div className="flex items-start gap-3 mb-3">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                      <h6 className="text-sm font-semibold text-[var(--color-text-primary)] flex-1 leading-relaxed">
                         {criterion.criterion}
                       </h6>
                     </div>
-                    <p className="text-base lg:text-lg text-[var(--color-text-secondary)] mb-2 ml-10">
+                    <p className="text-sm text-[var(--color-text-secondary)] mb-2 ml-8 leading-relaxed">
                       <strong>How to verify:</strong> {criterion.howToVerify}
                     </p>
-                    <p className="text-sm lg:text-base text-emerald-400 ml-10 italic">
+                    <p className="text-sm text-emerald-400 ml-8 italic leading-relaxed">
                       <strong>Visual cue:</strong> {criterion.visualCue}
                     </p>
                   </div>
@@ -723,28 +779,26 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
             </div>
           )}
 
-          {/* Failure Indicators (Enhanced) */}
+          {/* Failure Indicators */}
           {isEnhanced && testCase.failureIndicators && (
-            <div className="bg-gradient-to-br from-red-500/10 to-[var(--color-bg-primary)] rounded-2xl p-8 lg:p-10 border-2 border-red-500/30 shadow-xl">
-              <h5 className="text-2xl lg:text-3xl font-bold text-[var(--color-text-primary)] mb-6 flex items-center gap-4">
-                <XCircle className="w-8 h-8 text-red-400" />
+            <div className="bg-red-500/5 rounded-xl p-6 border border-red-500/20">
+              <h5 className="text-base font-semibold text-[var(--color-text-primary)] mb-5 flex items-center gap-3">
+                <XCircle className="w-5 h-5 text-red-400" />
                 {testCase.failureIndicators.title}
               </h5>
               <div className="space-y-4">
                 {testCase.failureIndicators.scenarios.map((scenario, idx) => (
-                  <div key={idx} className="bg-[var(--color-bg-tertiary)] rounded-xl p-6 border-2 border-red-500/20">
-                    <div className="mb-3">
-                      <h6 className="text-lg lg:text-xl font-bold text-red-400 mb-2">
-                        {scenario.whatHappened}
-                      </h6>
-                      <p className="text-base lg:text-lg font-semibold text-[var(--color-text-primary)] mb-2">
-                        {scenario.severity}
-                      </p>
-                    </div>
-                    <p className="text-base lg:text-lg text-[var(--color-text-secondary)] mb-2">
+                  <div key={idx} className="bg-[var(--color-bg-secondary)] rounded-lg p-5 border border-red-500/20">
+                    <h6 className="text-sm font-semibold text-red-400 mb-2 leading-relaxed">
+                      {scenario.whatHappened}
+                    </h6>
+                    <p className="text-sm font-medium text-[var(--color-text-primary)] mb-2 leading-relaxed">
+                      {scenario.severity}
+                    </p>
+                    <p className="text-sm text-[var(--color-text-secondary)] mb-2 leading-relaxed">
                       <strong>What to report:</strong> {scenario.whatToReport}
                     </p>
-                    <p className="text-sm lg:text-base text-amber-400 italic">
+                    <p className="text-sm text-amber-400 italic leading-relaxed">
                       <strong>How to document:</strong> {scenario.howToDocument}
                     </p>
                   </div>
@@ -753,40 +807,40 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
             </div>
           )}
 
-          {/* Troubleshooting (Enhanced) */}
+          {/* Troubleshooting */}
           {isEnhanced && testCase.troubleshooting && (
-            <div className="bg-gradient-to-br from-blue-500/10 to-[var(--color-bg-primary)] rounded-2xl p-8 lg:p-10 border-2 border-blue-500/30 shadow-xl">
-              <h5 className="text-2xl lg:text-3xl font-bold text-[var(--color-text-primary)] mb-6 flex items-center gap-4">
-                <HelpCircle className="w-8 h-8 text-blue-400" />
+            <div className="bg-blue-500/5 rounded-xl p-6 border border-blue-500/20">
+              <h5 className="text-base font-semibold text-[var(--color-text-primary)] mb-5 flex items-center gap-3">
+                <HelpCircle className="w-5 h-5 text-blue-400" />
                 {testCase.troubleshooting.title}
               </h5>
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {testCase.troubleshooting.commonIssues.map((issue, idx) => (
-                  <div key={idx} className="bg-[var(--color-bg-tertiary)] rounded-xl p-6 border-2 border-blue-500/20">
-                    <h6 className="text-xl lg:text-2xl font-bold text-[var(--color-text-primary)] mb-4">
+                  <div key={idx} className="bg-[var(--color-bg-secondary)] rounded-lg p-5 border border-blue-500/20">
+                    <h6 className="text-sm font-semibold text-[var(--color-text-primary)] mb-4 leading-relaxed">
                       {issue.problem}
                     </h6>
                     <div className="mb-4">
-                      <p className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                        Possible Causes:
+                      <p className="text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-3">
+                        Possible Causes
                       </p>
                       <ul className="space-y-2">
                         {issue.possibleCauses.map((cause, i) => (
-                          <li key={i} className="text-base lg:text-lg text-[var(--color-text-secondary)] flex items-start gap-3">
-                            <span className="text-blue-400 mt-1">•</span>
+                          <li key={i} className="text-sm text-[var(--color-text-secondary)] flex items-start gap-3 leading-relaxed">
+                            <span className="text-blue-400 mt-0.5 flex-shrink-0">•</span>
                             <span>{cause}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
-                        What to Do:
+                      <p className="text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-3">
+                        What to Do
                       </p>
                       <ol className="space-y-2">
                         {issue.whatToDo.map((action, i) => (
-                          <li key={i} className="text-base lg:text-lg text-[var(--color-text-primary)] flex items-start gap-3">
-                            <span className="text-blue-400 font-bold">{i + 1}.</span>
+                          <li key={i} className="text-sm text-[var(--color-text-primary)] flex items-start gap-3 leading-relaxed">
+                            <span className="text-blue-400 font-bold flex-shrink-0">{i + 1}.</span>
                             <span>{action}</span>
                           </li>
                         ))}
@@ -798,81 +852,14 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
             </div>
           )}
 
-          {/* Preconditions (Regular test cases only - enhanced ones show above) */}
-          {!isEnhanced && testCase.preconditions && testCase.preconditions.length > 0 && (
-            <div>
-              <h5 className="text-xl lg:text-2xl font-semibold text-[var(--color-text-primary)] mb-6 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-amber-500" />
-                </div>
-                Before You Start
-              </h5>
-              <div className="bg-gradient-to-br from-[var(--color-bg-primary)] to-amber-500/5 rounded-xl p-8 lg:p-10 border-2 border-amber-500/20 shadow-lg">
-                <p className="text-base lg:text-lg text-[var(--color-text-muted)] mb-6 leading-relaxed font-medium">Make sure these things are ready:</p>
-                <ul className="space-y-4">
-                  {testCase.preconditions.map((pre, idx) => (
-                    <li key={idx} className="text-lg lg:text-xl text-[var(--color-text-secondary)] flex items-start gap-4 leading-relaxed bg-[var(--color-bg-tertiary)] p-4 rounded-lg border border-[var(--color-border)]">
-                      <span className="w-4 h-4 rounded-full bg-amber-500 mt-1 flex-shrink-0 shadow-md" />
-                      <span className="flex-1">{pre}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-
-          {/* Test Data */}
-          {!isEnhanced && 'testData' in testCase && testCase.testData && (
-            <div>
-              <h5 className="text-xl lg:text-2xl font-semibold text-[var(--color-text-primary)] mb-6 flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-purple-500" />
-                </div>
-                Test Data / Example Values
-              </h5>
-              <div className="bg-gradient-to-br from-[var(--color-bg-primary)] to-purple-500/5 rounded-xl p-8 lg:p-10 border-2 border-purple-500/20 shadow-lg">
-                <p className="text-base lg:text-lg text-[var(--color-text-muted)] mb-6 leading-relaxed font-medium">Use these values when testing:</p>
-                <code className="code-block block text-base lg:text-lg p-6 lg:p-8 bg-[var(--color-bg-tertiary)] rounded-lg border-2 border-purple-500/20 shadow-inner">
-                  {testCase.testData}
-                </code>
-              </div>
-            </div>
-          )}
-
-          {/* Bug Report Button (when failed) */}
-          {currentStatus === 'Fail' && (
-            <div className="bg-red-500/10 rounded-2xl p-8 lg:p-10 border-2 border-red-500/30">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h5 className="text-xl lg:text-2xl font-bold text-[var(--color-text-primary)] mb-2 flex items-center gap-3">
-                    <AlertCircle className="w-6 h-6 text-red-400" />
-                    Test Failed
-                  </h5>
-                  <p className="text-base lg:text-lg text-[var(--color-text-secondary)]">
-                    Help us fix this by reporting the issue
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowBugReport(true)}
-                  className="px-6 py-4 bg-red-500 text-white rounded-xl font-bold text-lg shadow-lg hover:bg-red-600 hover:scale-105 transition-all flex items-center gap-3"
-                >
-                  <FileText className="w-5 h-5" />
-                  Report Bug
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Notes */}
           <div>
-            <label className="text-xl lg:text-2xl font-semibold text-[var(--color-text-primary)] mb-6 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                <Edit3 className="w-6 h-6 text-blue-500" />
-              </div>
+            <label className="text-lg font-semibold text-[var(--color-text-primary)] mb-5 flex items-center gap-3">
+              <Edit3 className="w-6 h-6 text-blue-400" />
               Your Notes
             </label>
-            <div className="bg-gradient-to-br from-[var(--color-bg-primary)] to-blue-500/5 rounded-xl p-8 lg:p-10 border-2 border-blue-500/20 shadow-lg">
-              <p className="text-base lg:text-lg text-[var(--color-text-muted)] mb-6 leading-relaxed font-medium">
+            <div className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]" style={{ padding: '32px' }}>
+              <p className="text-base text-[var(--color-text-muted)] mb-5 leading-relaxed">
                 Write down anything important: what you saw, any problems, screenshots you took, etc.
               </p>
               <textarea
@@ -880,21 +867,44 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
                 onChange={(e) => setNotes(e.target.value)}
                 onBlur={handleNotesBlur}
                 placeholder="Example: 'Everything worked perfectly!' or 'The button didn't respond when I tapped it'..."
-                className="input-base resize-none h-40 lg:h-48 text-lg lg:text-xl p-6 lg:p-8 leading-relaxed border-2 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                style={{ padding: '20px' }}
+                className="w-full h-32 text-base bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all resize-none leading-relaxed"
               />
             </div>
           </div>
 
-          {/* Bug Report Form Modal */}
+          {/* Bug Report */}
+          {currentStatus === 'Fail' && (
+            <div className="bg-red-500/5 rounded-xl p-6 border border-red-500/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h5 className="text-base font-semibold text-[var(--color-text-primary)] mb-1 flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-400" />
+                    Test Failed
+                  </h5>
+                  <p className="text-sm text-[var(--color-text-secondary)]">
+                    Help us fix this by reporting the issue
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowBugReport(true)}
+                  className="px-5 py-2.5 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition-all flex items-center gap-2 shadow-lg shadow-red-500/20"
+                >
+                  <FileText className="w-4 h-4" />
+                  Report Bug
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Bug Report Form */}
           {showBugReport && (
             <BugReportForm
               testId={testCase.id}
               testName={testCase.title}
               onSubmit={(data) => {
-                // Handle bug report submission
                 console.log('Bug report submitted:', data);
                 setShowBugReport(false);
-                // You can integrate with your bug tracking system here
               }}
               onCancel={() => setShowBugReport(false)}
             />
@@ -902,49 +912,21 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
 
           {/* Metadata */}
           {(result?.lastTested || result?.testedBy) && (
-            <div className="flex items-center gap-10 text-base lg:text-lg text-[var(--color-text-muted)] bg-[var(--color-bg-tertiary)] p-6 rounded-xl border border-[var(--color-border)]">
+            <div className="flex items-center gap-6 text-sm text-[var(--color-text-muted)] pt-4 border-t border-[var(--color-border)]">
               {result.lastTested && (
-                <span className="flex items-center gap-3 font-medium">
-                  <div className="w-8 h-8 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center">
-                    <Clock className="w-4 h-4 text-[var(--color-primary)]" />
-                  </div>
+                <span className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
                   {formatDate(result.lastTested)}
                 </span>
               )}
               {result.testedBy && (
-                <span className="flex items-center gap-3 font-medium">
-                  <div className="w-8 h-8 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center">
-                    <User className="w-4 h-4 text-[var(--color-primary)]" />
-                  </div>
+                <span className="flex items-center gap-2">
+                  <User className="w-4 h-4" />
                   {result.testedBy}
                 </span>
               )}
             </div>
           )}
-
-          {/* Related Items */}
-          <div className="pt-8 border-t-2 border-[var(--color-border)] flex flex-wrap gap-8">
-            {testCase.relatedUseCases && testCase.relatedUseCases.length > 0 && (
-              <div className="flex items-center gap-4 flex-wrap">
-                <span className="text-base lg:text-lg text-[var(--color-text-muted)] font-semibold">Use Cases:</span>
-                {testCase.relatedUseCases.map(uc => (
-                  <code key={uc} className="text-base lg:text-lg bg-blue-500/10 text-blue-400 px-5 py-2.5 rounded-lg font-mono border-2 border-blue-500/30 shadow-md hover:shadow-lg transition-all">
-                    {uc}
-                  </code>
-                ))}
-              </div>
-            )}
-            {testCase.relatedEdgeCases && testCase.relatedEdgeCases.length > 0 && (
-              <div className="flex items-center gap-4 flex-wrap">
-                <span className="text-base lg:text-lg text-[var(--color-text-muted)] font-semibold">Edge Cases:</span>
-                {testCase.relatedEdgeCases.map(ec => (
-                  <code key={ec} className="text-base lg:text-lg bg-amber-500/10 text-amber-400 px-5 py-2.5 rounded-lg font-mono border-2 border-amber-500/30 shadow-md hover:shadow-lg transition-all">
-                    {ec}
-                  </code>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       )}
     </div>

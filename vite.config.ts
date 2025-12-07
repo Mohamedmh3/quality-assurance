@@ -10,4 +10,8 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  build: {
+    // Clear output directory before build
+    emptyOutDir: true,
+  },
 })

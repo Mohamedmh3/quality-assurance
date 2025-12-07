@@ -4,9 +4,6 @@ import {
   Folder, 
   GitBranch, 
   Code2, 
-  ShoppingCart, 
-  Heart, 
-  Share2,
   Settings,
   Database,
   Globe,
@@ -17,9 +14,9 @@ import {
   Smartphone,
   Zap
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, StatCard } from '@/components/Card';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { Accordion, AccordionItem } from '@/components/Accordion';
-import { Badge, ArchitectureBadge, StatusBadge } from '@/components/Badge';
+import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
 import { UseCaseSection } from '@/components/UseCaseSection';
 import { EdgeCaseSection } from '@/components/EdgeCaseSection';
 import { QATestingGuide } from '@/components/QATestingGuide';
@@ -101,78 +98,35 @@ const folderStructure = {
 };
 
 export function DishFeature() {
-  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const [activeTab, setActiveTab] = useState<TabId>('qa-tests');
 
   return (
-    <div className="space-y-12 lg:space-y-16">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-[var(--color-bg-secondary)] border-2 border-[var(--color-border)] p-10 lg:p-16 xl:p-20 shadow-xl">
-        {/* Background elements */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptMC0xMHY2aDZ2LTZoLTZ6bTEwIDEwdjZoNnYtNmgtNnptMC0xMHY2aDZ2LTZoLTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-50 rounded-3xl" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--color-primary)]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4" />
-        
-        <div className="relative">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-4 text-base lg:text-lg text-[var(--color-text-muted)] mb-12 lg:mb-16 animate-fade-in font-medium">
-            <span className="hover:text-[var(--color-text-secondary)] transition-colors cursor-pointer">Features</span>
-            <ChevronRight className="w-5 h-5 lg:w-6 lg:h-6" />
-            <span className="text-[var(--color-primary)] font-semibold">Dish</span>
+    <div className="space-y-6">
+      {/* Compact Header */}
+      <div className="flex items-center justify-between gap-4 border-b border-[var(--color-border)]" style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] flex items-center justify-center">
+            <UtensilsCrossed className="w-5 h-5 text-white" />
           </div>
-
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-16 lg:gap-20">
-            {/* Title and Description */}
-            <div className="flex-1 animate-fade-in">
-              <div className="flex items-center gap-8 mb-10 lg:mb-12">
-                <div className="icon-container w-20 h-20 lg:w-24 lg:h-24 rounded-2xl shadow-2xl">
-                  <UtensilsCrossed className="w-10 h-10 lg:w-12 lg:h-12 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-5xl lg:text-6xl xl:text-7xl font-extrabold text-[var(--color-text-primary)] mb-4">
-                    Dish Feature
-                  </h1>
-                  <div className="flex items-center gap-4 lg:gap-6 flex-wrap">
-                    <StatusBadge status="Stable" />
-                    <ArchitectureBadge type="MVVM" />
-                    <Badge variant="outline">MobX State</Badge>
-                  </div>
-                </div>
-              </div>
-              
-              <p className="text-xl lg:text-2xl text-[var(--color-text-secondary)] max-w-3xl leading-relaxed mb-12 lg:mb-16 text-center lg:text-left">
-                The Dish feature allows users to view detailed information about a menu item, 
-                customize it with options and toppings, adjust quantity, add special notes, 
-                and add the configured item to their shopping cart.
-              </p>
-
-              {/* Key Features */}
-              <div className="flex flex-wrap gap-4 lg:gap-6">
-                {[
-                  { icon: ShoppingCart, label: 'Add to Cart' },
-                  { icon: Settings, label: 'Options & Toppings' },
-                  { icon: Heart, label: 'Favorites' },
-                  { icon: Share2, label: 'Share' },
-                ].map(({ icon: Icon, label }) => (
-                  <div key={label} className="feature-tag">
-                    <Icon className="w-5 h-5" />
-                    <span>{label}</span>
-                  </div>
-                ))}
-              </div>
+          <div>
+            <div className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-1">
+              <span>Features</span>
+              <ChevronRight className="w-3 h-3" />
+              <span className="text-[var(--color-primary)]">Dish</span>
             </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-6 lg:gap-8 lg:w-80 animate-fade-in stagger-2">
-              <StatCard value={dishUseCases.length} label="Use Cases" />
-              <StatCard value={dishEdgeCases.length} label="Edge Cases" />
-              <StatCard value={dishTestCases.length} label="Test Cases" />
-              <StatCard value={17} label="Source Files" />
-            </div>
+            <h1 className="text-xl font-bold text-[var(--color-text-primary)]">
+              Dish Feature
+            </h1>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <StatusBadge status="Stable" />
+          <ArchitectureBadge type="MVVM" />
         </div>
       </div>
 
       {/* Tab Navigation */}
-      <div className="sticky top-20 z-10 glass rounded-2xl border-2 border-[var(--color-border)] p-6 lg:p-8 shadow-xl">
+      <div className="sticky top-20 z-10 glass rounded-xl border border-[var(--color-border)] p-4 shadow-lg">
         <nav className="flex gap-4 lg:gap-6 overflow-x-auto" role="tablist">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -193,7 +147,7 @@ export function DishFeature() {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-[var(--color-bg-secondary)] rounded-3xl border-2 border-[var(--color-border)] p-10 lg:p-16 xl:p-20 shadow-xl">
+      <div className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'use-cases' && <UseCaseSection useCases={dishUseCases} />}
         {activeTab === 'edge-cases' && <EdgeCaseSection edgeCases={dishEdgeCases} />}

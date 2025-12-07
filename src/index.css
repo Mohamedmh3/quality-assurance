@@ -697,3 +697,36 @@ code, pre {
 .animate-pulse-slow {
   animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Gradient text animation */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  animation: gradient 4s ease infinite;
+}
+
+/* Select dropdown styling */
+select {
+  color: var(--color-text-primary) !important;
+  background-color: var(--color-bg-primary) !important;
+}
+
+select option {
+  background-color: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+  padding: 8px 12px;
+}
+
+select:focus {
+  color: var(--color-text-primary) !important;
+  background-color: var(--color-bg-primary) !important;
+}
+
+select:focus option {
+  background-color: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+}

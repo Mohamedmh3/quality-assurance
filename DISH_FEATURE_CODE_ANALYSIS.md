@@ -327,3 +327,4 @@
 6. **Inventory Check**: `isOverQuantity()` considers current cart quantity + new quantity
 7. **Restaurant Status**: Checked AFTER adding to cart (cart still added, toast shown)
 
+
