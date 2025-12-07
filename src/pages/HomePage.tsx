@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -14,6 +14,9 @@ import { splashTestCases } from '@/features/splash/data/test-cases';
 import { menuRestaurantUseCases } from '@/features/menu-restaurant/data/use-cases';
 import { menuRestaurantEdgeCases } from '@/features/menu-restaurant/data/edge-cases';
 import { menuRestaurantTestCases } from '@/features/menu-restaurant/data/test-cases';
+import { checkoutUseCases } from '@/features/checkout/data/use-cases';
+import { checkoutEdgeCases } from '@/features/checkout/data/edge-cases';
+import { checkoutTestCases } from '@/features/checkout/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -68,6 +71,19 @@ const features: FeatureCard[] = [
     testCases: splashTestCases.length,
     path: '/feature/splash',
     tags: ['Authentication', 'Initialization', 'Navigation'],
+  },
+  {
+    id: 'checkout',
+    name: 'Checkout',
+    icon: ShoppingCart,
+    description: 'Complete orders with bill calculation, payment methods, vouchers, tips, gift orders, and delivery scheduling.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: checkoutUseCases.length,
+    edgeCases: checkoutEdgeCases.length,
+    testCases: checkoutTestCases.length,
+    path: '/feature/checkout',
+    tags: ['Payment', 'Vouchers', 'Tips', 'Gift Orders'],
   },
 ];
 
