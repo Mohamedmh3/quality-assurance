@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +17,9 @@ import { menuRestaurantTestCases } from '@/features/menu-restaurant/data/test-ca
 import { checkoutUseCases } from '@/features/checkout/data/use-cases';
 import { checkoutEdgeCases } from '@/features/checkout/data/edge-cases';
 import { checkoutTestCases } from '@/features/checkout/data/test-cases';
+import { cartUseCases } from '@/features/cart/data/use-cases';
+import { cartEdgeCases } from '@/features/cart/data/edge-cases';
+import { cartTestCases } from '@/features/cart/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -84,6 +87,19 @@ const features: FeatureCard[] = [
     testCases: checkoutTestCases.length,
     path: '/feature/checkout',
     tags: ['Payment', 'Vouchers', 'Tips', 'Gift Orders'],
+  },
+  {
+    id: 'cart',
+    name: 'Cart',
+    icon: ShoppingBag,
+    description: 'Shopping cart management with multiple carts, item customization, quantity controls, free delivery tracking, and dynamic rewards.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: cartUseCases.length,
+    edgeCases: cartEdgeCases.length,
+    testCases: cartTestCases.length,
+    path: '/feature/cart',
+    tags: ['Cart', 'Basket', 'Quantity', 'Rewards'],
   },
 ];
 
