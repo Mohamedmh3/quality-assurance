@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -11,6 +11,9 @@ import { dishTestCases } from '@/features/dish/data/test-cases';
 import { splashUseCases } from '@/features/splash/data/use-cases';
 import { splashEdgeCases } from '@/features/splash/data/edge-cases';
 import { splashTestCases } from '@/features/splash/data/test-cases';
+import { menuRestaurantUseCases } from '@/features/menu-restaurant/data/use-cases';
+import { menuRestaurantEdgeCases } from '@/features/menu-restaurant/data/edge-cases';
+import { menuRestaurantTestCases } from '@/features/menu-restaurant/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -39,6 +42,19 @@ const features: FeatureCard[] = [
     testCases: dishTestCases.length,
     path: '/feature/dish',
     tags: ['Cart', 'Customization', 'Favorites'],
+  },
+  {
+    id: 'menu-restaurant',
+    name: 'Menu Restaurant',
+    icon: Store,
+    description: 'Browse restaurants and markets, view menus, search items, toggle pickup/delivery, and manage favorites.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: menuRestaurantUseCases.length,
+    edgeCases: menuRestaurantEdgeCases.length,
+    testCases: menuRestaurantTestCases.length,
+    path: '/feature/menu-restaurant',
+    tags: ['Menu', 'Search', 'Favorites', 'Market'],
   },
   {
     id: 'splash',
