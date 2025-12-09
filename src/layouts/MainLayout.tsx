@@ -21,26 +21,39 @@ export function MainLayout() {
           {/* Logo */}
           <Link 
             to="/" 
-            className="flex items-center gap-4 group relative"
+            className="flex items-center gap-3 group relative"
           >
             {/* Animated background glow */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-[var(--color-primary)]/20 to-purple-500/20 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300" />
+            <div className="absolute -inset-1 bg-gradient-to-r from-[var(--color-primary)]/30 via-purple-500/30 to-pink-500/30 rounded-2xl opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-300" />
             
-            <div className="relative p-3 bg-gradient-to-br from-[var(--color-primary)] via-purple-500 to-pink-500 rounded-xl shadow-lg shadow-[var(--color-primary)]/30 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/50 transition-all duration-300 group-hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl" />
-              <BookOpen className="w-6 h-6 text-white relative z-10 group-hover:rotate-12 transition-transform duration-300" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
+            {/* Icon Container */}
+            <div className="relative">
+              {/* Outer glow ring */}
+              <div className="absolute -inset-0.5 bg-gradient-to-br from-[var(--color-primary)] via-purple-500 to-pink-500 rounded-2xl opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300" />
+              
+              {/* Main icon background */}
+              <div className="relative p-2.5 bg-gradient-to-br from-[var(--color-primary)] via-purple-600 to-pink-500 rounded-xl shadow-lg shadow-[var(--color-primary)]/40 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/60 transition-all duration-300 group-hover:scale-110">
+                {/* Inner shine */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-white/10 to-transparent rounded-xl" />
+                
+                {/* Icon */}
+                <BookOpen className="w-5 h-5 text-white relative z-10 drop-shadow-lg" />
+                
+                {/* Corner accent */}
+                <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full shadow-lg shadow-emerald-400/50" />
+              </div>
             </div>
             
+            {/* Text */}
             <div className="flex flex-col relative z-10">
-              <div className="flex items-baseline gap-2">
-                <span className="font-bold text-xl bg-gradient-to-r from-[var(--color-text-primary)] to-[var(--color-primary)] bg-clip-text text-transparent group-hover:from-[var(--color-primary)] group-hover:to-purple-500 transition-all duration-300">
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-xl text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors duration-300">
                   BeeOrder
                 </span>
-                <Sparkles className="w-4 h-4 text-[var(--color-primary)] opacity-70 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-300" />
+                <Sparkles className="w-4 h-4 text-[var(--color-primary)] opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
               </div>
-              <span className="text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wider">
-                Documentation Portal
+              <span className="text-xs font-medium text-[var(--color-text-muted)] tracking-wide">
+                Documentation
               </span>
             </div>
           </Link>
@@ -124,24 +137,15 @@ function NavLink({ to, children, active }: { to: string; children: React.ReactNo
     <Link
       to={to}
       className={cn(
-        'relative flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 group overflow-hidden',
+        'relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group',
         active
-          ? 'text-white bg-gradient-to-r from-[var(--color-primary)] to-purple-500 shadow-lg shadow-[var(--color-primary)]/30 hover:shadow-xl hover:shadow-[var(--color-primary)]/40'
+          ? 'text-[var(--color-primary)] bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-primary)]/30'
           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]'
       )}
     >
-      {active && (
-        <>
-          <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
-          <div className="absolute -inset-1 bg-gradient-to-r from-[var(--color-primary)]/20 to-purple-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity" />
-        </>
-      )}
-      <div className={cn(
-        "relative z-10 flex items-center gap-2",
-        active && "group-hover:scale-105 transition-transform duration-200"
-      )}>
+      <span className="relative z-10 flex items-center gap-2">
         {children}
-      </div>
+      </span>
     </Link>
   );
 }
