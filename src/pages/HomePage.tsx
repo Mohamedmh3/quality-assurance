@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -29,6 +29,9 @@ import { homeFeedTestCases } from '@/features/home-feed/data/test-cases';
 import { orderRatingUseCases } from '@/features/order-rating/data/use-cases';
 import { orderRatingEdgeCases } from '@/features/order-rating/data/edge-cases';
 import { orderRatingTestCases } from '@/features/order-rating/data/test-cases';
+import { orderTrackingUseCases } from '@/features/order-tracking/data/use-cases';
+import { orderTrackingEdgeCases } from '@/features/order-tracking/data/edge-cases';
+import { orderTrackingTestCases } from '@/features/order-tracking/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -148,6 +151,19 @@ const features: FeatureCard[] = [
     testCases: orderRatingTestCases.length,
     path: '/feature/order-rating',
     tags: ['Rating', 'Feedback', 'Reviews', 'Photos', 'Validation'],
+  },
+  {
+    id: 'order-tracking',
+    name: 'Order Tracking',
+    icon: MapPin,
+    description: 'Real-time order tracking with map visualization, driver location updates, status progress, address management, and completion overlay.',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: orderTrackingUseCases.length,
+    edgeCases: orderTrackingEdgeCases.length,
+    testCases: orderTrackingTestCases.length,
+    path: '/feature/order-tracking',
+    tags: ['Tracking', 'Map', 'Real-time', 'WebSocket', 'Driver Location'],
   },
 ];
 

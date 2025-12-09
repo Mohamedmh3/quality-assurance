@@ -193,7 +193,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
 
 // Architecture Badge
 interface ArchitectureBadgeProps {
-  type: 'MVVM' | 'Clean' | 'MVC' | 'MVP';
+  type: 'MVVM' | 'Clean' | 'MVC' | 'MVP' | 'BLoC';
   className?: string;
 }
 
