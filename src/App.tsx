@@ -12,6 +12,7 @@ import { OrderRatingFeature } from './features/order-rating/OrderRatingFeature';
 import { OrderTrackingFeature } from './features/order-tracking/OrderTrackingFeature';
 import { RestaurantListFeature } from './features/restaurant-list/RestaurantListFeature';
 import { AddressFeature } from './features/address/AddressFeature';
+import { SearchPageFeature } from './features/search-page/SearchPageFeature';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="feature/order-tracking" element={<OrderTrackingFeature />} />
           <Route path="feature/restaurant-list" element={<RestaurantListFeature />} />
           <Route path="feature/address" element={<AddressFeature />} />
+          <Route path="feature/search-page" element={<SearchPageFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>

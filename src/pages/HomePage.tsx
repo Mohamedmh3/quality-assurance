@@ -38,6 +38,9 @@ import { restaurantListTestCases } from '@/features/restaurant-list/data/test-ca
 import { addressUseCases } from '@/features/address/data/use-cases';
 import { addressEdgeCases } from '@/features/address/data/edge-cases';
 import { addressTestCases } from '@/features/address/data/test-cases';
+import { searchPageUseCases } from '@/features/search-page/data/use-cases';
+import { searchPageEdgeCases } from '@/features/search-page/data/edge-cases';
+import { searchPageTestCases } from '@/features/search-page/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -196,6 +199,19 @@ const features: FeatureCard[] = [
     testCases: addressTestCases.length,
     path: '/feature/address',
     tags: ['Address', 'Map', 'Location', 'Delivery', 'GPS'],
+  },
+  {
+    id: 'search-page',
+    name: 'Search Page',
+    icon: Search,
+    description: 'Comprehensive search functionality for finding restaurants, markets, and dishes with filters, suggestions, categories, and outlet recommendations.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: searchPageUseCases.length,
+    edgeCases: searchPageEdgeCases.length,
+    testCases: searchPageTestCases.length,
+    path: '/feature/search-page',
+    tags: ['Search', 'Filters', 'Suggestions', 'Categories', 'Recommendations'],
   },
 ];
 
