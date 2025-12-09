@@ -18,7 +18,8 @@ import {
   Receipt,
   Ticket,
   ChevronRight,
-  Smartphone
+  Smartphone,
+  Workflow
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { Accordion, AccordionItem } from '@/components/Accordion';
@@ -27,12 +28,13 @@ import { UseCaseSection } from '@/components/UseCaseSection';
 import { EdgeCaseSection } from '@/components/EdgeCaseSection';
 import { QATestingGuide } from '@/components/QATestingGuide';
 import { FolderTree } from '@/components/FolderTree';
+import { FlowchartSection } from '@/components/flowchart';
 import { checkoutUseCases } from './data/use-cases';
 import { checkoutEdgeCases } from './data/edge-cases';
 import { checkoutTestCases } from './data/test-cases';
 import { cn } from '@/lib/utils';
 
-type TabId = 'overview' | 'use-cases' | 'edge-cases' | 'qa-tests' | 'implementation';
+type TabId = 'overview' | 'use-cases' | 'edge-cases' | 'flow-diagrams' | 'qa-tests' | 'implementation';
 
 interface Tab {
   id: TabId;
@@ -44,6 +46,7 @@ const tabs: Tab[] = [
   { id: 'overview', label: 'Overview', icon: Layers },
   { id: 'use-cases', label: 'Use Cases', icon: Users },
   { id: 'edge-cases', label: 'Edge Cases', icon: Shield },
+  { id: 'flow-diagrams', label: 'Flow Diagrams', icon: Workflow },
   { id: 'qa-tests', label: 'QA Tests', icon: Settings },
   { id: 'implementation', label: 'Implementation', icon: Code2 },
 ];
@@ -275,6 +278,7 @@ export function CheckoutFeature() {
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'use-cases' && <UseCaseSection useCases={checkoutUseCases} />}
         {activeTab === 'edge-cases' && <EdgeCaseSection edgeCases={checkoutEdgeCases} />}
+        {activeTab === 'flow-diagrams' && <FlowchartSection featureId="checkout" />}
         {activeTab === 'qa-tests' && <QATestingGuide testCases={checkoutTestCases} featureName="checkout" />}
         {activeTab === 'implementation' && <ImplementationTab />}
       </div>
@@ -666,4 +670,6 @@ function ImplementationTab() {
     </div>
   );
 }
+
+
 

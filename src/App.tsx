@@ -6,6 +6,7 @@ import { SplashFeature } from './features/splash/SplashFeature';
 import { MenuRestaurantFeature } from './features/menu-restaurant/MenuRestaurantFeature';
 import { CheckoutFeature } from './features/checkout/CheckoutFeature';
 import { CartFeature } from './features/cart/CartFeature';
+import { HomeFeature } from './features/home/HomeFeature';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="feature/menu-restaurant" element={<MenuRestaurantFeature />} />
           <Route path="feature/checkout" element={<CheckoutFeature />} />
           <Route path="feature/cart" element={<CartFeature />} />
+          <Route path="feature/home" element={<HomeFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>

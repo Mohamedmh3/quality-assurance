@@ -328,3 +328,5 @@
 7. **Restaurant Status**: Checked AFTER adding to cart (cart still added, toast shown)
 
 
+
+

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -20,6 +20,9 @@ import { checkoutTestCases } from '@/features/checkout/data/test-cases';
 import { cartUseCases } from '@/features/cart/data/use-cases';
 import { cartEdgeCases } from '@/features/cart/data/edge-cases';
 import { cartTestCases } from '@/features/cart/data/test-cases';
+import { homeUseCases } from '@/features/home/data/use-cases';
+import { homeEdgeCases } from '@/features/home/data/edge-cases';
+import { homeTestCases } from '@/features/home/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -100,6 +103,19 @@ const features: FeatureCard[] = [
     testCases: cartTestCases.length,
     path: '/feature/cart',
     tags: ['Cart', 'Basket', 'Quantity', 'Rewards'],
+  },
+  {
+    id: 'home',
+    name: 'Home',
+    icon: Home,
+    description: 'Main app container with bottom navigation, location permissions, push notifications, app lifecycle handling, and fortune wheel spinner.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: homeUseCases.length,
+    edgeCases: homeEdgeCases.length,
+    testCases: homeTestCases.length,
+    path: '/feature/home',
+    tags: ['Navigation', 'Location', 'Notifications', 'Spinner'],
   },
 ];
 
