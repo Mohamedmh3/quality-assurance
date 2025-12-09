@@ -128,17 +128,12 @@ export function OrderTrackingFeature() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap',
-                  activeTab === tab.id
-                    ? 'bg-[var(--color-primary)] text-white'
-                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-secondary)]'
-                )}
+                className={cn('tab-item', activeTab === tab.id && 'active')}
                 role="tab"
                 aria-selected={activeTab === tab.id}
               >
-                <Icon className="w-4 h-4" />
-                <span>{tab.label}</span>
+                <Icon className="w-5 h-5" />
+                {tab.label}
               </button>
             );
           })}
@@ -146,198 +141,231 @@ export function OrderTrackingFeature() {
       </div>
 
       {/* Tab Content */}
-      <div className="space-y-6">
-        {activeTab === 'overview' && (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Feature Overview</CardTitle>
-                <CardDescription>
-                  Real-time order tracking with map visualization, driver location, and status updates
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mb-2 text-[var(--color-text-primary)]">What This Feature Does</h3>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed">
-                    The Order Tracking feature allows customers to track their orders in real-time. It displays order status progress, 
-                    shows the delivery route on a map, tracks driver location when order is out for delivery, and provides options 
-                    to change delivery address or contact the driver. The feature uses WebSocket connections for real-time status 
-                    updates and Socket.IO for driver location tracking.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2 text-[var(--color-text-primary)]">Key Capabilities</h3>
-                  <ul className="list-disc list-inside space-y-1 text-[var(--color-text-secondary)]">
-                    <li>Real-time order status updates via WebSocket</li>
-                    <li>Interactive map showing restaurant, customer, and driver locations</li>
-                    <li>Route visualization between restaurant and delivery address</li>
-                    <li>Driver location tracking with real-time updates</li>
-                    <li>Order status progress indicator with visual steps</li>
-                    <li>Change delivery address (when allowed)</li>
-                    <li>Call driver directly from tracking screen</li>
-                    <li>Order completion overlay with animation</li>
-                    <li>Delete order option (when allowed)</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2 text-[var(--color-text-primary)]">Architecture</h3>
-                  <p className="text-[var(--color-text-secondary)] leading-relaxed">
-                    This feature uses <strong>BLoC (Business Logic Component)</strong> architecture pattern. The ViewModel 
-                    (Cubit) manages state, WebSocket connections, and map updates. The UI is built with Flutter widgets, 
-                    including Google Maps for map visualization and draggable bottom sheets for order information display.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-2 text-[var(--color-text-primary)]">Technical Highlights</h3>
-                  <ul className="list-disc list-inside space-y-1 text-[var(--color-text-secondary)]">
-                    <li>WebSocket integration for real-time order status updates</li>
-                    <li>Socket.IO integration for driver location tracking</li>
-                    <li>Google Maps Flutter plugin for map visualization</li>
-                    <li>Route service integration for delivery route calculation</li>
-                    <li>Draggable bottom sheet for order information</li>
-                    <li>Lottie animations for status indicators</li>
-                    <li>Automatic reconnection handling for WebSocket connections</li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Folder Structure</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <FolderTree data={folderStructure} />
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {activeTab === 'use-cases' && (
-          <UseCaseSection useCases={orderTrackingUseCases} />
-        )}
-
-        {activeTab === 'edge-cases' && (
-          <EdgeCaseSection edgeCases={orderTrackingEdgeCases} />
-        )}
-
+      <div className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
+        {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'use-cases' && <UseCaseSection useCases={orderTrackingUseCases} />}
+        {activeTab === 'edge-cases' && <EdgeCaseSection edgeCases={orderTrackingEdgeCases} />}
         {activeTab === 'flow-diagrams' && <FlowchartSection featureId="order-tracking" />}
-
-        {activeTab === 'qa-tests' && (
-          <QATestingGuide
-            featureName="Order Tracking"
-            testCases={orderTrackingTestCases}
-          />
-        )}
-
-        {activeTab === 'implementation' && (
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>API Endpoints</CardTitle>
-                <CardDescription>
-                  REST API endpoints used by the Order Tracking feature
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {apiEndpoints.map((endpoint, index) => (
-                    <div key={index} className="p-4 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className={cn(
-                          'px-2 py-1 rounded text-xs font-mono font-semibold',
-                          endpoint.method === 'GET' ? 'bg-blue-500/20 text-blue-400' : 'bg-green-500/20 text-green-400'
-                        )}>
-                          {endpoint.method}
-                        </span>
-                        <code className="text-sm text-[var(--color-text-primary)]">{endpoint.path}</code>
-                      </div>
-                      <p className="text-sm text-[var(--color-text-secondary)] mb-2">{endpoint.description}</p>
-                      {endpoint.params && endpoint.params.length > 0 && (
-                        <div className="text-xs text-[var(--color-text-muted)]">
-                          <strong>Parameters:</strong> {endpoint.params.join(', ')}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Key Files</CardTitle>
-                <CardDescription>
-                  Important files in the Order Tracking feature
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div>
-                    <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">ViewModel</h4>
-                    <code className="text-sm text-[var(--color-text-secondary)]">order_tracking_viewmodel.dart</code>
-                    <p className="text-sm text-[var(--color-text-muted)] mt-1">
-                      BLoC ViewModel managing order tracking logic, WebSocket connections, map updates, and state management.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">State</h4>
-                    <code className="text-sm text-[var(--color-text-secondary)]">state/order_tracking_state.dart</code>
-                    <p className="text-sm text-[var(--color-text-muted)] mt-1">
-                      BLoC state class with AsyncState for data fetching and SocketState for WebSocket connections.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Screen</h4>
-                    <code className="text-sm text-[var(--color-text-secondary)]">order_tracking_screen.dart</code>
-                    <p className="text-sm text-[var(--color-text-muted)] mt-1">
-                      Main screen widget orchestrating map, bottom sheet, and overlay components.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Map Widget</h4>
-                    <code className="text-sm text-[var(--color-text-secondary)]">components/order_tracking_map.dart</code>
-                    <p className="text-sm text-[var(--color-text-muted)] mt-1">
-                      Google Maps widget displaying restaurant, customer, and driver markers with route polylines.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>WebSocket Integration</CardTitle>
-                <CardDescription>
-                  Real-time communication setup for order tracking
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div>
-                    <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Order Status WebSocket</h4>
-                    <p className="text-sm text-[var(--color-text-muted)]">
-                      Uses OrderStatusSocketManager to receive real-time order status updates. Connects when order tracking 
-                      screen opens and disconnects when screen closes. Automatically reconnects on connection loss.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Driver Location Socket.IO</h4>
-                    <p className="text-sm text-[var(--color-text-muted)]">
-                      Uses DriverLocationSocketManager to receive driver location updates via Socket.IO. Connects when 
-                      order reaches delivery stage and driver is assigned. Updates driver marker on map in real-time.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+        {activeTab === 'qa-tests' && <QATestingGuide testCases={orderTrackingTestCases} featureName="Order Tracking" />}
+        {activeTab === 'implementation' && <ImplementationTab />}
       </div>
+    </div>
+  );
+}
+
+function OverviewTab() {
+  return (
+    <div className="space-y-16 lg:space-y-20 animate-fade-in">
+      {/* Plain Language Summary */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <MapPin className="w-6 h-6 text-blue-500" />
+            </div>
+            What It Does
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-7">
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            The <strong className="text-[var(--color-text-primary)]">Order Tracking</strong> feature allows customers to track their orders in real-time, 
+            providing visibility into order status, delivery progress, and driver location. This feature helps customers know exactly when to expect 
+            their order and provides peace of mind during the delivery process.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Customers can see their order status progress through visual steps (like "Preparing", "Out for Delivery", "Delivered"), 
+            view the delivery route on an interactive map, track the driver's location in real-time when the order is out for delivery, 
+            and contact the driver directly. The feature uses <strong className="text-[var(--color-text-primary)]">WebSocket connections</strong> for 
+            real-time status updates and <strong className="text-[var(--color-text-primary)]">Socket.IO</strong> for driver location tracking.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Special features include <strong className="text-[var(--color-text-primary)]">address change</strong> capability (when allowed), 
+            <strong className="text-[var(--color-text-primary)]"> order deletion</strong> option, <strong className="text-[var(--color-text-primary)]">map recentering</strong> 
+            to view all locations, and a <strong className="text-[var(--color-text-primary)]">completion overlay</strong> with animation when the order is delivered.
+          </p>
+          
+          <div className="divider" />
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="info-box flex-col success">
+              <Users className="w-10 h-10 text-blue-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Who Uses It</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Customers who have placed orders and want to track delivery progress
+              </p>
+            </div>
+            <div className="info-box flex-col warning">
+              <MapPin className="w-10 h-10 text-amber-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Key Value</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Real-time tracking, map visualization, driver location, status updates
+              </p>
+            </div>
+            <div className="info-box flex-col">
+              <Layers className="w-10 h-10 text-[var(--color-primary)] mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Entry Points</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Order confirmation screen, order history, push notifications
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Key Features */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <MapPin className="w-6 h-6 text-blue-500" />
+            </div>
+            Key Features
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: MapPin, title: 'Real-Time Tracking', description: 'Live order status updates via WebSocket', color: 'text-blue-500' },
+              { icon: Layers, title: 'Map Visualization', description: 'Interactive map with restaurant, customer, and driver locations', color: 'text-green-500' },
+              { icon: Workflow, title: 'Status Progress', description: 'Visual step-by-step order progress indicator', color: 'text-purple-500' },
+              { icon: Users, title: 'Driver Location', description: 'Real-time driver location tracking via Socket.IO', color: 'text-pink-500' },
+              { icon: Shield, title: 'Address Management', description: 'Change delivery address when allowed', color: 'text-orange-500' },
+              { icon: Settings, title: 'Route Display', description: 'Visual route between restaurant and delivery address', color: 'text-indigo-500' },
+            ].map((feature, idx) => {
+              const Icon = feature.icon;
+              return (
+                <div key={idx} className="info-box flex-col">
+                  <Icon className={`w-8 h-8 ${feature.color} mb-4`} />
+                  <h4 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">{feature.title}</h4>
+                  <p className="text-base text-[var(--color-text-secondary)]">{feature.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Folder Structure */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <Layers className="w-6 h-6 text-amber-500" />
+            </div>
+            Folder Structure
+          </CardTitle>
+          <CardDescription className="text-base">BLoC architecture with components, models, and state management</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FolderTree data={folderStructure} />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function ImplementationTab() {
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>API Endpoints</CardTitle>
+          <CardDescription>
+            REST API endpoints used by the Order Tracking feature
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {apiEndpoints.map((endpoint, index) => (
+              <div key={index} className="p-4 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-tertiary)]">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={cn(
+                    'px-2 py-1 rounded text-xs font-mono font-semibold',
+                    endpoint.method === 'GET' ? 'bg-blue-500/20 text-blue-400' : 'bg-green-500/20 text-green-400'
+                  )}>
+                    {endpoint.method}
+                  </span>
+                  <code className="text-sm text-[var(--color-text-primary)]">{endpoint.path}</code>
+                </div>
+                <p className="text-sm text-[var(--color-text-secondary)] mb-2">{endpoint.description}</p>
+                {endpoint.params && endpoint.params.length > 0 && (
+                  <div className="text-xs text-[var(--color-text-muted)]">
+                    <strong>Parameters:</strong> {endpoint.params.join(', ')}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Key Files</CardTitle>
+          <CardDescription>
+            Important files in the Order Tracking feature
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div>
+              <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">ViewModel</h4>
+              <code className="text-sm text-[var(--color-text-secondary)]">order_tracking_viewmodel.dart</code>
+              <p className="text-sm text-[var(--color-text-muted)] mt-1">
+                BLoC ViewModel managing order tracking logic, WebSocket connections, map updates, and state management.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">State</h4>
+              <code className="text-sm text-[var(--color-text-secondary)]">state/order_tracking_state.dart</code>
+              <p className="text-sm text-[var(--color-text-muted)] mt-1">
+                BLoC state class with AsyncState for data fetching and SocketState for WebSocket connections.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Screen</h4>
+              <code className="text-sm text-[var(--color-text-secondary)]">order_tracking_screen.dart</code>
+              <p className="text-sm text-[var(--color-text-muted)] mt-1">
+                Main screen widget orchestrating map, bottom sheet, and overlay components.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Map Widget</h4>
+              <code className="text-sm text-[var(--color-text-secondary)]">components/order_tracking_map.dart</code>
+              <p className="text-sm text-[var(--color-text-muted)] mt-1">
+                Google Maps widget displaying restaurant, customer, and driver markers with route polylines.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>WebSocket Integration</CardTitle>
+          <CardDescription>
+            Real-time communication setup for order tracking
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div>
+              <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Order Status WebSocket</h4>
+              <p className="text-sm text-[var(--color-text-muted)]">
+                Uses OrderStatusSocketManager to receive real-time order status updates. Connects when order tracking 
+                screen opens and disconnects when screen closes. Automatically reconnects on connection loss.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-[var(--color-text-primary)] mb-1">Driver Location Socket.IO</h4>
+              <p className="text-sm text-[var(--color-text-muted)]">
+                Uses DriverLocationSocketManager to receive driver location updates via Socket.IO. Connects when 
+                order reaches delivery stage and driver is assigned. Updates driver marker on map in real-time.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
