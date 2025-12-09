@@ -176,7 +176,7 @@ export const friendInviteEdgeCases: EdgeCase[] = [
   {
     id: 'EC-FRIEND-INVITE-009',
     title: 'Skip Navigation Fails',
-    category: 'Navigation',
+    category: 'State',
     likelihood: 'Low',
     impact: 'Medium',
     triggerCondition: 'Skip navigation logic fails or target screen unavailable',
@@ -198,7 +198,7 @@ export const friendInviteEdgeCases: EdgeCase[] = [
   {
     id: 'EC-FRIEND-INVITE-010',
     title: 'Success Navigation Fails',
-    category: 'Navigation',
+    category: 'State',
     likelihood: 'Low',
     impact: 'High',
     triggerCondition: 'Code applied successfully but navigation after success fails',
