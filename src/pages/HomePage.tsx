@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +26,9 @@ import { homeTestCases } from '@/features/home/data/test-cases';
 import { homeFeedUseCases } from '@/features/home-feed/data/use-cases';
 import { homeFeedEdgeCases } from '@/features/home-feed/data/edge-cases';
 import { homeFeedTestCases } from '@/features/home-feed/data/test-cases';
+import { orderRatingUseCases } from '@/features/order-rating/data/use-cases';
+import { orderRatingEdgeCases } from '@/features/order-rating/data/edge-cases';
+import { orderRatingTestCases } from '@/features/order-rating/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -33,7 +36,7 @@ interface FeatureCard {
   icon: React.ElementType;
   description: string;
   status: 'Stable' | 'Beta' | 'Alpha' | 'Deprecated';
-  architecture: 'MVVM' | 'Clean' | 'MVC' | 'MVP';
+  architecture: 'MVVM' | 'Clean' | 'MVC' | 'MVP' | 'BLoC';
   useCases: number;
   edgeCases: number;
   testCases: number;
@@ -132,6 +135,19 @@ const features: FeatureCard[] = [
     testCases: homeFeedTestCases.length,
     path: '/feature/home-feed',
     tags: ['Feed', 'Orders', 'Vouchers', 'Loyalty', 'Flash Sale', 'Real-time'],
+  },
+  {
+    id: 'order-rating',
+    name: 'Order Rating',
+    icon: Star,
+    description: 'Rate completed orders with star ratings, detailed feedback options, notes, photo uploads, and two-step rating process (restaurant and driver).',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: orderRatingUseCases.length,
+    edgeCases: orderRatingEdgeCases.length,
+    testCases: orderRatingTestCases.length,
+    path: '/feature/order-rating',
+    tags: ['Rating', 'Feedback', 'Reviews', 'Photos', 'Validation'],
   },
 ];
 

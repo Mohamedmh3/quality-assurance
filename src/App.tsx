@@ -8,6 +8,7 @@ import { CheckoutFeature } from './features/checkout/CheckoutFeature';
 import { CartFeature } from './features/cart/CartFeature';
 import { HomeFeature } from './features/home/HomeFeature';
 import { HomeFeedFeature } from './features/home-feed/HomeFeedFeature';
+import { OrderRatingFeature } from './features/order-rating/OrderRatingFeature';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="feature/cart" element={<CartFeature />} />
           <Route path="feature/home" element={<HomeFeature />} />
           <Route path="feature/home-feed" element={<HomeFeedFeature />} />
+          <Route path="feature/order-rating" element={<OrderRatingFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>
