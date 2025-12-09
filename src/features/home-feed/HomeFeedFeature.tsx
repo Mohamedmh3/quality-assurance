@@ -12,6 +12,11 @@ import {
   Gift,
   Bell,
   Zap,
+  ChevronRight,
+  Smartphone,
+  Folder,
+  GitBranch,
+  Rss,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
@@ -200,55 +205,56 @@ const apiEndpoints = [
 ];
 
 export function HomeFeedFeature() {
-  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const [activeTab, setActiveTab] = useState<TabId>('qa-tests');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Home className="w-6 h-6 text-primary" />
-            <div>
-              <h1 className="text-2xl font-bold text-white">Home Feed</h1>
-              <p className="text-sm text-slate-400">Dynamic content feed with sections, orders, vouchers, and more</p>
+    <div className="space-y-6">
+      {/* Compact Header */}
+      <div className="flex items-center justify-between gap-4 border-b border-[var(--color-border)]" style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-700 flex items-center justify-center">
+            <Rss className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-1">
+              <span>Features</span>
+              <ChevronRight className="w-3 h-3" />
+              <span className="text-orange-500">Home Feed</span>
             </div>
+            <h1 className="text-xl font-bold text-[var(--color-text-primary)]">
+              Home Feed Feature
+            </h1>
           </div>
-          <div className="flex items-center gap-2 mt-3">
-            <ArchitectureBadge type="MVVM" />
-            <StatusBadge status="Stable" />
-          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <StatusBadge status="Stable" />
+          <ArchitectureBadge type="MVVM" />
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="sticky top-[120px] z-30 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-1 overflow-x-auto">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2',
-                    activeTab === tab.id
-                      ? 'border-primary text-primary bg-primary/10'
-                      : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-600'
-                  )}
-                >
-                  <Icon className="w-4 h-4" />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+      {/* Tab Navigation */}
+      <div className="sticky top-20 z-10 glass rounded-xl border border-[var(--color-border)] p-4 shadow-lg">
+        <nav className="flex gap-4 lg:gap-6 overflow-x-auto" role="tablist">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn('tab-item', activeTab === tab.id && 'active')}
+                role="tab"
+                aria-selected={activeTab === tab.id}
+              >
+                <Icon className="w-5 h-5" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </nav>
       </div>
 
-      {/* Content */}
-      <div className="container mx-auto px-4 py-8">
+      {/* Tab Content */}
+      <div className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'use-cases' && <UseCaseSection useCases={homeFeedUseCases} />}
         {activeTab === 'edge-cases' && <EdgeCaseSection edgeCases={homeFeedEdgeCases} />}
@@ -262,90 +268,110 @@ export function HomeFeedFeature() {
 
 function OverviewTab() {
   return (
-    <div className="space-y-6">
-      <Card>
+    <div className="space-y-16 lg:space-y-20 animate-fade-in">
+      {/* Plain Language Summary */}
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle>Feature Overview</CardTitle>
-          <CardDescription>
-            The Home Feed is the main screen customers see when opening the app. It displays a dynamic, scrollable feed of content sections including restaurants, dishes, banners, offers, vouchers, order status, loyalty information, and more.
-          </CardDescription>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center">
+              <Smartphone className="w-6 h-6 text-orange-500" />
+            </div>
+            What It Does
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-white">Key Features</h3>
-            <ul className="list-disc list-inside space-y-2 text-slate-300">
-              <li>Dynamic section loading based on backend configuration</li>
-              <li>Pull-to-refresh functionality with throttling</li>
-              <li>Pagination for loading more sections as user scrolls</li>
-              <li>Real-time order status updates via WebSocket</li>
-              <li>Flash sale floating button and bottom sheet</li>
-              <li>Vouchers and loyalty points display</li>
-              <li>Delivery/Pickup mode switching</li>
-              <li>Banners, offers, and promotional content</li>
-              <li>Onboarding progress tracking</li>
-              <li>Achievements/challenges carousel</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-white">Architecture</h3>
-            <p className="text-slate-300 mb-2">
-              The Home Feed follows MVVM architecture with clear separation of concerns:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-slate-300">
-              <li><strong>View:</strong> <code className="text-primary">home_feed_view.dart</code> - Main UI screen with SmartRefresher</li>
-              <li><strong>ViewModel:</strong> <code className="text-primary">home_feed_viewmodel.dart</code> - Business logic, state management, API coordination</li>
-              <li><strong>Service:</strong> <code className="text-primary">feed_service.dart</code> - API calls for all feed data</li>
-              <li><strong>Widgets:</strong> Individual widgets for each section type (banners, orders, vouchers, etc.)</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2 text-white">Sub-Features</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Favorites</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-slate-400">View and manage favorite restaurants, markets, and dishes</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Loyalty Program</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-slate-400">Points, tiers, rewards, achievements, and redemption</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Voucher List</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-slate-400">Full list of available vouchers with categories and filters</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Flash Sale</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-slate-400">Time-limited sales with floating button and bottom sheet</p>
-                </CardContent>
-              </Card>
+        <CardContent className="space-y-7">
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            The <strong className="text-[var(--color-text-primary)]">Home Feed</strong> is the main screen customers see when opening the app. 
+            It displays a dynamic, scrollable feed of content sections that changes based on what the backend configures. 
+            Think of it like a personalized social media feed, but for food ordering.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Customers see different sections like <strong className="text-[var(--color-text-primary)]">restaurants</strong>, 
+            <strong className="text-[var(--color-text-primary)]"> dishes</strong>, <strong className="text-[var(--color-text-primary)]">banners</strong> 
+            with promotions, <strong className="text-[var(--color-text-primary)]">offers</strong>, their 
+            <strong className="text-[var(--color-text-primary)]"> vouchers</strong>, <strong className="text-[var(--color-text-primary)]">loyalty points</strong>, 
+            and most importantly, their <strong className="text-[var(--color-text-primary)]">active orders</strong> with real-time status updates.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Special features include <strong className="text-[var(--color-text-primary)]">pull-to-refresh</strong> to get fresh content, 
+            <strong className="text-[var(--color-text-primary)]"> automatic loading</strong> of more sections as you scroll, 
+            <strong className="text-[var(--color-text-primary)]"> flash sales</strong> that appear as floating buttons, 
+            and <strong className="text-[var(--color-text-primary)]">real-time order tracking</strong> that updates without refreshing.
+          </p>
+          
+          <div className="divider" />
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="info-box flex-col success">
+              <Users className="w-10 h-10 text-orange-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Who Uses It</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                All customers - it's the first screen they see when opening the app
+              </p>
+            </div>
+            <div className="info-box flex-col warning">
+              <Zap className="w-10 h-10 text-amber-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Key Value</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Dynamic content, real-time updates, personalized feed, order tracking
+              </p>
+            </div>
+            <div className="info-box flex-col">
+              <GitBranch className="w-10 h-10 text-[var(--color-primary)] mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Entry Points</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                App launch, bottom navigation Home tab, after login
+              </p>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Key Features */}
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle>Folder Structure</CardTitle>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-orange-500" />
+            </div>
+            Key Features
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <FolderTree data={folderStructure} />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: RefreshCw, title: 'Pull to Refresh', description: 'Refresh feed with throttling to prevent excessive calls', color: 'text-blue-500' },
+              { icon: Layers, title: 'Dynamic Sections', description: 'Backend-configured sections load progressively', color: 'text-purple-500' },
+              { icon: Bell, title: 'Real-Time Orders', description: 'WebSocket updates for order status changes', color: 'text-green-500' },
+              { icon: Gift, title: 'Flash Sales', description: 'Time-limited sales with floating button', color: 'text-pink-500' },
+              { icon: ShoppingBag, title: 'Vouchers & Loyalty', description: 'Display available vouchers and points', color: 'text-amber-500' },
+              { icon: Home, title: 'Delivery/Pickup', description: 'Switch between delivery and pickup modes', color: 'text-teal-500' },
+            ].map((feature, idx) => (
+              <div key={idx} className="info-box flex-col">
+                <feature.icon className={`w-8 h-8 ${feature.color} mb-4`} />
+                <h4 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">{feature.title}</h4>
+                <p className="text-base text-[var(--color-text-secondary)]">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Folder Structure */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <Folder className="w-6 h-6 text-amber-500" />
+            </div>
+            Folder Structure
+          </CardTitle>
+          <CardDescription className="text-base">MVVM architecture with dynamic section loading and sub-features</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-[var(--color-bg-primary)] rounded-2xl p-8 border border-[var(--color-border)]">
+            <FolderTree data={folderStructure} />
+          </div>
         </CardContent>
       </Card>
     </div>
@@ -354,11 +380,16 @@ function OverviewTab() {
 
 function ImplementationTab() {
   return (
-    <div className="space-y-6">
-      <Card>
+    <div className="space-y-8">
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle>API Endpoints</CardTitle>
-          <CardDescription>All API endpoints used by the Home Feed feature</CardDescription>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <Code2 className="w-6 h-6 text-blue-500" />
+            </div>
+            API Endpoints
+          </CardTitle>
+          <CardDescription className="text-base">All API endpoints used by the Home Feed feature</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -376,14 +407,14 @@ function ImplementationTab() {
                       {endpoint.method}
                     </span>
                     <div className="flex-1">
-                      <code className="text-primary font-mono text-sm">{endpoint.path}</code>
-                      <p className="text-sm text-slate-400 mt-1">{endpoint.description}</p>
+                      <code className="text-[var(--color-primary)] font-mono text-sm">{endpoint.path}</code>
+                      <p className="text-sm text-[var(--color-text-secondary)] mt-1">{endpoint.description}</p>
                       {endpoint.params.length > 0 && (
                         <div className="mt-2">
-                          <p className="text-xs text-slate-500 mb-1">Parameters:</p>
+                          <p className="text-xs text-[var(--color-text-muted)] mb-1">Parameters:</p>
                           <div className="flex flex-wrap gap-1">
                             {endpoint.params.map((param, i) => (
-                              <span key={i} className="px-2 py-0.5 bg-slate-700/50 rounded text-xs text-slate-300 font-mono">
+                              <span key={i} className="px-2 py-0.5 bg-[var(--color-bg-primary)] rounded text-xs text-[var(--color-text-secondary)] font-mono border border-[var(--color-border)]">
                                 {param}
                               </span>
                             ))}
@@ -399,103 +430,133 @@ function ImplementationTab() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle>Key Implementation Details</CardTitle>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-purple-500" />
+            </div>
+            Key Implementation Details
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="font-semibold mb-2 text-white flex items-center gap-2">
-              <RefreshCw className="w-4 h-4" />
-              Pull-to-Refresh with Throttling
-            </h3>
-            <p className="text-sm text-slate-300">
-              Refresh is throttled to prevent excessive API calls. After 5 retry attempts, throttle is overridden to allow refresh.
-            </p>
-            <code className="block mt-2 p-2 bg-slate-800 rounded text-xs text-slate-400">
-              home_feed_viewmodel.dart:1132-1190
-            </code>
+        <CardContent className="space-y-6">
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <RefreshCw className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Pull-to-Refresh with Throttling
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Refresh is throttled to prevent excessive API calls. After 5 retry attempts, throttle is overridden to allow refresh.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  home_feed_viewmodel.dart:1132-1190
+                </code>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-2 text-white flex items-center gap-2">
-              <Zap className="w-4 h-4" />
-              Real-Time Order Updates
-            </h3>
-            <p className="text-sm text-slate-300">
-              Uses WebSocket connection for real-time order status updates. Falls back to API polling if WebSocket fails.
-            </p>
-            <code className="block mt-2 p-2 bg-slate-800 rounded text-xs text-slate-400">
-              home_feed_viewmodel.dart:1528-1600
-            </code>
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Zap className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Real-Time Order Updates
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Uses WebSocket connection for real-time order status updates. Falls back to API polling if WebSocket fails.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  home_feed_viewmodel.dart:1528-1600
+                </code>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-2 text-white flex items-center gap-2">
-              <ShoppingBag className="w-4 h-4" />
-              Dynamic Section Loading
-            </h3>
-            <p className="text-sm text-slate-300">
-              Sections are loaded progressively as user scrolls. Each section type has its own data fetching logic.
-            </p>
-            <code className="block mt-2 p-2 bg-slate-800 rounded text-xs text-slate-400">
-              home_feed_viewmodel.dart:644-768
-            </code>
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <ShoppingBag className="w-6 h-6 text-purple-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Dynamic Section Loading
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Sections are loaded progressively as user scrolls. Each section type has its own data fetching logic.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  home_feed_viewmodel.dart:644-768
+                </code>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-2 text-white flex items-center gap-2">
-              <Bell className="w-4 h-4" />
-              Push Notification Handling
-            </h3>
-            <p className="text-sm text-slate-300">
-              Firebase push notifications trigger order updates, flash sale checks, and points earned dialogs.
-            </p>
-            <code className="block mt-2 p-2 bg-slate-800 rounded text-xs text-slate-400">
-              home_feed_viewmodel.dart:339-431
-            </code>
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Bell className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Push Notification Handling
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Firebase push notifications trigger order updates, flash sale checks, and points earned dialogs.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  home_feed_viewmodel.dart:339-431
+                </code>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h3 className="font-semibold mb-2 text-white flex items-center gap-2">
-              <Gift className="w-4 h-4" />
-              Flash Sale Periodic Updates
-            </h3>
-            <p className="text-sm text-slate-300">
-              Flash sale is checked periodically (configurable rate). New sales automatically show bottom sheet.
-            </p>
-            <code className="block mt-2 p-2 bg-slate-800 rounded text-xs text-slate-400">
-              flash_sale_viewmodel.dart:91-130
-            </code>
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Gift className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Flash Sale Periodic Updates
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Flash sale is checked periodically (configurable rate). New sales automatically show bottom sheet.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  flash_sale_viewmodel.dart:91-130
+                </code>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle>State Management</CardTitle>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center">
+              <GitBranch className="w-6 h-6 text-teal-500" />
+            </div>
+            State Management
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-6">
             <div>
-              <h4 className="font-semibold text-white mb-1">Observable State (MobX)</h4>
-              <ul className="list-disc list-inside text-sm text-slate-300 space-y-1">
-                <li><code className="text-primary">homeList</code> - Current list of sections to display</li>
-                <li><code className="text-primary">latestOrderList</code> - Active orders for display</li>
-                <li><code className="text-primary">userVoucherModel</code> - User vouchers</li>
-                <li><code className="text-primary">loyaltyInfoModel</code> - Loyalty points and tier</li>
-                <li><code className="text-primary">currentPickUpState</code> - Delivery or Pickup mode</li>
-                <li><code className="text-primary">onboardingProgressModel</code> - Onboarding progress</li>
-                <li><code className="text-primary">surveyCard</code> - Onboarding survey card</li>
+              <h4 className="font-semibold text-lg text-[var(--color-text-primary)] mb-3">Observable State (MobX)</h4>
+              <ul className="list-disc list-inside text-base text-[var(--color-text-secondary)] space-y-2">
+                <li><code className="text-[var(--color-primary)]">homeList</code> - Current list of sections to display</li>
+                <li><code className="text-[var(--color-primary)]">latestOrderList</code> - Active orders for display</li>
+                <li><code className="text-[var(--color-primary)]">userVoucherModel</code> - User vouchers</li>
+                <li><code className="text-[var(--color-primary)]">loyaltyInfoModel</code> - Loyalty points and tier</li>
+                <li><code className="text-[var(--color-primary)]">currentPickUpState</code> - Delivery or Pickup mode</li>
+                <li><code className="text-[var(--color-primary)]">onboardingProgressModel</code> - Onboarding progress</li>
+                <li><code className="text-[var(--color-primary)]">surveyCard</code> - Onboarding survey card</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-white mb-1">Loading States</h4>
-              <ul className="list-disc list-inside text-sm text-slate-300 space-y-1">
-                <li><code className="text-primary">homeListLoading</code> - Initial feed loading</li>
-                <li><code className="text-primary">onRefreshOn</code> - Refresh in progress</li>
-                <li><code className="text-primary">onLoadingOn</code> - Pagination loading</li>
-                <li><code className="text-primary">achievementsLoading</code> - Achievements loading</li>
+              <h4 className="font-semibold text-lg text-[var(--color-text-primary)] mb-3">Loading States</h4>
+              <ul className="list-disc list-inside text-base text-[var(--color-text-secondary)] space-y-2">
+                <li><code className="text-[var(--color-primary)]">homeListLoading</code> - Initial feed loading</li>
+                <li><code className="text-[var(--color-primary)]">onRefreshOn</code> - Refresh in progress</li>
+                <li><code className="text-[var(--color-primary)]">onLoadingOn</code> - Pagination loading</li>
+                <li><code className="text-[var(--color-primary)]">achievementsLoading</code> - Achievements loading</li>
               </ul>
             </div>
           </div>
