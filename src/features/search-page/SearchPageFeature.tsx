@@ -10,6 +10,13 @@ import {
   ChevronRight,
   Folder,
   GitBranch,
+  Smartphone,
+  Zap,
+  Filter,
+  MapPin,
+  Clock,
+  Store,
+  UtensilsCrossed,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
@@ -184,75 +191,111 @@ const apiEndpoints = [
 
 function OverviewTab() {
   return (
-    <div className="space-y-8">
-      <Card>
+    <div className="space-y-16 lg:space-y-20 animate-fade-in">
+      {/* Plain Language Summary */}
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-3">
-            <Search className="w-6 h-6 text-[var(--color-primary)]" />
-            Search Page Feature Overview
-          </CardTitle>
-          <CardDescription>
-            Comprehensive search functionality allowing users to find restaurants, markets, and dishes
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Feature Description</h3>
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
-              The Search Page feature provides a powerful search interface for customers to find restaurants, markets, and dishes.
-              It includes search tabs, filters, suggestions, categories, and the ability to recommend new outlets.
-              The feature supports both restaurant and item search with advanced filtering capabilities.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Key Capabilities</h3>
-            <ul className="space-y-2 text-base text-[var(--color-text-secondary)]">
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Search for restaurants and markets by name, cuisine, or keywords</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Search for specific dishes or items across restaurants</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Apply multiple filters (price, rating, cuisine type, features)</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Browse categories and suggestions</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Get search suggestions as you type</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Recommend new restaurants or markets</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Pagination for loading more results</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Automatic refresh when address changes</span>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Architecture</h3>
-            <div className="flex items-center gap-2 mb-3">
-              <ArchitectureBadge type="MVVM" />
-              <StatusBadge status="Stable" />
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <Smartphone className="w-6 h-6 text-blue-500" />
             </div>
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
-              The Search Page feature follows MVVM architecture with clear separation between View, ViewModel, Service, and Model layers.
-              The feature uses MobX for state management and includes sub-pages for categories and user suggestions.
-            </p>
+            What It Does
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-7">
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            The <strong className="text-[var(--color-text-primary)]">Search Page</strong> feature provides a powerful search interface for customers to find restaurants, markets, and dishes.
+            It displays search tabs (All, Restaurants, Markets), default sections with categories and suggestions, and allows users to search by typing queries.
+            Search results show restaurants or items matching the query with filters, pagination, and sorting options.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Customers can <strong className="text-[var(--color-text-primary)]">search for restaurants</strong> by name, cuisine type, or keywords,
+            <strong className="text-[var(--color-text-primary)]"> search for specific dishes</strong> across multiple restaurants,
+            <strong className="text-[var(--color-text-primary)]"> apply multiple filters</strong> (price, rating, cuisine, features) to refine results,
+            and <strong className="text-[var(--color-text-primary)]">browse categories</strong> to discover restaurants by cuisine type.
+            The feature also includes <strong className="text-[var(--color-text-primary)]">search suggestions</strong> that appear as users type.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Special features include <strong className="text-[var(--color-text-primary)]">outlet recommendations</strong> where users can suggest new restaurants or markets,
+            <strong className="text-[var(--color-text-primary)]"> automatic refresh</strong> when delivery address changes,
+            and <strong className="text-[var(--color-text-primary)]">pagination</strong> for loading more search results as users scroll.
+          </p>
+          
+          <div className="divider" />
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="info-box flex-col success">
+              <Users className="w-10 h-10 text-blue-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Who Uses It</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                All customers searching for restaurants, markets, or specific dishes
+              </p>
+            </div>
+            <div className="info-box flex-col warning">
+              <Zap className="w-10 h-10 text-amber-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Key Value</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Restaurant discovery, item search, filtering, categories, suggestions, recommendations
+              </p>
+            </div>
+            <div className="info-box flex-col">
+              <GitBranch className="w-10 h-10 text-[var(--color-primary)] mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Entry Points</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Search icon/bar from any screen, home feed, navigation menu
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Key Features */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <Search className="w-6 h-6 text-blue-500" />
+            </div>
+            Key Features
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: Search, title: 'Restaurant Search', description: 'Search restaurants by name, cuisine, or keywords with real-time results', color: 'text-blue-500' },
+              { icon: UtensilsCrossed, title: 'Item Search', description: 'Search for specific dishes or items across multiple restaurants', color: 'text-green-500' },
+              { icon: Filter, title: 'Advanced Filters', description: 'Apply multiple filters (price, rating, cuisine, features) to refine results', color: 'text-purple-500' },
+              { icon: Store, title: 'Category Browsing', description: 'Browse restaurants by cuisine categories (Pizza, Burgers, etc.)', color: 'text-orange-500' },
+              { icon: Zap, title: 'Search Suggestions', description: 'Get real-time suggestions as you type your search query', color: 'text-yellow-500' },
+              { icon: Users, title: 'Outlet Recommendations', description: 'Suggest new restaurants or markets to be added to the app', color: 'text-pink-500' },
+              { icon: MapPin, title: 'Location-Based', description: 'Search results filtered by user location and delivery address', color: 'text-red-500' },
+              { icon: Clock, title: 'Pagination', description: 'Load more search results as you scroll down', color: 'text-teal-500' },
+              { icon: Settings, title: 'Auto Refresh', description: 'Search results automatically refresh when delivery address changes', color: 'text-indigo-500' },
+            ].map((feature, idx) => (
+              <div key={idx} className="info-box flex-col">
+                <feature.icon className={`w-8 h-8 ${feature.color} mb-4`} />
+                <h4 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">{feature.title}</h4>
+                <p className="text-base text-[var(--color-text-secondary)]">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Folder Structure */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <Folder className="w-6 h-6 text-amber-500" />
+            </div>
+            Folder Structure
+          </CardTitle>
+          <CardDescription className="text-base">MVVM architecture with MobX state management</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-[var(--color-bg-primary)] rounded-2xl p-8 border border-[var(--color-border)]">
+            <FolderTree data={folderStructure} />
           </div>
         </CardContent>
       </Card>

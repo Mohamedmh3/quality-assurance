@@ -10,6 +10,13 @@ import {
   ChevronRight,
   Folder,
   GitBranch,
+  Smartphone,
+  Zap,
+  MessageSquare,
+  Phone,
+  Clock,
+  CheckCircle,
+  ArrowLeft,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
@@ -111,75 +118,110 @@ const apiEndpoints = [
 
 function OverviewTab() {
   return (
-    <div className="space-y-8">
-      <Card>
+    <div className="space-y-16 lg:space-y-20 animate-fade-in">
+      {/* Plain Language Summary */}
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-3">
-            <Shield className="w-6 h-6 text-[var(--color-primary)]" />
-            OTP Verification Feature Overview
-          </CardTitle>
-          <CardDescription>
-            Phone number verification using One-Time Password (OTP) codes sent via SMS or phone call
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Feature Description</h3>
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
-              The OTP Verification feature enables users to verify their phone numbers by entering a 6-digit code
-              received via SMS or phone call. The feature includes SMS autofill, automatic verification when 6 digits
-              are entered, resend options with countdown timer, and error handling for invalid or expired codes.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Key Capabilities</h3>
-            <ul className="space-y-2 text-base text-[var(--color-text-secondary)]">
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Enter 6-digit OTP code via input fields</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>SMS autofill automatically fills code from received SMS</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Automatic verification when 6 digits are entered</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Resend OTP via SMS or phone call</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Countdown timer (20 seconds) prevents spam resends</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Handle invalid, expired, or already used codes</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Navigate to next screen on successful verification</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Back navigation to phone number screen</span>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Architecture</h3>
-            <div className="flex items-center gap-2 mb-3">
-              <ArchitectureBadge type="BLoC" />
-              <StatusBadge status="Stable" />
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+              <Smartphone className="w-6 h-6 text-indigo-500" />
             </div>
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
-              The OTP Verification feature follows BLoC architecture with clear separation between UI, ViewModel (Cubit), and State.
-              The feature uses BLoC pattern for state management, includes SMS autofill integration, and proper error handling.
-            </p>
+            What It Does
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-7">
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            The <strong className="text-[var(--color-text-primary)]">OTP Verification</strong> feature enables users to verify their phone numbers by entering a 6-digit code
+            received via SMS or phone call. After entering a phone number, users receive an OTP code and must enter it to complete verification.
+            The feature displays 6 input fields for entering the code, shows the phone number where the code was sent, and provides options to resend if needed.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            When users <strong className="text-[var(--color-text-primary)]">receive SMS</strong> with the OTP code, the app can <strong className="text-[var(--color-text-primary)]">automatically fill</strong> the code using SMS autofill,
+            making verification faster. Users can also <strong className="text-[var(--color-text-primary)]">manually enter</strong> the code digit by digit.
+            Once 6 digits are entered, <strong className="text-[var(--color-text-primary)]">verification starts automatically</strong> without needing to tap a button.
+            If users don't receive the code, they can <strong className="text-[var(--color-text-primary)]">resend via SMS or phone call</strong>.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Special features include <strong className="text-[var(--color-text-primary)]">countdown timer</strong> (20 seconds) that prevents spam resend requests,
+            <strong className="text-[var(--color-text-primary)]"> error handling</strong> for invalid, expired, or already used codes,
+            and <strong className="text-[var(--color-text-primary)]">back navigation</strong> that allows users to return to phone number screen if they want to change their number.
+          </p>
+          
+          <div className="divider" />
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="info-box flex-col success">
+              <Users className="w-10 h-10 text-indigo-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Who Uses It</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                All users during registration or phone number verification
+              </p>
+            </div>
+            <div className="info-box flex-col warning">
+              <Zap className="w-10 h-10 text-amber-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Key Value</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Phone verification, SMS autofill, security, resend options, error handling
+              </p>
+            </div>
+            <div className="info-box flex-col">
+              <GitBranch className="w-10 h-10 text-[var(--color-primary)] mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Entry Points</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Phone number entry screen, registration flow, login flow
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Key Features */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+              <Shield className="w-6 h-6 text-indigo-500" />
+            </div>
+            Key Features
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: Shield, title: '6-Digit Code Input', description: 'Enter OTP code via 6 input fields with automatic focus movement', color: 'text-indigo-500' },
+              { icon: MessageSquare, title: 'SMS Autofill', description: 'Automatically fill code from received SMS message', color: 'text-blue-500' },
+              { icon: CheckCircle, title: 'Auto Verification', description: 'Verification starts automatically when 6 digits are entered', color: 'text-green-500' },
+              { icon: MessageSquare, title: 'Resend via SMS', description: 'Request new OTP code via SMS if not received', color: 'text-teal-500' },
+              { icon: Phone, title: 'Resend via Call', description: 'Request OTP code via automated phone call', color: 'text-purple-500' },
+              { icon: Clock, title: 'Countdown Timer', description: '20-second timer prevents spam resend requests', color: 'text-amber-500' },
+              { icon: ShieldCheck, title: 'Error Handling', description: 'Handle invalid, expired, or already used codes gracefully', color: 'text-red-500' },
+              { icon: ArrowLeft, title: 'Back Navigation', description: 'Navigate back to phone number screen to change number', color: 'text-gray-500' },
+              { icon: Zap, title: 'Phone Display', description: 'Show phone number where code was sent for user confirmation', color: 'text-pink-500' },
+            ].map((feature, idx) => (
+              <div key={idx} className="info-box flex-col">
+                <feature.icon className={`w-8 h-8 ${feature.color} mb-4`} />
+                <h4 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">{feature.title}</h4>
+                <p className="text-base text-[var(--color-text-secondary)]">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Folder Structure */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <Folder className="w-6 h-6 text-amber-500" />
+            </div>
+            Folder Structure
+          </CardTitle>
+          <CardDescription className="text-base">BLoC architecture with Cubit state management</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-[var(--color-bg-primary)] rounded-2xl p-8 border border-[var(--color-border)]">
+            <FolderTree data={folderStructure} />
           </div>
         </CardContent>
       </Card>

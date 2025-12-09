@@ -10,6 +10,10 @@ import {
   ChevronRight,
   Folder,
   GitBranch,
+  Smartphone,
+  Zap,
+  Gift,
+  CheckCircle,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
@@ -85,71 +89,107 @@ const apiEndpoints = [
 
 function OverviewTab() {
   return (
-    <div className="space-y-8">
-      <Card>
+    <div className="space-y-16 lg:space-y-20 animate-fade-in">
+      {/* Plain Language Summary */}
+      <Card padding="xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-3">
-            <UserPlus className="w-6 h-6 text-[var(--color-primary)]" />
-            Friend Invite Feature Overview
-          </CardTitle>
-          <CardDescription>
-            Allow users to enter friend invite codes to receive referral rewards and benefits
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Feature Description</h3>
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
-              The Friend Invite feature enables users to enter referral codes from friends during registration or onboarding.
-              Users can apply valid codes to receive rewards, or skip code entry to continue without a code.
-              The feature includes code validation, error handling, and navigation based on user flow state.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Key Capabilities</h3>
-            <ul className="space-y-2 text-base text-[var(--color-text-secondary)]">
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Enter friend invite codes via input field</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Real-time code validation as user types</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Apply valid codes to receive rewards</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Skip code entry to continue without code</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Handle invalid, expired, or already used codes</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Navigate based on user flow (from cart, logged in, etc.)</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--color-primary)] mt-1">•</span>
-                <span>Show intro questions if needed before final navigation</span>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Architecture</h3>
-            <div className="flex items-center gap-2 mb-3">
-              <ArchitectureBadge type="BLoC" />
-              <StatusBadge status="Stable" />
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <Smartphone className="w-6 h-6 text-purple-500" />
             </div>
-            <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
-              The Friend Invite feature follows BLoC architecture with clear separation between UI, ViewModel (Cubit), and State.
-              The feature uses BLoC pattern for state management and includes proper error handling and navigation logic.
-            </p>
+            What It Does
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-7">
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            The <strong className="text-[var(--color-text-primary)]">Friend Invite</strong> feature allows users to enter referral codes from friends during registration or onboarding.
+            Users can apply valid codes to receive rewards, discounts, or benefits, or skip code entry to continue without a code.
+            The feature displays an input field, instructions on how to find codes, and options to apply or skip.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            When users <strong className="text-[var(--color-text-primary)]">enter a valid code</strong>, the app verifies it with the backend,
+            grants rewards to both the referrer and the new user, and <strong className="text-[var(--color-text-primary)]">navigates to the next step</strong> in the flow.
+            If users <strong className="text-[var(--color-text-primary)]">skip code entry</strong>, they can continue with registration normally.
+            The feature includes <strong className="text-[var(--color-text-primary)]">real-time validation</strong> to ensure codes are in the correct format before submission.
+          </p>
+          <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed">
+            Special handling includes <strong className="text-[var(--color-text-primary)]">error messages</strong> for invalid, expired, or already used codes,
+            <strong className="text-[var(--color-text-primary)]"> navigation logic</strong> that considers user flow state (from cart, logged in, etc.),
+            and <strong className="text-[var(--color-text-primary)]">intro questions</strong> that may appear before final navigation.
+          </p>
+          
+          <div className="divider" />
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="info-box flex-col success">
+              <Users className="w-10 h-10 text-purple-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Who Uses It</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                New users during registration or onboarding who have friend referral codes
+              </p>
+            </div>
+            <div className="info-box flex-col warning">
+              <Zap className="w-10 h-10 text-amber-500 mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Key Value</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Referral rewards, user acquisition, code validation, flexible onboarding flow
+              </p>
+            </div>
+            <div className="info-box flex-col">
+              <GitBranch className="w-10 h-10 text-[var(--color-primary)] mb-4" />
+              <h4 className="font-semibold text-xl text-[var(--color-text-primary)] mb-3">Entry Points</h4>
+              <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+                Registration flow, onboarding process, user info screen
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Key Features */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <UserPlus className="w-6 h-6 text-purple-500" />
+            </div>
+            Key Features
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: UserPlus, title: 'Code Entry', description: 'Enter friend invite codes via input field with real-time validation', color: 'text-purple-500' },
+              { icon: CheckCircle, title: 'Code Validation', description: 'Real-time validation ensures codes are in correct format', color: 'text-green-500' },
+              { icon: Gift, title: 'Reward Application', description: 'Apply valid codes to receive referral rewards and benefits', color: 'text-pink-500' },
+              { icon: Zap, title: 'Skip Option', description: 'Skip code entry to continue registration without a code', color: 'text-amber-500' },
+              { icon: Shield, title: 'Error Handling', description: 'Handle invalid, expired, or already used codes gracefully', color: 'text-red-500' },
+              { icon: Settings, title: 'Flow Navigation', description: 'Navigate based on user flow state (from cart, logged in, etc.)', color: 'text-blue-500' },
+            ].map((feature, idx) => (
+              <div key={idx} className="info-box flex-col">
+                <feature.icon className={`w-8 h-8 ${feature.color} mb-4`} />
+                <h4 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">{feature.title}</h4>
+                <p className="text-base text-[var(--color-text-secondary)]">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Folder Structure */}
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <Folder className="w-6 h-6 text-amber-500" />
+            </div>
+            Folder Structure
+          </CardTitle>
+          <CardDescription className="text-base">BLoC architecture with Cubit state management</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-[var(--color-bg-primary)] rounded-2xl p-8 border border-[var(--color-border)]">
+            <FolderTree data={folderStructure} />
           </div>
         </CardContent>
       </Card>
