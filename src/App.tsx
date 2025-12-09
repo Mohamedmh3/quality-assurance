@@ -10,6 +10,8 @@ import { HomeFeature } from './features/home/HomeFeature';
 import { HomeFeedFeature } from './features/home-feed/HomeFeedFeature';
 import { OrderRatingFeature } from './features/order-rating/OrderRatingFeature';
 import { OrderTrackingFeature } from './features/order-tracking/OrderTrackingFeature';
+import { RestaurantListFeature } from './features/restaurant-list/RestaurantListFeature';
+import { AddressFeature } from './features/address/AddressFeature';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route path="feature/home-feed" element={<HomeFeedFeature />} />
           <Route path="feature/order-rating" element={<OrderRatingFeature />} />
           <Route path="feature/order-tracking" element={<OrderTrackingFeature />} />
+          <Route path="feature/restaurant-list" element={<RestaurantListFeature />} />
+          <Route path="feature/address" element={<AddressFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -32,6 +32,12 @@ import { orderRatingTestCases } from '@/features/order-rating/data/test-cases';
 import { orderTrackingUseCases } from '@/features/order-tracking/data/use-cases';
 import { orderTrackingEdgeCases } from '@/features/order-tracking/data/edge-cases';
 import { orderTrackingTestCases } from '@/features/order-tracking/data/test-cases';
+import { restaurantListUseCases } from '@/features/restaurant-list/data/use-cases';
+import { restaurantListEdgeCases } from '@/features/restaurant-list/data/edge-cases';
+import { restaurantListTestCases } from '@/features/restaurant-list/data/test-cases';
+import { addressUseCases } from '@/features/address/data/use-cases';
+import { addressEdgeCases } from '@/features/address/data/edge-cases';
+import { addressTestCases } from '@/features/address/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -164,6 +170,32 @@ const features: FeatureCard[] = [
     testCases: orderTrackingTestCases.length,
     path: '/feature/order-tracking',
     tags: ['Tracking', 'Map', 'Real-time', 'WebSocket', 'Driver Location'],
+  },
+  {
+    id: 'restaurant-list',
+    name: 'Restaurant List',
+    icon: Store,
+    description: 'Browse and discover restaurants with categories, filters, banners, pagination, pickup/delivery toggle, and guest user restrictions.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: restaurantListUseCases.length,
+    edgeCases: restaurantListEdgeCases.length,
+    testCases: restaurantListTestCases.length,
+    path: '/feature/restaurant-list',
+    tags: ['Restaurants', 'Filtering', 'Categories', 'Pagination', 'Search'],
+  },
+  {
+    id: 'address',
+    name: 'Address',
+    icon: MapPin,
+    description: 'Add and manage delivery addresses using interactive map, location search, delivery area visualization, and address validation.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: addressUseCases.length,
+    edgeCases: addressEdgeCases.length,
+    testCases: addressTestCases.length,
+    path: '/feature/address',
+    tags: ['Address', 'Map', 'Location', 'Delivery', 'GPS'],
   },
 ];
 
