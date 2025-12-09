@@ -416,7 +416,7 @@ function ImplementationTab() {
 }
 
 export default function PhoneNumberFeature() {
-  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const [activeTab, setActiveTab] = useState<TabId>('qa-tests');
 
   return (
     <div className="space-y-6">
