@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
+import { useQAStore } from '@/store/qa-store';
 
 // Import actual data to get real counts
 import { dishUseCases } from '@/features/dish/data/use-cases';
@@ -279,16 +280,82 @@ const features: FeatureCard[] = [
   },
 ];
 
+// Map feature IDs to their test cases
+const featureTestCasesMap: Record<string, typeof dishTestCases> = {
+  'dish': dishTestCases,
+  'splash': splashTestCases,
+  'menu-restaurant': menuRestaurantTestCases,
+  'checkout': checkoutTestCases,
+  'cart': cartTestCases,
+  'home': homeTestCases,
+  'home-feed': homeFeedTestCases,
+  'order-rating': orderRatingTestCases,
+  'order-tracking': orderTrackingTestCases,
+  'restaurant-list': restaurantListTestCases,
+  'address': addressTestCases,
+  'search-page': searchPageTestCases,
+  'friend-invite': friendInviteTestCases,
+  'otp': otpTestCases,
+  'phone-number': phoneNumberTestCases,
+  'user-info': userInfoTestCases,
+};
+
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const getProgress = useQAStore((state) => state.getProgress);
 
   const allTags = Array.from(new Set(features.flatMap(f => f.tags)));
   const totalUseCases = features.reduce((acc, f) => acc + f.useCases, 0);
   const totalEdgeCases = features.reduce((acc, f) => acc + f.edgeCases, 0);
   const totalTests = features.reduce((acc, f) => acc + f.testCases, 0);
 
-  const filteredFeatures = features.filter(feature => {
+  // Calculate progress for each feature
+  const featuresWithProgress = useMemo(() => {
+    return features.map(feature => {
+      const testCases = featureTestCasesMap[feature.id] || [];
+      const progress = getProgress(testCases);
+      return {
+        ...feature,
+        progress: progress.percentage,
+      };
+    });
+  }, [getProgress]);
+
+  // Group features by progress status
+  const groupedFeatures = useMemo(() => {
+    const notStarted = featuresWithProgress.filter(f => f.progress === 0);
+    const inProgress = featuresWithProgress.filter(f => f.progress > 0 && f.progress < 100);
+    const done = featuresWithProgress.filter(f => f.progress === 100);
+    return { notStarted, inProgress, done };
+  }, [featuresWithProgress]);
+
+  const filteredFeatures = featuresWithProgress.filter(feature => {
+    const matchesSearch = searchQuery === '' ||
+      feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      feature.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
+    return matchesSearch && matchesTag;
+  });
+
+  // Filter grouped features by search and tag
+  const filteredNotStarted = groupedFeatures.notStarted.filter(feature => {
+    const matchesSearch = searchQuery === '' ||
+      feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      feature.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
+    return matchesSearch && matchesTag;
+  });
+
+  const filteredInProgress = groupedFeatures.inProgress.filter(feature => {
+    const matchesSearch = searchQuery === '' ||
+      feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      feature.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
+    return matchesSearch && matchesTag;
+  });
+
+  const filteredDone = groupedFeatures.done.filter(feature => {
     const matchesSearch = searchQuery === '' ||
       feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       feature.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -396,75 +463,101 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Progress Sections */}
+      <div className="space-y-12">
+        {/* Not Started Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-gray-500/10 flex items-center justify-center">
+              <Circle className="w-5 h-5 text-gray-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
+              Not Started ({filteredNotStarted.length})
+            </h2>
+          </div>
+          {filteredNotStarted.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {filteredNotStarted.map((feature) => (
+                <FeatureCard key={feature.id} feature={feature} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
+              <Circle className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
+              <p className="text-sm text-[var(--color-text-secondary)]">
+                No features with 0% progress found
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* In Progress Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+              <Clock className="w-5 h-5 text-amber-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
+              In Progress ({filteredInProgress.length})
+            </h2>
+          </div>
+          {filteredInProgress.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {filteredInProgress.map((feature) => (
+                <FeatureCard key={feature.id} feature={feature} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
+              <Clock className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
+              <p className="text-sm text-[var(--color-text-secondary)]">
+                No features in progress found
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* Done Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
+              Done ({filteredDone.length})
+            </h2>
+          </div>
+          {filteredDone.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {filteredDone.map((feature) => (
+                <FeatureCard key={feature.id} feature={feature} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
+              <CheckCircle2 className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
+              <p className="text-sm text-[var(--color-text-secondary)]">
+                No completed features found
+              </p>
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* Features Section - Keep for backward compatibility */}
       <section>
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center">
             <Layers className="w-5 h-5 text-[var(--color-primary)]" />
           </div>
           <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
-            Documented Features
+            All Features ({filteredFeatures.length})
           </h2>
         </div>
         
         <div className="grid md:grid-cols-2 gap-6">
           {filteredFeatures.map((feature) => (
-            <Link
-              key={feature.id}
-              to={feature.path}
-              className="block group"
-            >
-              <div className="h-full bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] hover:border-[var(--color-primary)]/50 transition-all duration-200 hover:shadow-lg hover:shadow-[var(--color-primary)]/5" style={{ padding: '32px' }}>
-                {/* Header */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] flex items-center justify-center shadow-lg">
-                    <feature.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <StatusBadge status={feature.status} />
-                </div>
-                
-                {/* Content */}
-                <h3 className="text-2xl font-bold text-[var(--color-text-primary)] mb-3 group-hover:text-[var(--color-primary)] transition-colors">
-                  {feature.name}
-                </h3>
-                <p className="text-base text-[var(--color-text-secondary)] mb-6 leading-relaxed">
-                  {feature.description}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {feature.tags.map(tag => (
-                    <span 
-                      key={tag} 
-                      className="px-3 py-1.5 text-sm font-medium rounded-lg bg-[var(--color-bg-tertiary)] text-[var(--color-text-muted)] border border-[var(--color-border)]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Stats Footer */}
-                <div className="flex items-center justify-between pt-6 border-t border-[var(--color-border)]">
-                  <div className="flex gap-6">
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-[var(--color-primary)]">{feature.useCases}</div>
-                      <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide">Use Cases</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-amber-500">{feature.edgeCases}</div>
-                      <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide">Edge Cases</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-emerald-500">{feature.testCases}</div>
-                      <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide">Tests</div>
-                    </div>
-                  </div>
-                  <div className="w-12 h-12 rounded-xl bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] flex items-center justify-center group-hover:bg-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all">
-                    <ArrowRight className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-white transition-colors" />
-                  </div>
-                </div>
-              </div>
-            </Link>
+            <FeatureCard key={feature.id} feature={feature} />
           ))}
         </div>
 
@@ -491,5 +584,91 @@ export function HomePage() {
         )}
       </section>
     </div>
+  );
+}
+
+// Feature Card Component
+function FeatureCard({ feature }: { feature: FeatureCard & { progress?: number } }) {
+  return (
+    <Link
+      to={feature.path}
+      className="block group"
+    >
+      <div className="h-full bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] hover:border-[var(--color-primary)]/50 transition-all duration-200 hover:shadow-lg hover:shadow-[var(--color-primary)]/5" style={{ padding: '32px' }}>
+        {/* Header */}
+        <div className="flex items-start justify-between mb-6">
+          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] flex items-center justify-center shadow-lg">
+            <feature.icon className="w-8 h-8 text-white" />
+          </div>
+          <div className="flex flex-col items-end gap-2">
+            <StatusBadge status={feature.status} />
+            {feature.progress !== undefined && (
+              <div className="flex items-center gap-2">
+                <div className="relative w-16 h-2 bg-[var(--color-bg-tertiary)] rounded-full overflow-hidden">
+                  <div 
+                    className={cn(
+                      "h-full rounded-full transition-all duration-300",
+                      feature.progress === 0 ? "bg-gray-500" :
+                      feature.progress === 100 ? "bg-emerald-500" :
+                      "bg-amber-500"
+                    )}
+                    style={{ width: `${feature.progress}%` }}
+                  />
+                </div>
+                <span className={cn(
+                  "text-xs font-semibold",
+                  feature.progress === 0 ? "text-gray-500" :
+                  feature.progress === 100 ? "text-emerald-500" :
+                  "text-amber-500"
+                )}>
+                  {feature.progress}%
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Content */}
+        <h3 className="text-2xl font-bold text-[var(--color-text-primary)] mb-3 group-hover:text-[var(--color-primary)] transition-colors">
+          {feature.name}
+        </h3>
+        <p className="text-base text-[var(--color-text-secondary)] mb-6 leading-relaxed">
+          {feature.description}
+        </p>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {feature.tags.map(tag => (
+            <span 
+              key={tag} 
+              className="px-3 py-1.5 text-sm font-medium rounded-lg bg-[var(--color-bg-tertiary)] text-[var(--color-text-muted)] border border-[var(--color-border)]"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Stats Footer */}
+        <div className="flex items-center justify-between pt-6 border-t border-[var(--color-border)]">
+          <div className="flex gap-6">
+            <div className="text-center">
+              <div className="text-xl font-bold text-[var(--color-primary)]">{feature.useCases}</div>
+              <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide">Use Cases</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-bold text-amber-500">{feature.edgeCases}</div>
+              <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide">Edge Cases</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-bold text-emerald-500">{feature.testCases}</div>
+              <div className="text-xs text-[var(--color-text-muted)] uppercase tracking-wide">Tests</div>
+            </div>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-[var(--color-bg-tertiary)] border border-[var(--color-border)] flex items-center justify-center group-hover:bg-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all">
+            <ArrowRight className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-white transition-colors" />
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }
