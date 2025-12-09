@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp, Tag } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 import { useQAStore } from '@/store/qa-store';
@@ -72,6 +72,9 @@ import { liveChatTestCases } from '@/features/live-chat/data/test-cases';
 import { profileUseCases } from '@/features/profile/data/use-cases';
 import { profileEdgeCases } from '@/features/profile/data/edge-cases';
 import { profileTestCases } from '@/features/profile/data/test-cases';
+import { tagScreensUseCases } from '@/features/tag-screens/data/use-cases';
+import { tagScreensEdgeCases } from '@/features/tag-screens/data/edge-cases';
+import { tagScreensTestCases } from '@/features/tag-screens/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -374,6 +377,19 @@ const features: FeatureCard[] = [
     path: '/feature/live-chat',
     tags: ['Support', 'Chat', 'Customer Service', 'Communication'],
   },
+  {
+    id: 'tag-screens',
+    name: 'Tag Screens',
+    icon: Tag,
+    description: 'Browse dishes and restaurants filtered by tags with infinite scroll pagination, loading states, error handling, and smooth navigation.',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: tagScreensUseCases.length,
+    edgeCases: tagScreensEdgeCases.length,
+    testCases: tagScreensTestCases.length,
+    path: '/feature/tag-screens',
+    tags: ['Tags', 'Filtering', 'Pagination', 'Browse'],
+  },
 ];
 
 // Map feature IDs to their test cases
@@ -400,6 +416,7 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'edit-profile': editProfileTestCases,
   'profile': profileTestCases,
   'live-chat': liveChatTestCases,
+  'tag-screens': tagScreensTestCases,
 };
 
 type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';

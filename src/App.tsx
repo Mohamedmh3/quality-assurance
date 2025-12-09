@@ -23,6 +23,7 @@ import ReportingFeature from './features/reporting/ReportingFeature';
 import EditProfileFeature from './features/edit-profile/EditProfileFeature';
 import { ProfileFeature } from './features/profile/ProfileFeature';
 import { LiveChatFeature } from './features/live-chat/LiveChatFeature';
+import { TagScreensFeature } from './features/tag-screens/TagScreensFeature';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="feature/edit-profile" element={<EditProfileFeature />} />
           <Route path="feature/profile" element={<ProfileFeature />} />
           <Route path="feature/live-chat" element={<LiveChatFeature />} />
+          <Route path="feature/tag-screens" element={<TagScreensFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>
