@@ -137,15 +137,13 @@ function NavLink({ to, children, active }: { to: string; children: React.ReactNo
     <Link
       to={to}
       className={cn(
-        'relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group',
+        'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200',
         active
           ? 'text-[var(--color-primary)] bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-primary)]/30'
           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]'
       )}
     >
-      <span className="relative z-10 flex items-center gap-2">
-        {children}
-      </span>
+      {children}
     </Link>
   );
 }
