@@ -1,7 +1,8 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Menu, X, Home, BookOpen, Sparkles } from 'lucide-react';
+import { Menu, X, Home, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import logoUrl from '@/assets/logo.svg';
 
 export function MainLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,21 +27,19 @@ export function MainLayout() {
             {/* Animated background glow */}
             <div className="absolute -inset-1 bg-gradient-to-r from-[var(--color-primary)]/30 via-purple-500/30 to-pink-500/30 rounded-2xl opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-300" />
             
-            {/* Icon Container */}
+            {/* Logo Container */}
             <div className="relative">
               {/* Outer glow ring */}
               <div className="absolute -inset-0.5 bg-gradient-to-br from-[var(--color-primary)] via-purple-500 to-pink-500 rounded-2xl opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300" />
               
-              {/* Main icon background */}
-              <div className="relative w-12 h-12 flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)] via-purple-600 to-pink-500 rounded-xl shadow-lg shadow-[var(--color-primary)]/40 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/60 transition-all duration-300 group-hover:scale-110">
-                {/* Inner shine */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-white/10 to-transparent rounded-xl" />
-                
-                {/* Icon */}
-                <BookOpen className="w-5 h-5 text-white relative z-10 drop-shadow-lg" />
-                
-                {/* Corner accent */}
-                <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full shadow-lg shadow-emerald-400/50" />
+              {/* Logo background */}
+              <div className="relative flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/10 via-purple-500/10 to-pink-500/10 rounded-xl p-2 shadow-lg shadow-[var(--color-primary)]/20 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/30 transition-all duration-300 group-hover:scale-105">
+                {/* Logo SVG */}
+                <img 
+                  src={logoUrl} 
+                  alt="BeeOrder Logo" 
+                  className="h-10 w-auto relative z-10 drop-shadow-lg"
+                />
               </div>
             </div>
             
