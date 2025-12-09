@@ -29,15 +29,12 @@ export function MainLayout() {
             
             {/* Logo Container */}
             <div className="relative">
-              {/* Logo background */}
-              <div className="relative flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/10 via-purple-500/10 to-pink-500/10 rounded-xl p-2 transition-all duration-300 group-hover:scale-105">
-                {/* Logo SVG */}
-                <img 
-                  src={logoUrl} 
-                  alt="BeeOrder Logo" 
-                  className="h-10 w-auto relative z-10"
-                />
-              </div>
+              {/* Logo SVG */}
+              <img 
+                src={logoUrl} 
+                alt="BeeOrder Logo" 
+                className="h-10 w-auto relative z-10 transition-all duration-300 group-hover:scale-105"
+              />
             </div>
             
             {/* Text */}
