@@ -22,7 +22,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       validationRules: ['Error state is set in fetchRatingState', 'Error widget is displayed'],
       apiErrorCodes: ['Network timeout', 'Server error (500)', 'Not found (404)'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-016'],
+    relatedTestCases: ['TC-ORDER-RATING-010'],
   },
   {
     id: 'EC-ORDER-RATING-002',
@@ -45,7 +45,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       validationRules: ['Error state is set in submitRatingState', 'Error dialog is shown'],
       apiErrorCodes: ['Network timeout', 'Server error (500)', 'Validation error (400)'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-017'],
+    relatedTestCases: ['TC-ORDER-RATING-011'],
   },
   {
     id: 'EC-ORDER-RATING-003',
@@ -66,7 +66,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:72-114', 'rating_submit_button.dart:91-92'],
       validationRules: ['ratingRequiredValidation is true when star not selected', 'Submit button is disabled'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-018'],
+    relatedTestCases: ['TC-ORDER-RATING-008'],
   },
   {
     id: 'EC-ORDER-RATING-004',
@@ -87,7 +87,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:72-114', 'rating_options_list.dart:30-34'],
       validationRules: ['selectionRequiredValidation is true when required options not selected', 'Options list border turns red'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-019'],
+    relatedTestCases: ['TC-ORDER-RATING-009'],
   },
   {
     id: 'EC-ORDER-RATING-005',
@@ -108,7 +108,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['rating_section_widget.dart:209-214', 'order_rating_viewmodel.dart:117-121'],
       validationRules: ['Form validator checks if note is required and empty', 'Error message shows "Required"'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-020'],
+    relatedTestCases: ['TC-ORDER-RATING-017'],
   },
   {
     id: 'EC-ORDER-RATING-006',
@@ -130,7 +130,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['rating_submit_button.dart:66-75'],
       validationRules: ['Check if selected option has withImage=true', 'Check if images list is empty'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-021'],
+    relatedTestCases: ['TC-ORDER-RATING-018'],
   },
   {
     id: 'EC-ORDER-RATING-007',
@@ -152,7 +152,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:164-165', 'rating_submit_button.dart:56-60'],
       validationRules: ['isOneModelNull checks if driver or restaurant is null', 'Button text changes based on isOneModelNull'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-022'],
+    relatedTestCases: ['TC-ORDER-RATING-019'],
   },
   {
     id: 'EC-ORDER-RATING-008',
@@ -174,7 +174,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:164-165', 'rating_submit_button.dart:56-60'],
       validationRules: ['isOneModelNull checks if driver or restaurant is null'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-023'],
+    relatedTestCases: ['TC-ORDER-RATING-020'],
   },
   {
     id: 'EC-ORDER-RATING-009',
@@ -195,7 +195,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['rating_submit_button.dart:77-83'],
       validationRules: ['Check imageApiLoading state before submission', 'Show error if images are uploading'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-024'],
+    relatedTestCases: ['TC-ORDER-RATING-021'],
   },
   {
     id: 'EC-ORDER-RATING-010',
@@ -216,7 +216,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:154-155'],
       validationRules: ['maxPhotoAvailable is set from ratingModel.canUpload', 'ImagePickerViewModel enforces limit'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-025'],
+    relatedTestCases: ['TC-ORDER-RATING-022'],
   },
   {
     id: 'EC-ORDER-RATING-011',
@@ -237,7 +237,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['rating_options_list.dart:72-74'],
       validationRules: ['Options list widget checks if options.isEmpty', 'Widget returns SizedBox.shrink() if empty'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-026'],
+    relatedTestCases: ['TC-ORDER-RATING-023'],
   },
   {
     id: 'EC-ORDER-RATING-012',
@@ -258,7 +258,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:346-390'],
       validationRules: ['Dish selection is optional', 'Sub-option can be selected without dishes'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-027'],
+    relatedTestCases: ['TC-ORDER-RATING-024'],
   },
   {
     id: 'EC-ORDER-RATING-013',
@@ -279,7 +279,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_screen.dart:142-152'],
       validationRules: ['onWillPop returns false if submitRatingState.isLoading', 'Back button is disabled during loading'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-028'],
+    relatedTestCases: ['TC-ORDER-RATING-025'],
   },
   {
     id: 'EC-ORDER-RATING-014',
@@ -300,7 +300,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_screen.dart:142-152'],
       validationRules: ['onWillPop checks isDriverRatingTab', 'If true, changePage to restaurant tab and return false'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-015'],
+    relatedTestCases: ['TC-ORDER-RATING-012'],
   },
   {
     id: 'EC-ORDER-RATING-015',
@@ -321,7 +321,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:496-557'],
       validationRules: ['Rating version determines how star values are mapped to types', 'Version 2 uses star directly'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-029'],
+    relatedTestCases: ['TC-ORDER-RATING-026'],
   },
   {
     id: 'EC-ORDER-RATING-016',
@@ -343,7 +343,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_screen.dart:63-73'],
       validationRules: ['App rating prompt is shown if both ratings >= 4', 'Prompt failure does not affect rating submission'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-030'],
+    relatedTestCases: ['TC-ORDER-RATING-013', 'TC-ORDER-RATING-030'],
   },
   {
     id: 'EC-ORDER-RATING-017',
@@ -365,7 +365,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['rating_submit_button.dart:77-83'],
       validationRules: ['ImagePickerViewModel handles upload errors', 'Upload state is tracked'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-031'],
+    relatedTestCases: ['TC-ORDER-RATING-027'],
   },
   {
     id: 'EC-ORDER-RATING-018',
@@ -386,7 +386,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:41-69'],
       validationRules: ['Rating options are fetched once on init', 'Options are cached in state'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-032'],
+    relatedTestCases: ['TC-ORDER-RATING-028'],
   },
   {
     id: 'EC-ORDER-RATING-019',
@@ -407,7 +407,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:298-344'],
       validationRules: ['removeWhere removes existing sub-option for same optionId', 'Only one sub-option per option'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-033'],
+    relatedTestCases: ['TC-ORDER-RATING-015'],
   },
   {
     id: 'EC-ORDER-RATING-020',
@@ -428,7 +428,7 @@ export const orderRatingEdgeCases: EdgeCase[] = [
       flutterFiles: ['order_rating_viewmodel.dart:346-390'],
       validationRules: ['Dish selection replaces previous selection', 'Only one dish per sub-option'],
     },
-    relatedTestCases: ['TC-ORDER-RATING-034'],
+    relatedTestCases: ['TC-ORDER-RATING-016'],
   },
 ];
 

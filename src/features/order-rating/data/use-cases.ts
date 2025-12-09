@@ -360,7 +360,7 @@ export const orderRatingUseCases: UseCase[] = [
       'App rating prompt works correctly',
       'Screen closes after completion',
     ],
-    relatedTestCases: ['TC-ORDER-RATING-013', 'TC-ORDER-RATING-014'],
+    relatedTestCases: ['TC-ORDER-RATING-007', 'TC-ORDER-RATING-013', 'TC-ORDER-RATING-014'],
   },
   {
     id: 'UC-ORDER-RATING-008',
