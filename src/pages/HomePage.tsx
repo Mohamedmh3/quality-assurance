@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 import { useQAStore } from '@/store/qa-store';
@@ -66,6 +66,9 @@ import { reportingTestCases } from '@/features/reporting/data/test-cases';
 import { editProfileUseCases } from '@/features/edit-profile/data/use-cases';
 import { editProfileEdgeCases } from '@/features/edit-profile/data/edge-cases';
 import { editProfileTestCases } from '@/features/edit-profile/data/test-cases';
+import { liveChatUseCases } from '@/features/live-chat/data/use-cases';
+import { liveChatEdgeCases } from '@/features/live-chat/data/edge-cases';
+import { liveChatTestCases } from '@/features/live-chat/data/test-cases';
 import { profileUseCases } from '@/features/profile/data/use-cases';
 import { profileEdgeCases } from '@/features/profile/data/edge-cases';
 import { profileTestCases } from '@/features/profile/data/test-cases';
@@ -358,6 +361,19 @@ const features: FeatureCard[] = [
     path: '/feature/profile',
     tags: ['Profile', 'Settings', 'Navigation', 'Account', 'Help Center'],
   },
+  {
+    id: 'live-chat',
+    name: 'Live Chat',
+    icon: MessageCircle,
+    description: 'Customer support chat interface with floating action button, unread message badge, web view chat interface, loading states, and error handling.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: liveChatUseCases.length,
+    edgeCases: liveChatEdgeCases.length,
+    testCases: liveChatTestCases.length,
+    path: '/feature/live-chat',
+    tags: ['Support', 'Chat', 'Customer Service', 'Communication'],
+  },
 ];
 
 // Map feature IDs to their test cases
@@ -383,6 +399,7 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'reporting': reportingTestCases,
   'edit-profile': editProfileTestCases,
   'profile': profileTestCases,
+  'live-chat': liveChatTestCases,
 };
 
 type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';

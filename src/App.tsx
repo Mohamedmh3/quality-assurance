@@ -22,6 +22,7 @@ import KnowUsFeature from './features/know-us/KnowUsFeature';
 import ReportingFeature from './features/reporting/ReportingFeature';
 import EditProfileFeature from './features/edit-profile/EditProfileFeature';
 import { ProfileFeature } from './features/profile/ProfileFeature';
+import { LiveChatFeature } from './features/live-chat/LiveChatFeature';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
           <Route path="feature/reporting" element={<ReportingFeature />} />
           <Route path="feature/edit-profile" element={<EditProfileFeature />} />
           <Route path="feature/profile" element={<ProfileFeature />} />
+          <Route path="feature/live-chat" element={<LiveChatFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>
