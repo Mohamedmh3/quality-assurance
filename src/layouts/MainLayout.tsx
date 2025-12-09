@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X, Home, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import logoUrl from '@/assets/logo.svg';
+import logoUrl from '/logo.svg';
 
 export function MainLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

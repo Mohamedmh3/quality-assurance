@@ -60,6 +60,9 @@ import { surveyTestCases } from '@/features/survey/data/test-cases';
 import { knowUsUseCases } from '@/features/know-us/data/use-cases';
 import { knowUsEdgeCases } from '@/features/know-us/data/edge-cases';
 import { knowUsTestCases } from '@/features/know-us/data/test-cases';
+import { reportingUseCases } from '@/features/reporting/data/use-cases';
+import { reportingEdgeCases } from '@/features/reporting/data/edge-cases';
+import { reportingTestCases } from '@/features/reporting/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -310,6 +313,19 @@ const features: FeatureCard[] = [
     path: '/feature/know-us',
     tags: ['Onboarding', 'Survey', 'User Data', 'Registration'],
   },
+  {
+    id: 'reporting',
+    name: 'Reporting',
+    icon: AlertTriangle,
+    description: 'Multi-step issue reporting with issue type selection, reason forms, date picker, dish search, note input, and progress tracking.',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: reportingUseCases.length,
+    edgeCases: reportingEdgeCases.length,
+    testCases: reportingTestCases.length,
+    path: '/feature/reporting',
+    tags: ['Issue Reporting', 'Quality Control', 'Customer Feedback', 'Restaurant'],
+  },
 ];
 
 // Map feature IDs to their test cases
@@ -332,6 +348,7 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'user-info': userInfoTestCases,
   'survey': surveyTestCases,
   'know-us': knowUsTestCases,
+  'reporting': reportingTestCases,
 };
 
 type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';

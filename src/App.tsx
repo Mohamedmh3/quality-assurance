@@ -19,6 +19,7 @@ import PhoneNumberFeature from './features/phone-number/PhoneNumberFeature';
 import UserInfoFeature from './features/user-info/UserInfoFeature';
 import SurveyFeature from './features/survey/SurveyFeature';
 import KnowUsFeature from './features/know-us/KnowUsFeature';
+import ReportingFeature from './features/reporting/ReportingFeature';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="feature/user-info" element={<UserInfoFeature />} />
           <Route path="feature/survey" element={<SurveyFeature />} />
           <Route path="feature/know-us" element={<KnowUsFeature />} />
+          <Route path="feature/reporting" element={<ReportingFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>
