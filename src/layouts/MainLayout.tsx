@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Menu, X, Home, BookOpen } from 'lucide-react';
+import { Menu, X, Home, BookOpen, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -11,23 +11,42 @@ export function MainLayout() {
     <div className="min-h-screen bg-[var(--color-bg-primary)] flex flex-col">
       {/* Header */}
       <header 
-        className="sticky top-0 z-50 bg-[var(--color-bg-secondary)] border-b border-[var(--color-border)]"
+        className="sticky top-0 z-50 backdrop-blur-xl bg-[var(--color-bg-secondary)]/80 border-b border-[var(--color-border)]/50 shadow-lg shadow-[var(--color-primary)]/5"
         style={{ paddingLeft: '80px', paddingRight: '80px' }}
       >
-        <div className="flex items-center justify-between h-16">
+        {/* Decorative gradient line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--color-primary)] via-purple-500 to-pink-500 opacity-60" />
+        
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] rounded-lg">
-              <BookOpen className="w-5 h-5 text-white" />
+          <Link 
+            to="/" 
+            className="flex items-center gap-4 group relative"
+          >
+            {/* Animated background glow */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-[var(--color-primary)]/20 to-purple-500/20 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300" />
+            
+            <div className="relative p-3 bg-gradient-to-br from-[var(--color-primary)] via-purple-500 to-pink-500 rounded-xl shadow-lg shadow-[var(--color-primary)]/30 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/50 transition-all duration-300 group-hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl" />
+              <BookOpen className="w-6 h-6 text-white relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
             </div>
-            <div className="flex items-baseline gap-1">
-              <span className="font-bold text-lg text-[var(--color-text-primary)]">BeeOrder</span>
-              <span className="text-sm text-[var(--color-text-muted)]">Docs</span>
+            
+            <div className="flex flex-col relative z-10">
+              <div className="flex items-baseline gap-2">
+                <span className="font-bold text-xl bg-gradient-to-r from-[var(--color-text-primary)] to-[var(--color-primary)] bg-clip-text text-transparent group-hover:from-[var(--color-primary)] group-hover:to-purple-500 transition-all duration-300">
+                  BeeOrder
+                </span>
+                <Sparkles className="w-4 h-4 text-[var(--color-primary)] opacity-70 group-hover:opacity-100 group-hover:rotate-12 transition-all duration-300" />
+              </div>
+              <span className="text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wider">
+                Documentation Portal
+              </span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2">
             <NavLink to="/" active={location.pathname === '/'}>
               <Home className="w-4 h-4" />
               <span>Features</span>
@@ -36,28 +55,39 @@ export function MainLayout() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)] rounded-lg transition-all"
+            className="md:hidden relative p-3 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)] rounded-xl transition-all duration-200 hover:scale-105 active:scale-95"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/10 to-purple-500/10 rounded-xl opacity-0 hover:opacity-100 transition-opacity" />
+            {isMenuOpen ? (
+              <X className="w-6 h-6 relative z-10" />
+            ) : (
+              <Menu className="w-6 h-6 relative z-10" />
+            )}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)] py-4">
+          <div className="md:hidden border-t border-[var(--color-border)]/50 bg-[var(--color-bg-secondary)]/95 backdrop-blur-xl py-4 animate-in slide-in-from-top duration-200">
             <Link
               to="/"
               className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium',
+                'flex items-center gap-3 px-6 py-4 mx-4 rounded-xl transition-all text-sm font-medium relative overflow-hidden group',
                 location.pathname === '/'
-                  ? 'bg-[var(--color-primary)] text-white'
-                  : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)]'
+                  ? 'bg-gradient-to-r from-[var(--color-primary)] to-purple-500 text-white shadow-lg shadow-[var(--color-primary)]/30'
+                  : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
               )}
               onClick={() => setIsMenuOpen(false)}
             >
-              <Home className="w-5 h-5" />
-              Features
+              {location.pathname === '/' && (
+                <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
+              )}
+              <Home className={cn(
+                "w-5 h-5 relative z-10 transition-transform",
+                location.pathname === '/' ? "text-white" : "group-hover:scale-110"
+              )} />
+              <span className="relative z-10 font-semibold">Features</span>
             </Link>
           </div>
         )}
@@ -94,13 +124,24 @@ function NavLink({ to, children, active }: { to: string; children: React.ReactNo
     <Link
       to={to}
       className={cn(
-        'flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all',
+        'relative flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 group overflow-hidden',
         active
-          ? 'text-[var(--color-primary)] bg-[var(--color-primary)]/10'
+          ? 'text-white bg-gradient-to-r from-[var(--color-primary)] to-purple-500 shadow-lg shadow-[var(--color-primary)]/30 hover:shadow-xl hover:shadow-[var(--color-primary)]/40'
           : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]'
       )}
     >
-      {children}
+      {active && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
+          <div className="absolute -inset-1 bg-gradient-to-r from-[var(--color-primary)]/20 to-purple-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity" />
+        </>
+      )}
+      <div className={cn(
+        "relative z-10 flex items-center gap-2",
+        active && "group-hover:scale-105 transition-transform duration-200"
+      )}>
+        {children}
+      </div>
     </Link>
   );
 }
