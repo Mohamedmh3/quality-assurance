@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -47,6 +47,9 @@ import { friendInviteTestCases } from '@/features/friend-invite/data/test-cases'
 import { otpUseCases } from '@/features/otp/data/use-cases';
 import { otpEdgeCases } from '@/features/otp/data/edge-cases';
 import { otpTestCases } from '@/features/otp/data/test-cases';
+import { phoneNumberUseCases } from '@/features/phone-number/data/use-cases';
+import { phoneNumberEdgeCases } from '@/features/phone-number/data/edge-cases';
+import { phoneNumberTestCases } from '@/features/phone-number/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -244,6 +247,19 @@ const features: FeatureCard[] = [
     testCases: otpTestCases.length,
     path: '/feature/otp',
     tags: ['Authentication', 'Verification', 'SMS', 'Security', 'OTP'],
+  },
+  {
+    id: 'phone-number',
+    name: 'Phone Number',
+    icon: Phone,
+    description: 'Phone number entry, validation, country selection, previous numbers, guest mode, and terms acceptance.',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: phoneNumberUseCases.length,
+    edgeCases: phoneNumberEdgeCases.length,
+    testCases: phoneNumberTestCases.length,
+    path: '/feature/phone-number',
+    tags: ['Authentication', 'Phone', 'Validation', 'Guest Mode'],
   },
 ];
 
