@@ -15,6 +15,7 @@ import {
   Globe,
   Loader,
   AlertCircle,
+  Zap,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
@@ -259,6 +260,10 @@ function OverviewTab() {
   );
 }
 
+const apiEndpoints = [
+  { method: 'GET', path: '/chat/url', description: 'Fetch chat URL for live chat interface', params: ['billId (optional)'] },
+];
+
 function ImplementationTab() {
   return (
     <div className="space-y-8">
@@ -270,13 +275,11 @@ function ImplementationTab() {
             </div>
             API Endpoints
           </CardTitle>
-          <CardDescription className="text-base">API endpoints used by the Live Chat feature</CardDescription>
+          <CardDescription className="text-base">All API endpoints used by the Live Chat feature</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {[
-              { method: 'GET', path: '/chat/url', description: 'Fetch chat URL for live chat interface', params: ['billId (optional)'] },
-            ].map((endpoint, index) => (
+            {apiEndpoints.map((endpoint, index) => (
               <Card key={index}>
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-4">
@@ -290,16 +293,18 @@ function ImplementationTab() {
                       {endpoint.method}
                     </span>
                     <div className="flex-1">
-                      <code className="text-sm font-mono text-[var(--color-text-primary)]">{endpoint.path}</code>
+                      <code className="text-[var(--color-primary)] font-mono text-sm">{endpoint.path}</code>
                       <p className="text-sm text-[var(--color-text-secondary)] mt-1">{endpoint.description}</p>
-                      {endpoint.params && endpoint.params.length > 0 && (
+                      {endpoint.params.length > 0 && (
                         <div className="mt-2">
                           <p className="text-xs text-[var(--color-text-muted)] mb-1">Parameters:</p>
-                          <ul className="list-disc list-inside text-xs text-[var(--color-text-secondary)]">
+                          <div className="flex flex-wrap gap-1">
                             {endpoint.params.map((param, i) => (
-                              <li key={i}>{param}</li>
+                              <span key={i} className="px-2 py-0.5 bg-[var(--color-bg-primary)] rounded text-xs text-[var(--color-text-secondary)] font-mono border border-[var(--color-border)]">
+                                {param}
+                              </span>
                             ))}
-                          </ul>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -314,35 +319,101 @@ function ImplementationTab() {
       <Card padding="xl">
         <CardHeader>
           <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
-            <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-              <Settings className="w-6 h-6 text-green-500" />
+            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-purple-500" />
             </div>
-            Key Components
+            Key Implementation Details
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {[
-              { name: 'LiveChatView', description: 'Main chat screen widget with app bar, loading state, web view, and error handling', file: 'live_chat_view.dart' },
-              { name: 'LiveChatViewModel', description: 'MobX ViewModel managing chat URL fetching, loading state, and chat model updates', file: 'live_chat_viewmodel.dart' },
-              { name: 'LiveChatButton', description: 'Floating action button with bounce animation, unread count badge, and tutorial support', file: 'live_chat_button_widget.dart' },
-              { name: 'LiveChatModel', description: 'Data model containing chat URL and unread message count', file: 'live_chat_model.dart' },
-              { name: 'CustomErrorWidget', description: 'Error widget displaying sad mascot icon and error message when chat fails to load', file: 'live_chat_view.dart' },
-            ].map((component, index) => (
-              <Card key={index}>
-                <CardContent className="pt-4">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <code className="text-sm font-mono font-semibold text-[var(--color-text-primary)]">{component.name}</code>
-                        <span className="text-xs text-[var(--color-text-muted)]">({component.file})</span>
-                      </div>
-                      <p className="text-sm text-[var(--color-text-secondary)]">{component.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+        <CardContent className="space-y-6">
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Globe className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  InAppWebView Integration
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Uses InAppWebView widget to display the chat interface within the app. The web view loads the chat URL fetched from the server, 
+                  allowing users to interact with the chat interface without leaving the app. JavaScript is enabled for full chat functionality.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  live_chat_view.dart:45-65
+                </code>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <MessageCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Chat URL Fetching with MobX
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Chat URL is fetched using MobX ViewModel. The ViewModel manages loading state and updates the chat model with the fetched URL. 
+                  Optional billId parameter can be passed to link chat to a specific order. Error handling displays custom error widget on failure.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  live_chat_viewmodel.dart:25-45
+                </code>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Loader className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Loading State Management
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Loading state is managed through MobX observable. While fetching chat URL, a loading indicator is displayed. Once URL is loaded, 
+                  the web view is shown. If loading fails, error state is displayed with retry option.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  live_chat_view.dart:30-44, live_chat_viewmodel.dart:15-20
+                </code>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <AlertCircle className="w-6 h-6 text-red-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Error Handling with Custom Widget
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  When chat fails to load, a custom error widget is displayed showing a sad mascot icon and error message. Users can retry loading 
+                  the chat. Error state is managed through MobX observable and displayed conditionally based on error status.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  live_chat_view.dart:66-85
+                </code>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Badge className="w-6 h-6 text-purple-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Unread Message Count Badge
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Live chat button displays unread message count badge when there are unread messages. The badge count is fetched from the chat model 
+                  and updated when chat URL is loaded. Badge is hidden when count is zero.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  live_chat_button_widget.dart:45-60
+                </code>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>

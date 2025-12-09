@@ -132,6 +132,11 @@ const folderStructure = {
   ]
 };
 
+const apiEndpoints = [
+  { method: 'GET', path: 'tagUrl (dynamic)', description: 'Fetch dishes for a specific tag', params: ['page'] },
+  { method: 'GET', path: 'tagUrl (dynamic)', description: 'Fetch restaurants for a specific tag', params: ['page'] },
+];
+
 export function TagScreensFeature() {
   const [activeTab, setActiveTab] = useState<TabId>('qa-tests');
 
@@ -308,34 +313,150 @@ function ImplementationTab() {
     <div className="space-y-8">
       <Card padding="xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-3">
-            <Code2 className="w-6 h-6 text-[var(--color-primary)]" />
-            Architecture
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <Code2 className="w-6 h-6 text-blue-500" />
+            </div>
+            API Endpoints
           </CardTitle>
+          <CardDescription className="text-base">All API endpoints used by the Tag Screens feature</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-[var(--color-text-secondary)] mb-4">
-            The Tag Screens feature uses BLoC (Business Logic Component) architecture pattern.
-          </p>
           <div className="space-y-4">
-            <div>
-              <h3 className="font-semibold text-[var(--color-text-primary)] mb-2">ViewModels (BLoC)</h3>
-              <ul className="list-disc list-inside text-[var(--color-text-secondary)] space-y-1">
-                <li>TagDishesViewModel - Manages tag dishes state and pagination</li>
-                <li>TagRestaurantsViewModel - Manages tag restaurants state and pagination</li>
-              </ul>
+            {apiEndpoints.map((endpoint, index) => (
+              <Card key={index}>
+                <CardContent className="pt-4">
+                  <div className="flex items-start gap-4">
+                    <span className={cn(
+                      'px-2 py-1 rounded text-xs font-mono font-semibold',
+                      endpoint.method === 'GET' ? 'bg-blue-500/20 text-blue-400' :
+                      endpoint.method === 'POST' ? 'bg-green-500/20 text-green-400' :
+                      endpoint.method === 'DELETE' ? 'bg-red-500/20 text-red-400' :
+                      'bg-purple-500/20 text-purple-400'
+                    )}>
+                      {endpoint.method}
+                    </span>
+                    <div className="flex-1">
+                      <code className="text-[var(--color-primary)] font-mono text-sm">{endpoint.path}</code>
+                      <p className="text-sm text-[var(--color-text-secondary)] mt-1">{endpoint.description}</p>
+                      {endpoint.params.length > 0 && (
+                        <div className="mt-2">
+                          <p className="text-xs text-[var(--color-text-muted)] mb-1">Parameters:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {endpoint.params.map((param, i) => (
+                              <span key={i} className="px-2 py-0.5 bg-[var(--color-bg-primary)] rounded text-xs text-[var(--color-text-secondary)] font-mono border border-[var(--color-border)]">
+                                {param}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card padding="xl">
+        <CardHeader>
+          <CardTitle as="h2" className="flex items-center gap-4 text-2xl">
+            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-purple-500" />
             </div>
-            <div>
-              <h3 className="font-semibold text-[var(--color-text-primary)] mb-2">Repository</h3>
-              <ul className="list-disc list-inside text-[var(--color-text-secondary)] space-y-1">
-                <li>TagRepository - Handles data operations for tag screens</li>
-              </ul>
+            Key Implementation Details
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Tag className="w-6 h-6 text-purple-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Infinite Scroll Pagination
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Uses PagingController from infinite_scroll_pagination package for automatic pagination. When user scrolls to bottom, 
+                  next page is automatically fetched and appended to the list. Pagination stops when last page is reached.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  tag_dishes_list.dart:30-38, tag_restaurants_list.dart:31-39
+                </code>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-[var(--color-text-primary)] mb-2">Service</h3>
-              <ul className="list-disc list-inside text-[var(--color-text-secondary)] space-y-1">
-                <li>TagService - API service for fetching tag dishes and restaurants</li>
-              </ul>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Shield className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  BLoC State Management
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Uses Cubit for state management. TagDishesViewModel and TagRestaurantsViewModel extend Cubit and manage 
+                  AsyncState for loading, success, and error states. State includes current page items and overall list state.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  tag_dishes_viewmodel.dart:9-40, tag_restaurants_viewmodel.dart:9-41
+                </code>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Users className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Error Handling with BlocListener
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Error handling is done through BlocListener that listens for state changes from non-error to error. 
+                  When error occurs, a dialog is shown with error message. User can retry by refreshing the list.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  tag_dishes_view.dart:34-46, tag_restaurants_view.dart:37-49
+                </code>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <Zap className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Dynamic Tag URL
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  Tag URL is passed as a parameter to the screen and used directly in API requests. The URL is dynamic and 
+                  can point to different endpoints based on the tag type. Page parameter is sent as query parameter.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  tag_service.dart:14-26, tag_service.dart:28-39
+                </code>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-box">
+            <div className="flex items-start gap-4">
+              <AlertTriangle className="w-6 h-6 text-orange-500 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg text-[var(--color-text-primary)] mb-2">
+                  Empty State Handling
+                </h3>
+                <p className="text-base text-[var(--color-text-secondary)] mb-3">
+                  When no items are found, PagedListView shows noItemsFoundIndicatorBuilder with "No dishes found" or 
+                  "No restaurants found" message. Empty state is displayed clearly to inform users.
+                </p>
+                <code className="block p-3 bg-[var(--color-bg-primary)] rounded-lg text-xs text-[var(--color-text-muted)] font-mono border border-[var(--color-border)]">
+                  tag_dishes_list.dart:106-115, tag_restaurants_list.dart:114-123
+                </code>
+              </div>
             </div>
           </div>
         </CardContent>
