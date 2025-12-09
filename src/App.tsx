@@ -16,6 +16,7 @@ import { SearchPageFeature } from './features/search-page/SearchPageFeature';
 import { FriendInviteFeature } from './features/friend-invite/FriendInviteFeature';
 import { OTPFeature } from './features/otp/OTPFeature';
 import PhoneNumberFeature from './features/phone-number/PhoneNumberFeature';
+import UserInfoFeature from './features/user-info/UserInfoFeature';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="feature/friend-invite" element={<FriendInviteFeature />} />
           <Route path="feature/otp" element={<OTPFeature />} />
           <Route path="feature/phone-number" element={<PhoneNumberFeature />} />
+          <Route path="feature/user-info" element={<UserInfoFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>

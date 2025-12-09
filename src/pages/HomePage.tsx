@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -50,6 +50,9 @@ import { otpTestCases } from '@/features/otp/data/test-cases';
 import { phoneNumberUseCases } from '@/features/phone-number/data/use-cases';
 import { phoneNumberEdgeCases } from '@/features/phone-number/data/edge-cases';
 import { phoneNumberTestCases } from '@/features/phone-number/data/test-cases';
+import { userInfoUseCases } from '@/features/user-info/data/use-cases';
+import { userInfoEdgeCases } from '@/features/user-info/data/edge-cases';
+import { userInfoTestCases } from '@/features/user-info/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -260,6 +263,19 @@ const features: FeatureCard[] = [
     testCases: phoneNumberTestCases.length,
     path: '/feature/phone-number',
     tags: ['Authentication', 'Phone', 'Validation', 'Guest Mode'],
+  },
+  {
+    id: 'user-info',
+    name: 'User Info',
+    icon: User,
+    description: 'Personal information collection with name, gender, city selection, form validation, and onboarding flow navigation.',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: userInfoUseCases.length,
+    edgeCases: userInfoEdgeCases.length,
+    testCases: userInfoTestCases.length,
+    path: '/feature/user-info',
+    tags: ['Authentication', 'Registration', 'Profile', 'Onboarding'],
   },
 ];
 
