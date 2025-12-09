@@ -7,6 +7,7 @@ import {
   Settings,
   Code2,
   Layers,
+  ChevronRight,
   Folder,
   GitBranch,
   Smartphone,
@@ -18,6 +19,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
+import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
 import { UseCaseSection } from '@/components/UseCaseSection';
 import { EdgeCaseSection } from '@/components/EdgeCaseSection';
 import { QATestingGuide } from '@/components/QATestingGuide';
@@ -417,49 +419,59 @@ export default function PhoneNumberFeature() {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg-primary)]">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[var(--color-text-primary)] mb-2">
-            Phone Number Feature
-          </h1>
-          <p className="text-lg text-[var(--color-text-secondary)]">
-            Phone number entry, validation, and authentication initiation
-          </p>
+    <div className="space-y-6">
+      {/* Compact Header */}
+      <div className="flex items-center justify-between gap-4 border-b border-[var(--color-border)]" style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-700 flex items-center justify-center">
+            <Phone className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 text-sm text-[var(--color-text-muted)] mb-1">
+              <span>Features</span>
+              <ChevronRight className="w-3 h-3" />
+              <span className="text-teal-500">Phone Number</span>
+            </div>
+            <h1 className="text-xl font-bold text-[var(--color-text-primary)]">
+              Phone Number Feature
+            </h1>
+          </div>
         </div>
+        <div className="flex items-center gap-2">
+          <StatusBadge status="Stable" />
+          <ArchitectureBadge type="BLoC" />
+        </div>
+      </div>
 
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-2 mb-6 border-b border-[var(--color-border)]">
+      {/* Tab Navigation */}
+      <div className="sticky top-20 z-10 glass rounded-xl border border-[var(--color-border)] p-4 shadow-lg">
+        <nav className="flex gap-4 lg:gap-6 overflow-x-auto" role="tablist">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'flex items-center gap-2 px-4 py-2 font-medium transition-colors border-b-2',
-                  activeTab === tab.id
-                    ? 'border-[var(--color-primary)] text-[var(--color-primary)]'
-                    : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                )}
+                className={cn('tab-item', activeTab === tab.id && 'active')}
+                role="tab"
+                aria-selected={activeTab === tab.id}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-5 h-5" />
                 {tab.label}
               </button>
             );
           })}
-        </div>
+        </nav>
+      </div>
 
-        {/* Tab Content */}
-        <div className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
-          {activeTab === 'overview' && <OverviewTab />}
-          {activeTab === 'use-cases' && <UseCaseSection useCases={phoneNumberUseCases} />}
-          {activeTab === 'edge-cases' && <EdgeCaseSection edgeCases={phoneNumberEdgeCases} />}
-          {activeTab === 'flow-diagrams' && <FlowchartSection featureId="phone-number" />}
-          {activeTab === 'qa-tests' && <QATestingGuide testCases={phoneNumberTestCases} featureName="Phone Number" />}
-          {activeTab === 'implementation' && <ImplementationTab />}
-        </div>
+      {/* Tab Content */}
+      <div className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
+        {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'use-cases' && <UseCaseSection useCases={phoneNumberUseCases} />}
+        {activeTab === 'edge-cases' && <EdgeCaseSection edgeCases={phoneNumberEdgeCases} />}
+        {activeTab === 'flow-diagrams' && <FlowchartSection featureId="phone-number" />}
+        {activeTab === 'qa-tests' && <QATestingGuide testCases={phoneNumberTestCases} featureName="Phone Number" />}
+        {activeTab === 'implementation' && <ImplementationTab />}
       </div>
     </div>
   );
