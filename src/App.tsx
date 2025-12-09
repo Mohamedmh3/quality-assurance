@@ -25,6 +25,7 @@ import { ProfileFeature } from './features/profile/ProfileFeature';
 import { LiveChatFeature } from './features/live-chat/LiveChatFeature';
 import { TagScreensFeature } from './features/tag-screens/TagScreensFeature';
 import { WalletInfoFeature } from './features/wallet-info/WalletInfoFeature';
+import { WalletFeature } from './features/wallet/WalletFeature';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           <Route path="feature/live-chat" element={<LiveChatFeature />} />
           <Route path="feature/tag-screens" element={<TagScreensFeature />} />
           <Route path="feature/wallet-info" element={<WalletInfoFeature />} />
+          <Route path="feature/wallet" element={<WalletFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>

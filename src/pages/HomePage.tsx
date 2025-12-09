@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp, Tag, CreditCard } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp, Tag, CreditCard, Wallet } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 import { useQAStore } from '@/store/qa-store';
@@ -78,6 +78,9 @@ import { tagScreensTestCases } from '@/features/tag-screens/data/test-cases';
 import { walletInfoUseCases } from '@/features/wallet-info/data/use-cases';
 import { walletInfoEdgeCases } from '@/features/wallet-info/data/edge-cases';
 import { walletInfoTestCases } from '@/features/wallet-info/data/test-cases';
+import { walletUseCases } from '@/features/wallet/data/use-cases';
+import { walletEdgeCases } from '@/features/wallet/data/edge-cases';
+import { walletTestCases } from '@/features/wallet/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -406,6 +409,19 @@ const features: FeatureCard[] = [
     path: '/feature/wallet-info',
     tags: ['Wallet', 'Transactions', 'Payment', 'Finance'],
   },
+  {
+    id: 'wallet',
+    name: 'Wallet',
+    icon: Wallet,
+    description: 'Manage digital wallet, view balance, pay invoices with PIN, top up funds, browse restaurants for dine-in payment.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: walletUseCases.length,
+    edgeCases: walletEdgeCases.length,
+    testCases: walletTestCases.length,
+    path: '/feature/wallet',
+    tags: ['Wallet', 'Payment', 'Finance', 'Dine-In'],
+  },
 ];
 
 // Map feature IDs to their test cases
@@ -434,6 +450,7 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'live-chat': liveChatTestCases,
   'tag-screens': tagScreensTestCases,
   'wallet-info': walletInfoTestCases,
+  'wallet': walletTestCases,
 };
 
 type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';
