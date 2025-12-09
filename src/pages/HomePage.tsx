@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 import { useQAStore } from '@/store/qa-store';
@@ -408,6 +408,7 @@ export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [progressView, setProgressView] = useState<ProgressView>('all');
+  const [tagsExpanded, setTagsExpanded] = useState(false);
   const getProgress = useQAStore((state) => state.getProgress);
 
   const allTags = Array.from(new Set(features.flatMap(f => f.tags)));
@@ -532,35 +533,70 @@ export function HomePage() {
         </div>
 
         {/* Tag Filters */}
-        <div className="flex flex-wrap justify-center gap-3">
-          <button
-            onClick={() => setSelectedTag(null)}
-            className={cn(
-              'rounded-xl text-base font-semibold transition-all duration-200 flex items-center gap-2',
-              !selectedTag 
-                ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/25 hover:shadow-xl hover:shadow-[var(--color-primary)]/35' 
-                : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
-            )}
-            style={{ padding: '16px 32px' }}
-          >
-            <Layers className="w-5 h-5" />
-            All
-          </button>
-          {allTags.map(tag => (
+        <div className="w-full">
+          {/* Toggle Button */}
+          <div className="flex justify-center mb-4">
             <button
-              key={tag}
-              onClick={() => setSelectedTag(tag === selectedTag ? null : tag)}
+              onClick={() => setTagsExpanded(!tagsExpanded)}
               className={cn(
-                'rounded-xl text-base font-semibold transition-all duration-200',
-                selectedTag === tag
-                  ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/25 hover:shadow-xl hover:shadow-[var(--color-primary)]/35' 
-                  : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
+                'rounded-xl text-base font-semibold transition-all duration-200 flex items-center gap-2',
+                'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
               )}
               style={{ padding: '16px 32px' }}
             >
-              {tag}
+              <span>Menu</span>
+              {tagsExpanded ? (
+                <ChevronUp className="w-5 h-5 transition-transform duration-200" />
+              ) : (
+                <ChevronDown className="w-5 h-5 transition-transform duration-200" />
+              )}
             </button>
-          ))}
+          </div>
+
+          {/* Collapsible Tags Container */}
+          <div
+            className={cn(
+              'overflow-hidden transition-all duration-300 ease-in-out',
+              tagsExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+            )}
+          >
+            <div className="flex flex-wrap justify-center gap-3 pt-4">
+              <button
+                onClick={() => {
+                  setSelectedTag(null);
+                  setTagsExpanded(false);
+                }}
+                className={cn(
+                  'rounded-xl text-base font-semibold transition-all duration-200 flex items-center gap-2',
+                  !selectedTag 
+                    ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/25 hover:shadow-xl hover:shadow-[var(--color-primary)]/35' 
+                    : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
+                )}
+                style={{ padding: '16px 32px' }}
+              >
+                <Layers className="w-5 h-5" />
+                All
+              </button>
+              {allTags.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => {
+                    setSelectedTag(tag === selectedTag ? null : tag);
+                    setTagsExpanded(false);
+                  }}
+                  className={cn(
+                    'rounded-xl text-base font-semibold transition-all duration-200',
+                    selectedTag === tag
+                      ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/25 hover:shadow-xl hover:shadow-[var(--color-primary)]/35' 
+                      : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
+                  )}
+                  style={{ padding: '16px 32px' }}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
