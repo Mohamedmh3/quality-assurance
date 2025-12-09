@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp, Tag } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp, Tag, CreditCard } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 import { useQAStore } from '@/store/qa-store';
@@ -75,6 +75,9 @@ import { profileTestCases } from '@/features/profile/data/test-cases';
 import { tagScreensUseCases } from '@/features/tag-screens/data/use-cases';
 import { tagScreensEdgeCases } from '@/features/tag-screens/data/edge-cases';
 import { tagScreensTestCases } from '@/features/tag-screens/data/test-cases';
+import { walletInfoUseCases } from '@/features/wallet-info/data/use-cases';
+import { walletInfoEdgeCases } from '@/features/wallet-info/data/edge-cases';
+import { walletInfoTestCases } from '@/features/wallet-info/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -390,6 +393,19 @@ const features: FeatureCard[] = [
     path: '/feature/tag-screens',
     tags: ['Tags', 'Filtering', 'Pagination', 'Browse'],
   },
+  {
+    id: 'wallet-info',
+    name: 'Wallet Info',
+    icon: CreditCard,
+    description: 'View wallet transaction history with date filtering, manage card details, pay invoices with PIN validation and tip selection.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: walletInfoUseCases.length,
+    edgeCases: walletInfoEdgeCases.length,
+    testCases: walletInfoTestCases.length,
+    path: '/feature/wallet-info',
+    tags: ['Wallet', 'Transactions', 'Payment', 'Finance'],
+  },
 ];
 
 // Map feature IDs to their test cases
@@ -417,6 +433,7 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'profile': profileTestCases,
   'live-chat': liveChatTestCases,
   'tag-screens': tagScreensTestCases,
+  'wallet-info': walletInfoTestCases,
 };
 
 type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';
