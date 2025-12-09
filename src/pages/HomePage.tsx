@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -23,6 +23,9 @@ import { cartTestCases } from '@/features/cart/data/test-cases';
 import { homeUseCases } from '@/features/home/data/use-cases';
 import { homeEdgeCases } from '@/features/home/data/edge-cases';
 import { homeTestCases } from '@/features/home/data/test-cases';
+import { homeFeedUseCases } from '@/features/home-feed/data/use-cases';
+import { homeFeedEdgeCases } from '@/features/home-feed/data/edge-cases';
+import { homeFeedTestCases } from '@/features/home-feed/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -116,6 +119,19 @@ const features: FeatureCard[] = [
     testCases: homeTestCases.length,
     path: '/feature/home',
     tags: ['Navigation', 'Location', 'Notifications', 'Spinner'],
+  },
+  {
+    id: 'home-feed',
+    name: 'Home Feed',
+    icon: Rss,
+    description: 'Dynamic content feed with sections, order status, vouchers, loyalty points, flash sales, banners, offers, and real-time updates.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: homeFeedUseCases.length,
+    edgeCases: homeFeedEdgeCases.length,
+    testCases: homeFeedTestCases.length,
+    path: '/feature/home-feed',
+    tags: ['Feed', 'Orders', 'Vouchers', 'Loyalty', 'Flash Sale', 'Real-time'],
   },
 ];
 
