@@ -66,6 +66,9 @@ import { reportingTestCases } from '@/features/reporting/data/test-cases';
 import { editProfileUseCases } from '@/features/edit-profile/data/use-cases';
 import { editProfileEdgeCases } from '@/features/edit-profile/data/edge-cases';
 import { editProfileTestCases } from '@/features/edit-profile/data/test-cases';
+import { profileUseCases } from '@/features/profile/data/use-cases';
+import { profileEdgeCases } from '@/features/profile/data/edge-cases';
+import { profileTestCases } from '@/features/profile/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -342,6 +345,19 @@ const features: FeatureCard[] = [
     path: '/feature/edit-profile',
     tags: ['Profile', 'User Management', 'Account', 'Settings'],
   },
+  {
+    id: 'profile',
+    name: 'Profile',
+    icon: User,
+    description: 'Central hub for account management, settings, navigation to account details, language/currency selection, help center, and live chat.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: profileUseCases.length,
+    edgeCases: profileEdgeCases.length,
+    testCases: profileTestCases.length,
+    path: '/feature/profile',
+    tags: ['Profile', 'Settings', 'Navigation', 'Account', 'Help Center'],
+  },
 ];
 
 // Map feature IDs to their test cases
@@ -366,6 +382,7 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'know-us': knowUsTestCases,
   'reporting': reportingTestCases,
   'edit-profile': editProfileTestCases,
+  'profile': profileTestCases,
 };
 
 type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';
