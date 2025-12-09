@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -41,6 +41,9 @@ import { addressTestCases } from '@/features/address/data/test-cases';
 import { searchPageUseCases } from '@/features/search-page/data/use-cases';
 import { searchPageEdgeCases } from '@/features/search-page/data/edge-cases';
 import { searchPageTestCases } from '@/features/search-page/data/test-cases';
+import { friendInviteUseCases } from '@/features/friend-invite/data/use-cases';
+import { friendInviteEdgeCases } from '@/features/friend-invite/data/edge-cases';
+import { friendInviteTestCases } from '@/features/friend-invite/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -212,6 +215,19 @@ const features: FeatureCard[] = [
     testCases: searchPageTestCases.length,
     path: '/feature/search-page',
     tags: ['Search', 'Filters', 'Suggestions', 'Categories', 'Recommendations'],
+  },
+  {
+    id: 'friend-invite',
+    name: 'Friend Invite',
+    icon: UserPlus,
+    description: 'Allow users to enter friend invite codes during registration or onboarding to receive referral rewards and benefits.',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: friendInviteUseCases.length,
+    edgeCases: friendInviteEdgeCases.length,
+    testCases: friendInviteTestCases.length,
+    path: '/feature/friend-invite',
+    tags: ['Referral', 'Invite', 'Rewards', 'Onboarding', 'Validation'],
   },
 ];
 
