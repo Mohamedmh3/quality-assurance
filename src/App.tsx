@@ -14,6 +14,7 @@ import { RestaurantListFeature } from './features/restaurant-list/RestaurantList
 import { AddressFeature } from './features/address/AddressFeature';
 import { SearchPageFeature } from './features/search-page/SearchPageFeature';
 import { FriendInviteFeature } from './features/friend-invite/FriendInviteFeature';
+import { OTPFeature } from './features/otp/OTPFeature';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="feature/address" element={<AddressFeature />} />
           <Route path="feature/search-page" element={<SearchPageFeature />} />
           <Route path="feature/friend-invite" element={<FriendInviteFeature />} />
+          <Route path="feature/otp" element={<OTPFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>

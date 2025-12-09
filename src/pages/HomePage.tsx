@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 
@@ -44,6 +44,9 @@ import { searchPageTestCases } from '@/features/search-page/data/test-cases';
 import { friendInviteUseCases } from '@/features/friend-invite/data/use-cases';
 import { friendInviteEdgeCases } from '@/features/friend-invite/data/edge-cases';
 import { friendInviteTestCases } from '@/features/friend-invite/data/test-cases';
+import { otpUseCases } from '@/features/otp/data/use-cases';
+import { otpEdgeCases } from '@/features/otp/data/edge-cases';
+import { otpTestCases } from '@/features/otp/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -228,6 +231,19 @@ const features: FeatureCard[] = [
     testCases: friendInviteTestCases.length,
     path: '/feature/friend-invite',
     tags: ['Referral', 'Invite', 'Rewards', 'Onboarding', 'Validation'],
+  },
+  {
+    id: 'otp',
+    name: 'OTP Verification',
+    icon: Shield,
+    description: 'Phone number verification using One-Time Password codes sent via SMS or phone call with SMS autofill and automatic verification.',
+    status: 'Stable',
+    architecture: 'BLoC',
+    useCases: otpUseCases.length,
+    edgeCases: otpEdgeCases.length,
+    testCases: otpTestCases.length,
+    path: '/feature/otp',
+    tags: ['Authentication', 'Verification', 'SMS', 'Security', 'OTP'],
   },
 ];
 
