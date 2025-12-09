@@ -32,7 +32,7 @@ export function MainLayout() {
               <div className="absolute -inset-0.5 bg-gradient-to-br from-[var(--color-primary)] via-purple-500 to-pink-500 rounded-2xl opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300" />
               
               {/* Main icon background */}
-              <div className="relative p-2.5 bg-gradient-to-br from-[var(--color-primary)] via-purple-600 to-pink-500 rounded-xl shadow-lg shadow-[var(--color-primary)]/40 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/60 transition-all duration-300 group-hover:scale-110">
+              <div className="relative w-12 h-12 flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)] via-purple-600 to-pink-500 rounded-xl shadow-lg shadow-[var(--color-primary)]/40 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/60 transition-all duration-300 group-hover:scale-110">
                 {/* Inner shine */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-white/10 to-transparent rounded-xl" />
                 
