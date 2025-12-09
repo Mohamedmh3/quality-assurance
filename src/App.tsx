@@ -18,6 +18,7 @@ import { OTPFeature } from './features/otp/OTPFeature';
 import PhoneNumberFeature from './features/phone-number/PhoneNumberFeature';
 import UserInfoFeature from './features/user-info/UserInfoFeature';
 import SurveyFeature from './features/survey/SurveyFeature';
+import KnowUsFeature from './features/know-us/KnowUsFeature';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="feature/phone-number" element={<PhoneNumberFeature />} />
           <Route path="feature/user-info" element={<UserInfoFeature />} />
           <Route path="feature/survey" element={<SurveyFeature />} />
+          <Route path="feature/know-us" element={<KnowUsFeature />} />
         </Route>
       </Routes>
     </BrowserRouter>
