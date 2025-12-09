@@ -29,16 +29,13 @@ export function MainLayout() {
             
             {/* Logo Container */}
             <div className="relative">
-              {/* Outer glow ring */}
-              <div className="absolute -inset-0.5 bg-gradient-to-br from-[var(--color-primary)] via-purple-500 to-pink-500 rounded-2xl opacity-20 group-hover:opacity-40 blur-sm transition-opacity duration-300" />
-              
               {/* Logo background */}
-              <div className="relative flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/10 via-purple-500/10 to-pink-500/10 rounded-xl p-2 shadow-lg shadow-[var(--color-primary)]/20 group-hover:shadow-xl group-hover:shadow-[var(--color-primary)]/30 transition-all duration-300 group-hover:scale-105">
+              <div className="relative flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/10 via-purple-500/10 to-pink-500/10 rounded-xl p-2 transition-all duration-300 group-hover:scale-105">
                 {/* Logo SVG */}
                 <img 
                   src={logoUrl} 
                   alt="BeeOrder Logo" 
-                  className="h-10 w-auto relative z-10 drop-shadow-lg"
+                  className="h-10 w-auto relative z-10"
                 />
               </div>
             </div>
