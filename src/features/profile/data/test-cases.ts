@@ -194,7 +194,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ My Orders option is visible',
    '✓ going to screen works',
@@ -241,7 +241,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ My Addresses option is visible',
    '✓ going to screen works',
@@ -288,7 +288,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ Favorites option is visible',
    '✓ going to screen works',
@@ -335,7 +335,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ My Vouchers option is visible',
    '✓ going to screen works',
@@ -498,7 +498,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ Privacy option is visible',
    '✓ going to screen works',
@@ -544,7 +544,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ App Terms option is visible',
    '✓ going to screen works',
@@ -590,7 +590,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ Get Help option is visible',
    '✓ going to screen works',
@@ -636,7 +636,7 @@ export const profileTestCases: TestCase[] = [
   testData: 'N/A',
   automatable: true,
   status: 'Not Started',
-  notes: 'navigation should work smoothly',
+  notes: 'Navigation should work smoothly',
   successChecklist: [
    '✓ About Us option is visible',
    '✓ going to screen works',
