@@ -727,54 +727,57 @@ function TestCaseRow({ testCase, isExpanded, onToggle, result, onStatusChange, o
                   </div>
                 ))
               ) : (
-                ('testSteps' in testCase && testCase.testSteps ? testCase.testSteps : []).map((step, idx) => (
-                  <div key={idx} className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]" style={{ padding: '20px' }}>
-                    <div className="flex gap-5">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white flex items-center justify-center font-bold text-base shadow-lg">
-                        {step.step}
-                      </div>
-                      <div className="flex-1 space-y-5">
-                        <h6 className="text-base font-semibold text-[var(--color-text-primary)] leading-relaxed">
-                          {makeFriendly(step.instruction)}
-                        </h6>
-                        {step.detailedSteps && step.detailedSteps.length > 0 && (
-                          <div className="bg-[var(--color-bg-primary)] rounded-lg p-5 border border-[var(--color-border)]">
-                            <p className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-3">
-                              How to Do It
-                            </p>
-                            <ol className="space-y-3">
-                              {step.detailedSteps.map((item, i) => (
-                                <li key={i} className="text-base text-[var(--color-text-secondary)] leading-relaxed flex items-start gap-3">
-                                  <span className="text-[var(--color-primary)] font-bold mt-0.5 flex-shrink-0">{i + 1}.</span>
-                                  <span>{item}</span>
-                                </li>
-                              ))}
-                            </ol>
-                          </div>
-                        )}
-                        {step.whatYouShouldSee && (
-                          <div className="bg-emerald-500/10 rounded-lg p-5 border border-emerald-500/20">
-                            <p className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3">
-                              What You Should See
-                            </p>
-                            <p className="text-base text-[var(--color-text-primary)] leading-relaxed">
-                              {step.whatYouShouldSee}
-                            </p>
-                          </div>
-                        )}
+                ('testSteps' in testCase && testCase.testSteps ? testCase.testSteps : []).map((step, idx) => {
+                  const testStep = step as import('@/lib/types').TestStep;
+                  return (
+                    <div key={idx} className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]" style={{ padding: '20px' }}>
+                      <div className="flex gap-5">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white flex items-center justify-center font-bold text-base shadow-lg">
+                          {testStep.step}
+                        </div>
+                        <div className="flex-1 space-y-5">
+                          <h6 className="text-base font-semibold text-[var(--color-text-primary)] leading-relaxed">
+                            {makeFriendly(testStep.instruction)}
+                          </h6>
+                          {testStep.detailedSteps && testStep.detailedSteps.length > 0 && (
+                            <div className="bg-[var(--color-bg-primary)] rounded-lg p-5 border border-[var(--color-border)]">
+                              <p className="text-sm font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-3">
+                                How to Do It
+                              </p>
+                              <ol className="space-y-3">
+                                {testStep.detailedSteps.map((item: string, i: number) => (
+                                  <li key={i} className="text-base text-[var(--color-text-secondary)] leading-relaxed flex items-start gap-3">
+                                    <span className="text-[var(--color-primary)] font-bold mt-0.5 flex-shrink-0">{i + 1}.</span>
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ol>
+                            </div>
+                          )}
+                          {testStep.whatYouShouldSee && (
+                            <div className="bg-emerald-500/10 rounded-lg p-5 border border-emerald-500/20">
+                              <p className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3">
+                                What You Should See
+                              </p>
+                              <p className="text-base text-[var(--color-text-primary)] leading-relaxed">
+                                {testStep.whatYouShouldSee}
+                              </p>
+                            </div>
+                          )}
                         <div className="bg-blue-500/10 rounded-lg p-5 border border-blue-500/20">
                           <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-3">
                             Expected Result
                           </p>
                           <p className="text-base text-[var(--color-text-primary)] leading-relaxed flex items-start gap-2">
                             <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
-                            <span>{makeFriendly(step.expectedResult)}</span>
+                            <span>{makeFriendly(testStep.expectedResult)}</span>
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>

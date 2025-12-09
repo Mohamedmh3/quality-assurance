@@ -8,13 +8,8 @@ import {
   Code2,
   Layers,
   ChevronRight,
-  Smartphone,
   Folder,
   GitBranch,
-  Filter,
-  MapPin,
-  Clock,
-  Zap,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/Card';
 import { ArchitectureBadge, StatusBadge } from '@/components/Badge';
