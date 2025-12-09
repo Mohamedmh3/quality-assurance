@@ -53,7 +53,7 @@ export const liveChatTestCases: TestCase[] = [
   id: 'TC-LIVE-CHAT-002',
   title: 'Open Live Chat Screen',
   whatYoureTesting: 'Verify that tapping live chat button goes to chat screen and loads chat interface',
-  whyItMatters: 'Users need to access chat support. navigation must work correctly and chat must load.',
+  whyItMatters: 'Users need to access chat support. Navigation must work correctly and chat must load.',
   estimatedTime: '2-3 minutes',
   type: 'Functional',
   priority: 'P0',

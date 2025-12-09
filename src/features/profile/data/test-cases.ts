@@ -158,7 +158,7 @@ export const profileTestCases: TestCase[] = [
   id: 'TC-PROFILE-004',
   title: 'Go to My Orders',
   whatYoureTesting: 'Verify that tapping My Orders goes to orders screen',
-  whyItMatters: 'Users need to view their order history. navigation must work correctly.',
+  whyItMatters: 'Users need to view their order history. Navigation must work correctly.',
   estimatedTime: '30 seconds',
   type: 'Functional',
   priority: 'P0',

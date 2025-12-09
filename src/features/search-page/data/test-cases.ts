@@ -812,7 +812,7 @@ export const searchPageTestCases: TestCase[] = [
     instruction: 'Tap on an item',
     detailedSteps: [
      '1. Tap on one of the item cards',
-     '2. navigation should occur',
+     '2. Navigation should occur',
     ],
     whatYouShouldSee: 'Either dish detail page opens, or restaurant menu opens showing that dish',
     expectedResult: 'Item going to screen works',
