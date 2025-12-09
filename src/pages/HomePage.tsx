@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
 import { cn } from '@/lib/utils';
 import { useQAStore } from '@/store/qa-store';
@@ -54,6 +54,9 @@ import { phoneNumberTestCases } from '@/features/phone-number/data/test-cases';
 import { userInfoUseCases } from '@/features/user-info/data/use-cases';
 import { userInfoEdgeCases } from '@/features/user-info/data/edge-cases';
 import { userInfoTestCases } from '@/features/user-info/data/test-cases';
+import { surveyUseCases } from '@/features/survey/data/use-cases';
+import { surveyEdgeCases } from '@/features/survey/data/edge-cases';
+import { surveyTestCases } from '@/features/survey/data/test-cases';
 
 interface FeatureCard {
   id: string;
@@ -278,6 +281,19 @@ const features: FeatureCard[] = [
     path: '/feature/user-info',
     tags: ['Authentication', 'Registration', 'Profile', 'Onboarding'],
   },
+  {
+    id: 'survey',
+    name: 'Survey',
+    icon: ClipboardList,
+    description: 'User feedback collection through interactive surveys with single choice, multiple choice, rating, and text-only questions displayed in bottom sheets.',
+    status: 'Stable',
+    architecture: 'MVVM',
+    useCases: surveyUseCases.length,
+    edgeCases: surveyEdgeCases.length,
+    testCases: surveyTestCases.length,
+    path: '/feature/survey',
+    tags: ['Feedback', 'Survey', 'Rating', 'User Research'],
+  },
 ];
 
 // Map feature IDs to their test cases
@@ -298,6 +314,7 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'otp': otpTestCases,
   'phone-number': phoneNumberTestCases,
   'user-info': userInfoTestCases,
+  'survey': surveyTestCases,
 };
 
 type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';
