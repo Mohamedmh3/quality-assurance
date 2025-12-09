@@ -364,8 +364,8 @@ export const menuRestaurantTestCases: TestCase[] = [
      '2. You should return to the main market view',
      '3. Make sure you can browse other categories'
     ],
-    whatYouShouldSee: 'Back go to works smoothly, returning you to previous screens',
-    expectedResult: 'go to back to main market view works correctly'
+    whatYouShouldSee: 'Back going to screen works smoothly, returning you to previous screens',
+    expectedResult: 'Going to back to main market view works correctly'
    }
   ],
   successChecklist: [
@@ -373,7 +373,7 @@ export const menuRestaurantTestCases: TestCase[] = [
    '✓ Sub-categories are visible and accessible',
    '✓ Tapping sub-category filters products correctly',
    '✓ Back go to returns to previous screen',
-   '✓ go to is smooth without delays'
+   '✓ navigation is smooth without delays'
   ],
   ifThisFails: {
    commonIssues: [
@@ -1160,7 +1160,7 @@ export const menuRestaurantTestCases: TestCase[] = [
     detailedSteps: [
      '1. Make sure you can tap on dishes to see details',
      '2. You should be able to see prices',
-     '3. Basic go to should work',
+     '3. Basic navigation should work',
      '4. But some features may require login'
     ],
     whatYouShouldSee: 'Basic browsing works - can see dishes, prices, and basic info. Advanced features prompt for login.',
@@ -1412,7 +1412,7 @@ export const menuRestaurantTestCases: TestCase[] = [
   id: 'TC-MENU-REST-019',
   title: 'Navigate Sub-Menu Categories in Market',
   whatYoureTesting: 'Making sure customers can drill down into sub-categories in market stores and view all nested products',
-  whyItMatters: 'Large grocery stores have many nested categories (Dairy → Milk → Almond Milk). If go to is broken, customers can\'t find products.',
+  whyItMatters: 'Large grocery stores have many nested categories (Dairy → Milk → Almond Milk). If navigation is broken, customers can\'t find products.',
   estimatedTime: '3-4 minutes',
   type: 'Functional',
   priority: 'P1',

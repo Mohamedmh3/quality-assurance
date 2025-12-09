@@ -812,10 +812,10 @@ export const searchPageTestCases: TestCase[] = [
     instruction: 'Tap on an item',
     detailedSteps: [
      '1. Tap on one of the item cards',
-     '2. go to should occur',
+     '2. navigation should occur',
     ],
     whatYouShouldSee: 'Either dish detail page opens, or restaurant menu opens showing that dish',
-    expectedResult: 'Item go to works',
+    expectedResult: 'Item going to screen works',
    },
   ],
   preconditions: [
@@ -831,7 +831,7 @@ export const searchPageTestCases: TestCase[] = [
    '✓ Item results displayed',
    '✓ Items show correct information',
    '✓ Items are tappable',
-   '✓ go to works',
+   '✓ going to screen works',
    '✓ Restaurant info shown',
   ],
  },

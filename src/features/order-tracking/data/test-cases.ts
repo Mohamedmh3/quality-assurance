@@ -1215,7 +1215,7 @@ export const orderTrackingTestCases: TestCase[] = [
      '2. Wait for go to',
     ],
     whatYouShouldSee: 'Screen transitions to home screen',
-    expectedResult: 'go to triggered',
+    expectedResult: 'Going to triggered',
    },
    {
     step: 4,
@@ -1226,7 +1226,7 @@ export const orderTrackingTestCases: TestCase[] = [
      '3. Check that home screen loads correctly',
     ],
     whatYouShouldSee: 'Home screen displayed, overlay gone, home screen content visible',
-    expectedResult: 'go to successful',
+    expectedResult: 'Going to successful',
    },
   ],
   preconditions: [
@@ -1241,7 +1241,7 @@ export const orderTrackingTestCases: TestCase[] = [
   successChecklist: [
    '✓ Back to Home button is visible',
    '✓ Button is enabled',
-   '✓ go to works when tapped',
+   '✓ going to screen works when tapped',
    '✓ Home screen loads correctly',
    '✓ Overlay is dismissed',
   ],

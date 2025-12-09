@@ -218,7 +218,7 @@ export const restaurantListTestCases: TestCase[] = [
    '✓ Search icon is visible',
    '✓ Icon is in correct position',
    '✓ Icon is tappable',
-   '✓ go to works when tapped',
+   '✓ going to screen works when tapped',
   ],
  },
  {
@@ -911,7 +911,7 @@ export const restaurantListTestCases: TestCase[] = [
      '1. Tap on the login prompt',
      '2. Check if it goes to login',
     ],
-    whatYouShouldSee: 'Login screen opens or go to to login occurs',
+    whatYouShouldSee: 'Login screen opens or going to login occurs',
     expectedResult: 'Login prompt works',
    },
   ],
@@ -928,7 +928,7 @@ export const restaurantListTestCases: TestCase[] = [
    '✓ Login prompt appears at bottom',
    '✓ Message is clear',
    '✓ Prompt is tappable',
-   '✓ go to to login works',
+   '✓ going to login works',
   ],
  },
  {
@@ -1093,7 +1093,7 @@ export const restaurantListTestCases: TestCase[] = [
      '3. Wait for go to',
     ],
     whatYouShouldSee: 'Screen transitions to restaurant menu screen',
-    expectedResult: 'go to triggered',
+    expectedResult: 'Going to triggered',
    },
    {
     step: 3,
@@ -1117,7 +1117,7 @@ export const restaurantListTestCases: TestCase[] = [
   notes: 'Tapping a restaurant card should Go to the restaurant menu screen with restaurant data.',
   successChecklist: [
    '✓ Restaurant card is tappable',
-   '✓ go to works',
+   '✓ going to screen works',
    '✓ Menu screen opens',
    '✓ Restaurant data is correct',
   ],

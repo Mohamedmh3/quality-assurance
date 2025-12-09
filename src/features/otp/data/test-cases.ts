@@ -418,7 +418,7 @@ export const otpTestCases: TestCase[] = [
      '2. Verify you are on correct screen',
     ],
     whatYouShouldSee: 'Screen goes to user info screen or next step in registration flow',
-    expectedResult: 'go to occurs correctly',
+    expectedResult: 'Going to occurs correctly',
    },
   ],
   preconditions: [
@@ -752,7 +752,7 @@ export const otpTestCases: TestCase[] = [
      '2. Check the screen',
     ],
     whatYouShouldSee: 'Screen navigates back to phone number entry screen, and you can change phone number',
-    expectedResult: 'go to to phone screen',
+    expectedResult: 'going to phone screen',
    },
    {
     step: 3,

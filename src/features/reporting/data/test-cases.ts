@@ -66,7 +66,7 @@ export const reportingTestCases: TestCase[] = [
   id: 'TC-REPORTING-002',
   title: 'Navigate Through Issue Reason Steps',
   whatYoureTesting: 'Verify that users can navigate through multi-step form for each selected reason',
-  whyItMatters: 'Users need to provide details for each reason. go to must work correctly for the flow to complete.',
+  whyItMatters: 'Users need to provide details for each reason. navigation must work correctly for the flow to complete.',
   estimatedTime: '3-5 minutes',
   type: 'Functional',
   priority: 'P0',
@@ -101,7 +101,7 @@ export const reportingTestCases: TestCase[] = [
      '2. Tap Next button',
     ],
     whatYouShouldSee: 'Current step disappears, next reason step appears. Progress header updates to show "Step 2 of X". Next reason name is displayed',
-    expectedResult: 'go to to next step works',
+    expectedResult: 'going to next step works',
    },
    {
     step: 4,
@@ -125,7 +125,7 @@ export const reportingTestCases: TestCase[] = [
   successChecklist: [
    '✓ First step appears',
    '✓ Form fields match reason requirements',
-   '✓ go to works',
+   '✓ going to screen works',
    '✓ Progress updates',
    '✓ All steps can be completed',
   ],
@@ -382,7 +382,7 @@ export const reportingTestCases: TestCase[] = [
   id: 'TC-REPORTING-007',
   title: 'Navigate Back to Previous Step',
   whatYoureTesting: 'Verify that users can navigate back to previous steps and data is preserved',
-  whyItMatters: 'Users may want to review or modify previous answers. Back go to must work correctly.',
+  whyItMatters: 'Users may want to review or modify previous answers. Back navigation must work correctly.',
   estimatedTime: '2-3 minutes',
   type: 'Functional',
   priority: 'P1',
@@ -407,7 +407,7 @@ export const reportingTestCases: TestCase[] = [
      '1. Tap back button in header',
     ],
     whatYouShouldSee: 'Current step disappears, previous step (first reason) appears. Form fields are pre-filled with previously entered data',
-    expectedResult: 'Back go to works',
+    expectedResult: 'Back going to screen works',
    },
    {
     step: 3,
@@ -440,7 +440,7 @@ export const reportingTestCases: TestCase[] = [
   status: 'Not Started',
   notes: 'Back button on first step returns to selection screen',
   successChecklist: [
-   '✓ Back go to works',
+   '✓ Back going to screen works',
    '✓ Data is preserved',
    '✓ First step back works',
   ],
@@ -493,7 +493,7 @@ export const reportingTestCases: TestCase[] = [
      '1. Check where user is navigated',
     ],
     whatYouShouldSee: 'Screen closes, user returns to previous screen (restaurant page). Success message is shown',
-    expectedResult: 'go to works correctly',
+    expectedResult: 'going to screen works correctly',
    },
   ],
   preconditions: [
@@ -504,7 +504,7 @@ export const reportingTestCases: TestCase[] = [
   testData: 'Completed report with all fields filled',
   automatable: true,
   status: 'Not Started',
-  notes: 'Success message appears after go to',
+  notes: 'Success message appears after going to screen',
   successChecklist: [
    '✓ Submit button appears',
    '✓ Submission works',

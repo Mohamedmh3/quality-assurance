@@ -211,7 +211,7 @@ export const dishTestCases: TestCase[] = [
      '5. The app should work normally after this'
     ],
     whatYouShouldSee: 'When you press back, the app goes to the home screen (not crashing). This is normal because the app was opened from a link when it wasn\'t running, so it goes to home instead of trying to go "back" to a previous screen',
-    expectedResult: 'go to works correctly - goes to home screen without crashing'
+    expectedResult: 'going to screen works correctly - goes to home screen without crashing'
    }
   ],
   successChecklist: [
@@ -1306,7 +1306,7 @@ export const dishTestCases: TestCase[] = [
   relatedEdgeCases: [],
   testSteps: [
    { step: 1, instruction: 'Scroll to report section', expectedResult: 'Report card visible' },
-   { step: 2, instruction: 'Tap report card', expectedResult: 'Go to report screen' },
+   { step: 2, instruction: 'Tap report card', expectedResult: 'Going to report screen' },
    { step: 3, instruction: 'Verify dish info passed', expectedResult: 'Report form has dish context' },
    { step: 4, instruction: 'Navigate back', expectedResult: 'Return to dish page' }
   ],
@@ -1323,7 +1323,7 @@ export const dishTestCases: TestCase[] = [
   relatedUseCases: ['UC-DISH-021'],
   relatedEdgeCases: ['EC-DISH-024'],
   testSteps: [
-   { step: 1, instruction: 'Tap restaurant logo in app bar', expectedResult: 'Go to restaurant menu' },
+   { step: 1, instruction: 'Tap restaurant logo in app bar', expectedResult: 'Going to restaurant menu' },
    { step: 2, instruction: 'Verify restaurant loads', expectedResult: 'Full menu displayed' },
    { step: 3, instruction: 'Verify correct restaurant', expectedResult: 'Same as dish\'s restaurant' }
   ],
@@ -1626,7 +1626,7 @@ export const dishTestCases: TestCase[] = [
      '5. The app should work normally after this'
     ],
     whatYouShouldSee: 'When you press back, the app goes to the home screen (not crashing). This is normal because the app was opened from a link when it wasn\'t running, so it goes to home instead of trying to go "back" to a previous screen',
-    expectedResult: 'go to works correctly - goes to home screen without crashing or showing blank screen'
+    expectedResult: 'going to screen works correctly - goes to home screen without crashing or showing blank screen'
    }
   ],
   successChecklist: [

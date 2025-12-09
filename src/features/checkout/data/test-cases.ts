@@ -86,7 +86,7 @@ export const checkoutTestCases: TestCase[] = [
      '4. Your cart should be empty now'
     ],
     whatYouShouldSee: 'Order tracking page shows your order with status "New" or "Pending". Going back to home shows empty cart.',
-    expectedResult: 'go to to order tracking, cart is cleared'
+    expectedResult: 'going to order tracking, cart is cleared'
    }
   ],
   successChecklist: [
@@ -1843,7 +1843,7 @@ export const checkoutTestCases: TestCase[] = [
      '3. A message should appear'
     ],
     whatYouShouldSee: 'Message saying you can\'t leave while order is being submitted.',
-    expectedResult: 'go to blocked with message'
+    expectedResult: 'Going to blocked with message'
    }
   ],
   successChecklist: [

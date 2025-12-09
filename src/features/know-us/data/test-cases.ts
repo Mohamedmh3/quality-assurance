@@ -42,7 +42,7 @@ export const knowUsTestCases: TestCase[] = [
      '1. Tap on "Start the survey" button',
     ],
     whatYouShouldSee: 'Screen transitions to questions screen showing first question',
-    expectedResult: 'go to to questions works',
+    expectedResult: 'going to questions works',
    },
   ],
   preconditions: [
@@ -57,7 +57,7 @@ export const knowUsTestCases: TestCase[] = [
    '✓ Welcome screen appears',
    '✓ All elements are visible',
    '✓ Start button works',
-   '✓ go to to questions works',
+   '✓ going to questions works',
   ],
  },
  {
@@ -374,7 +374,7 @@ export const knowUsTestCases: TestCase[] = [
   id: 'TC-KNOW-US-007',
   title: 'Go to Next Question',
   whatYoureTesting: 'Verify that users can Go to next question after answering',
-  whyItMatters: 'Users need to progress through questions. go to must work correctly.',
+  whyItMatters: 'Users need to progress through questions. navigation must work correctly.',
   estimatedTime: '1-2 minutes',
   type: 'Functional',
   priority: 'P0',
@@ -398,7 +398,7 @@ export const knowUsTestCases: TestCase[] = [
      '1. Tap on Next button',
     ],
     whatYouShouldSee: 'Current question disappears, next question appears. Progress bar updates to show new progress',
-    expectedResult: 'go to to next question works',
+    expectedResult: 'going to next question works',
    },
    {
     step: 3,
@@ -422,7 +422,7 @@ export const knowUsTestCases: TestCase[] = [
   notes: 'Next button is only enabled when question is answered',
   successChecklist: [
    '✓ Next button enables when answered',
-   '✓ go to works',
+   '✓ going to screen works',
    '✓ Progress updates',
    '✓ Question changes correctly',
   ],
@@ -431,7 +431,7 @@ export const knowUsTestCases: TestCase[] = [
   id: 'TC-KNOW-US-008',
   title: 'Navigate Back to Previous Question',
   whatYoureTesting: 'Verify that users can navigate back to previous questions',
-  whyItMatters: 'Users may want to review or change previous answers. Back go to must work correctly.',
+  whyItMatters: 'Users may want to review or change previous answers. Back navigation must work correctly.',
   estimatedTime: '1-2 minutes',
   type: 'Functional',
   priority: 'P1',
@@ -457,7 +457,7 @@ export const knowUsTestCases: TestCase[] = [
      '1. Tap back button in header',
     ],
     whatYouShouldSee: 'Current question disappears, previous question (second) appears. Progress bar updates to show decreased progress',
-    expectedResult: 'go to to previous question works',
+    expectedResult: 'going to previous question works',
    },
    {
     step: 3,
@@ -488,7 +488,7 @@ export const knowUsTestCases: TestCase[] = [
   status: 'Not Started',
   notes: 'Back button on first question closes the screen',
   successChecklist: [
-   '✓ Back go to works',
+   '✓ Back going to screen works',
    '✓ Answers are preserved',
    '✓ Progress updates',
    '✓ First question back closes screen',
@@ -595,7 +595,7 @@ export const knowUsTestCases: TestCase[] = [
      '1. Check where user is navigated',
     ],
     whatYouShouldSee: 'If from cart, goes to cart page. Otherwise, goes to home page. All previous screens are cleared',
-    expectedResult: 'go to works correctly',
+    expectedResult: 'going to screen works correctly',
    },
   ],
   preconditions: [

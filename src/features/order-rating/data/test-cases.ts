@@ -678,7 +678,7 @@ export const orderRatingTestCases: TestCase[] = [
      '3. Driver rating screen appears',
     ],
     whatYouShouldSee: 'Screen changes to show driver rating instead of restaurant rating',
-    expectedResult: 'go to to driver rating works',
+    expectedResult: 'going to driver rating works',
    },
    {
     step: 2,

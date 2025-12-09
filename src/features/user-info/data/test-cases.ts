@@ -556,7 +556,7 @@ export const userInfoTestCases: TestCase[] = [
   notes: 'go to depends on isNewUser flag',
   successChecklist: [
    '✓ Form submits successfully',
-   '✓ go to to friend invite screen occurs',
+   '✓ going to friend invite screen occurs',
   ],
  },
  {
@@ -601,7 +601,7 @@ export const userInfoTestCases: TestCase[] = [
   successChecklist: [
    '✓ Form submits successfully',
    '✓ Friend invite screen is skipped',
-   '✓ go to to home/cart occurs',
+   '✓ going to home/cart occurs',
   ],
  },
  {

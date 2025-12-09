@@ -478,7 +478,7 @@ export const friendInviteTestCases: TestCase[] = [
      '2. Verify flow continues',
     ],
     whatYouShouldSee: 'Screen goes to home screen or next step in flow, and no code is applied',
-    expectedResult: 'go to occurs correctly',
+    expectedResult: 'Going to occurs correctly',
    },
   ],
   preconditions: [
@@ -500,7 +500,7 @@ export const friendInviteTestCases: TestCase[] = [
  {
   id: 'TC-FRIEND-INVITE-008',
   title: 'go to After Successful Code Application',
-  whatYoureTesting: 'Making sure go to works correctly after successfully applying a friend invite code',
+  whatYoureTesting: 'Making sure going to screen works correctly after successfully applying a friend invite code',
   whyItMatters: 'Users need to continue their flow after applying code. If go to fails, users get stuck.',
   estimatedTime: '2-3 minutes',
   type: 'Functional',
@@ -528,7 +528,7 @@ export const friendInviteTestCases: TestCase[] = [
      '3. Verify final destination',
     ],
     whatYouShouldSee: 'Screen goes to appropriate destination: may show intro questions first, then home or cart screen',
-    expectedResult: 'go to occurs',
+    expectedResult: 'Going to occurs',
    },
    {
     step: 3,

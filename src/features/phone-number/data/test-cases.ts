@@ -162,7 +162,7 @@ export const phoneNumberTestCases: TestCase[] = [
      '2. Tap Accept button',
     ],
     whatYouShouldSee: 'Login request is sent and OTP screen appears',
-    expectedResult: 'go to to OTP screen occurs',
+    expectedResult: 'going to OTP screen occurs',
    },
   ],
   preconditions: [

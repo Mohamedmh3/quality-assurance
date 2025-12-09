@@ -1024,7 +1024,7 @@ export const homeFeedTestCases: TestCase[] = [
      '2. Wait for go to',
     ],
     whatYouShouldSee: 'The app goes to the linked content - it might go to a restaurant, a dish, an offer, or a special page.',
-    expectedResult: 'Banner go to works',
+    expectedResult: 'Banner going to screen works',
    },
    {
     step: 3,
@@ -1089,7 +1089,7 @@ export const homeFeedTestCases: TestCase[] = [
      '2. Wait for go to',
     ],
     whatYouShouldSee: 'The app goes to the restaurant or applies the voucher code automatically.',
-    expectedResult: 'Offer go to works',
+    expectedResult: 'Offer going to screen works',
    },
   ],
   preconditions: [
@@ -1307,7 +1307,7 @@ export const homeFeedTestCases: TestCase[] = [
      '2. Wait for go to',
     ],
     whatYouShouldSee: 'The app goes to the restaurant or applies the offer automatically.',
-    expectedResult: 'Offer go to works',
+    expectedResult: 'Offer going to screen works',
    },
   ],
   preconditions: [
