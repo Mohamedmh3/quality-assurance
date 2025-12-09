@@ -300,9 +300,12 @@ const featureTestCasesMap: Record<string, typeof dishTestCases> = {
   'user-info': userInfoTestCases,
 };
 
+type ProgressView = 'not-started' | 'in-progress' | 'done' | 'all';
+
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [progressView, setProgressView] = useState<ProgressView>('all');
   const getProgress = useQAStore((state) => state.getProgress);
 
   const allTags = Array.from(new Set(features.flatMap(f => f.tags)));
@@ -330,38 +333,34 @@ export function HomePage() {
     return { notStarted, inProgress, done };
   }, [featuresWithProgress]);
 
-  const filteredFeatures = featuresWithProgress.filter(feature => {
-    const matchesSearch = searchQuery === '' ||
-      feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      feature.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
-    return matchesSearch && matchesTag;
-  });
+  // Get features based on selected progress view
+  const getFeaturesForView = (view: ProgressView) => {
+    let featuresToShow: typeof featuresWithProgress = [];
+    switch (view) {
+      case 'not-started':
+        featuresToShow = groupedFeatures.notStarted;
+        break;
+      case 'in-progress':
+        featuresToShow = groupedFeatures.inProgress;
+        break;
+      case 'done':
+        featuresToShow = groupedFeatures.done;
+        break;
+      case 'all':
+      default:
+        featuresToShow = featuresWithProgress;
+        break;
+    }
+    return featuresToShow.filter(feature => {
+      const matchesSearch = searchQuery === '' ||
+        feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        feature.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
+      return matchesSearch && matchesTag;
+    });
+  };
 
-  // Filter grouped features by search and tag
-  const filteredNotStarted = groupedFeatures.notStarted.filter(feature => {
-    const matchesSearch = searchQuery === '' ||
-      feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      feature.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
-    return matchesSearch && matchesTag;
-  });
-
-  const filteredInProgress = groupedFeatures.inProgress.filter(feature => {
-    const matchesSearch = searchQuery === '' ||
-      feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      feature.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
-    return matchesSearch && matchesTag;
-  });
-
-  const filteredDone = groupedFeatures.done.filter(feature => {
-    const matchesSearch = searchQuery === '' ||
-      feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      feature.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTag = !selectedTag || feature.tags.includes(selectedTag);
-    return matchesSearch && matchesTag;
-  });
+  const displayedFeatures = getFeaturesForView(progressView);
 
   return (
     <div className="space-y-12">
@@ -463,123 +462,101 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Progress Sections */}
-      <div className="space-y-12">
-        {/* Not Started Section */}
-        <section>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-gray-500/10 flex items-center justify-center">
-              <Circle className="w-5 h-5 text-gray-500" />
-            </div>
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
-              Not Started ({filteredNotStarted.length})
-            </h2>
-          </div>
-          {filteredNotStarted.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              {filteredNotStarted.map((feature) => (
-                <FeatureCard key={feature.id} feature={feature} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
-              <Circle className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
-              <p className="text-sm text-[var(--color-text-secondary)]">
-                No features with 0% progress found
-              </p>
-            </div>
-          )}
-        </section>
-
-        {/* In Progress Section */}
-        <section>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-amber-500" />
-            </div>
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
-              In Progress ({filteredInProgress.length})
-            </h2>
-          </div>
-          {filteredInProgress.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              {filteredInProgress.map((feature) => (
-                <FeatureCard key={feature.id} feature={feature} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
-              <Clock className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
-              <p className="text-sm text-[var(--color-text-secondary)]">
-                No features in progress found
-              </p>
-            </div>
-          )}
-        </section>
-
-        {/* Done Section */}
-        <section>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-            </div>
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
-              Done ({filteredDone.length})
-            </h2>
-          </div>
-          {filteredDone.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              {filteredDone.map((feature) => (
-                <FeatureCard key={feature.id} feature={feature} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
-              <CheckCircle2 className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
-              <p className="text-sm text-[var(--color-text-secondary)]">
-                No completed features found
-              </p>
-            </div>
-          )}
-        </section>
-      </div>
-
-      {/* Features Section - Keep for backward compatibility */}
-      <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center">
-            <Layers className="w-5 h-5 text-[var(--color-primary)]" />
-          </div>
+      {/* Progress Navigation Tabs */}
+      <section className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] p-6">
+        <div className="flex flex-wrap items-center gap-4 mb-6">
           <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
-            All Features ({filteredFeatures.length})
+            Features by Progress
           </h2>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-6">
-          {filteredFeatures.map((feature) => (
-            <FeatureCard key={feature.id} feature={feature} />
-          ))}
+          <div className="flex flex-wrap gap-3 ml-auto">
+            <button
+              onClick={() => setProgressView('all')}
+              className={cn(
+                'rounded-xl text-base font-semibold transition-all duration-200 flex items-center gap-2',
+                progressView === 'all'
+                  ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white shadow-lg shadow-[var(--color-primary)]/25 hover:shadow-xl hover:shadow-[var(--color-primary)]/35'
+                  : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
+              )}
+              style={{ padding: '16px 32px' }}
+            >
+              <Layers className="w-5 h-5" />
+              All ({featuresWithProgress.length})
+            </button>
+            <button
+              onClick={() => setProgressView('not-started')}
+              className={cn(
+                'rounded-xl text-base font-semibold transition-all duration-200 flex items-center gap-2',
+                progressView === 'not-started'
+                  ? 'bg-gradient-to-r from-gray-500 to-gray-700 text-white shadow-lg shadow-gray-500/25 hover:shadow-xl hover:shadow-gray-500/35'
+                  : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-gray-500/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
+              )}
+              style={{ padding: '16px 32px' }}
+            >
+              <Circle className="w-5 h-5" />
+              Not Started ({groupedFeatures.notStarted.length})
+            </button>
+            <button
+              onClick={() => setProgressView('in-progress')}
+              className={cn(
+                'rounded-xl text-base font-semibold transition-all duration-200 flex items-center gap-2',
+                progressView === 'in-progress'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-700 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35'
+                  : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-amber-500/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
+              )}
+              style={{ padding: '16px 32px' }}
+            >
+              <Clock className="w-5 h-5" />
+              In Progress ({groupedFeatures.inProgress.length})
+            </button>
+            <button
+              onClick={() => setProgressView('done')}
+              className={cn(
+                'rounded-xl text-base font-semibold transition-all duration-200 flex items-center gap-2',
+                progressView === 'done'
+                  ? 'bg-gradient-to-r from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/35'
+                  : 'bg-[var(--color-bg-primary)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)] hover:border-emerald-500/50 hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)]'
+              )}
+              style={{ padding: '16px 32px' }}
+            >
+              <CheckCircle2 className="w-5 h-5" />
+              Done ({groupedFeatures.done.length})
+            </button>
+          </div>
         </div>
 
-        {/* Empty State */}
-        {filteredFeatures.length === 0 && (
-          <div className="text-center py-16 bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)]">
-            <Search className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />
+        {/* Features Grid */}
+        {displayedFeatures.length > 0 ? (
+          <div className="grid md:grid-cols-2 gap-6">
+            {displayedFeatures.map((feature) => (
+              <FeatureCard key={feature.id} feature={feature} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 bg-[var(--color-bg-primary)] rounded-xl border border-[var(--color-border)]">
+            {progressView === 'not-started' && <Circle className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />}
+            {progressView === 'in-progress' && <Clock className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />}
+            {progressView === 'done' && <CheckCircle2 className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />}
+            {progressView === 'all' && <Search className="w-12 h-12 text-[var(--color-text-muted)] mx-auto mb-4 opacity-50" />}
             <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
               No features found
             </h3>
             <p className="text-sm text-[var(--color-text-secondary)] mb-4">
-              Try adjusting your search or filters
+              {progressView === 'all' && 'Try adjusting your search or filters'}
+              {progressView === 'not-started' && 'No features with 0% progress found'}
+              {progressView === 'in-progress' && 'No features in progress found'}
+              {progressView === 'done' && 'No completed features found'}
             </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedTag(null);
-              }}
-              className="px-4 py-2 text-sm font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/10 rounded-lg hover:bg-[var(--color-primary)]/20 transition-all"
-            >
-              Clear filters
-            </button>
+            {(searchQuery || selectedTag) && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedTag(null);
+                }}
+                className="px-4 py-2 text-sm font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/10 rounded-lg hover:bg-[var(--color-primary)]/20 transition-all"
+              >
+                Clear filters
+              </button>
+            )}
           </div>
         )}
       </section>
