@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { CheckSquare, Download, RefreshCw, Search, ChevronDown, Edit3, Clock, User, Sparkles, AlertCircle, CheckCircle2, HelpCircle, XCircle, FileText, Filter, TrendingUp, SkipForward, Circle } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { CheckSquare, Download, RefreshCw, Search, ChevronDown, Edit3, Clock, User, Sparkles, AlertCircle, CheckCircle2, HelpCircle, XCircle, FileText, Filter, TrendingUp, SkipForward, Circle, Upload } from 'lucide-react';
 import type { TestCase, TestStatus, TestCaseType, TestPriority } from '@/lib/types';
 import type { EnhancedTestCase } from '@/lib/enhanced-qa-types';
 import { useQAStore } from '@/store/qa-store';
 import { TestPriorityBadge, TestStatusBadge, TestTypeBadge } from './Badge';
 import { BugReportForm } from './BugReportForm';
-import { exportToJSON, exportToCSV, cn, formatDate } from '@/lib/utils';
+import { exportToJSON, exportToCSV, cn, formatDate, readJSONFile, readCSVFile } from '@/lib/utils';
 
 // Helper function to make instructions more conversational
 const makeFriendly = (text: string): string => {
@@ -43,6 +43,8 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedTests, setExpandedTests] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const progress = getProgress(testCases);
 
@@ -88,6 +90,112 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
     exportToCSV(exportData, `${featureName}-qa-results`);
   };
 
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setImportError(null);
+
+    try {
+      let importedData: unknown;
+
+      if (file.name.endsWith('.json')) {
+        importedData = await readJSONFile(file);
+      } else if (file.name.endsWith('.csv')) {
+        importedData = await readCSVFile(file);
+      } else {
+        setImportError('Unsupported file type. Please use JSON or CSV files.');
+        return;
+      }
+
+      // Process imported data
+      if (Array.isArray(importedData)) {
+        // CSV or JSON array format
+        let importedCount = 0;
+        importedData.forEach((item: any) => {
+          const testId = item.id || item.testId;
+          if (testId && testCases.some(tc => tc.id === testId)) {
+            // Update status if provided
+            if (item.status && statusOptions.includes(item.status)) {
+              updateTestStatus(testId, item.status);
+            }
+            // Update notes if provided
+            if (item.notes !== undefined) {
+              updateTestNotes(testId, String(item.notes || ''));
+            }
+            importedCount++;
+          }
+        });
+        
+        if (importedCount === 0) {
+          setImportError('No matching test cases found in the imported file.');
+        } else {
+          alert(`Successfully imported ${importedCount} test result(s).`);
+        }
+      } else if (typeof importedData === 'object' && importedData !== null) {
+        // JSON object format (could be testResults object)
+        const data = importedData as Record<string, any>;
+        
+        // Check if it's a testResults object format
+        if (data.testResults && typeof data.testResults === 'object') {
+          let importedCount = 0;
+          Object.entries(data.testResults).forEach(([testId, result]: [string, any]) => {
+            if (testCases.some(tc => tc.id === testId)) {
+              if (result.status && statusOptions.includes(result.status)) {
+                updateTestStatus(testId, result.status);
+              }
+              if (result.notes !== undefined) {
+                updateTestNotes(testId, String(result.notes || ''));
+              }
+              importedCount++;
+            }
+          });
+          
+          if (importedCount === 0) {
+            setImportError('No matching test cases found in the imported file.');
+          } else {
+            alert(`Successfully imported ${importedCount} test result(s).`);
+          }
+        } else {
+          // Try to treat as array of test cases
+          const items = Object.values(data);
+          let importedCount = 0;
+          items.forEach((item: any) => {
+            const testId = item.id || item.testId;
+            if (testId && testCases.some(tc => tc.id === testId)) {
+              if (item.status && statusOptions.includes(item.status)) {
+                updateTestStatus(testId, item.status);
+              }
+              if (item.notes !== undefined) {
+                updateTestNotes(testId, String(item.notes || ''));
+              }
+              importedCount++;
+            }
+          });
+          
+          if (importedCount === 0) {
+            setImportError('Invalid file format. Expected an array of test cases or testResults object.');
+          } else {
+            alert(`Successfully imported ${importedCount} test result(s).`);
+          }
+        }
+      } else {
+        setImportError('Invalid file format.');
+      }
+
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      setImportError(error instanceof Error ? error.message : 'Failed to import file.');
+    }
+  };
+
   const toggleExpanded = (testId: string) => {
     const newExpanded = new Set(expandedTests);
     if (newExpanded.has(testId)) {
@@ -125,13 +233,29 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json,.csv"
+              onChange={handleFileImport}
+              className="hidden"
+            />
+            <button 
+              onClick={handleImportClick}
+              className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
+              style={{ padding: '16px 32px' }}
+              title="Import JSON or CSV file"
+            >
+              <Download className="w-5 h-5" />
+              <span>Import</span>
+            </button>
             <button 
               onClick={handleExportJSON} 
               className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
               style={{ padding: '16px 32px' }}
             >
-              <Download className="w-5 h-5" />
+              <Upload className="w-5 h-5" />
               <span>JSON</span>
             </button>
             <button 
@@ -139,7 +263,7 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
               className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
               style={{ padding: '16px 32px' }}
             >
-              <Download className="w-5 h-5" />
+              <Upload className="w-5 h-5" />
               <span>CSV</span>
             </button>
             <button
@@ -152,6 +276,13 @@ export function QAChecklist({ testCases, featureName }: QAChecklistProps) {
             </button>
           </div>
         </div>
+
+        {/* Import Error Message */}
+        {importError && (
+          <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+            {importError}
+          </div>
+        )}
 
         {/* Progress Section - Clean Design */}
         <div className="pt-8 border-t border-[var(--color-border)]">

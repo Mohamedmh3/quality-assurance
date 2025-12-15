@@ -26,3 +26,4 @@ export interface TagScreenParams {
 
 export type TagScreenType = 'dishes' | 'restaurants';
 
+

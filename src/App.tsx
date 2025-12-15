@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { MainLayout } from './layouts/MainLayout';
 import { HomePage } from './pages/HomePage';
@@ -26,8 +27,16 @@ import { LiveChatFeature } from './features/live-chat/LiveChatFeature';
 import { TagScreensFeature } from './features/tag-screens/TagScreensFeature';
 import { WalletInfoFeature } from './features/wallet-info/WalletInfoFeature';
 import { WalletFeature } from './features/wallet/WalletFeature';
+import { useQAStore } from './store/qa-store';
 
 function App() {
+  const initialize = useQAStore((state) => state.initialize);
+
+  useEffect(() => {
+    // Initialize QA store on app load
+    initialize();
+  }, [initialize]);
+
   return (
     <BrowserRouter>
       <Routes>

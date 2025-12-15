@@ -115,3 +115,79 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   };
 }
 
+/**
+ * Parse CSV file content into an array of objects
+ */
+export function parseCSV(csvContent: string): Record<string, unknown>[] {
+  const lines = csvContent.split('\n').filter(line => line.trim());
+  if (lines.length === 0) return [];
+
+  // Parse header
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+  
+  // Parse rows
+  const rows: Record<string, unknown>[] = [];
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split(',').map(v => {
+      let value = v.trim().replace(/^"|"$/g, '').replace(/""/g, '"');
+      // Try to parse as JSON if it looks like an object
+      if (value.startsWith('{') || value.startsWith('[')) {
+        try {
+          return JSON.parse(value);
+        } catch {
+          return value;
+        }
+      }
+      return value;
+    });
+    
+    const row: Record<string, unknown> = {};
+    headers.forEach((header, index) => {
+      row[header] = values[index] || '';
+    });
+    rows.push(row);
+  }
+  
+  return rows;
+}
+
+/**
+ * Read and parse a JSON file
+ */
+export function readJSONFile(file: File): Promise<unknown> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const parsed = JSON.parse(content);
+        resolve(parsed);
+      } catch (error) {
+        reject(new Error('Invalid JSON file'));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsText(file);
+  });
+}
+
+/**
+ * Read and parse a CSV file
+ */
+export function readCSVFile(file: File): Promise<Record<string, unknown>[]> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const parsed = parseCSV(content);
+        resolve(parsed);
+      } catch (error) {
+        reject(new Error('Invalid CSV file'));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsText(file);
+  });
+}
+

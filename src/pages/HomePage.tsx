@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp, Tag, CreditCard, Wallet } from 'lucide-react';
+import { Search, UtensilsCrossed, ArrowRight, FileText, Layers, Zap, Code2, TestTube, AlertTriangle, Store, ShoppingCart, ShoppingBag, Home, Rss, Star, MapPin, UserPlus, Shield, Phone, User, CheckCircle2, Clock, Circle, ClipboardList, HelpCircle, MessageCircle, ChevronDown, ChevronUp, Tag, CreditCard, Wallet, Download, Upload } from 'lucide-react';
 import { StatusBadge } from '@/components/Badge';
-import { cn } from '@/lib/utils';
+import { cn, exportToJSON, exportToCSV, readJSONFile, readCSVFile } from '@/lib/utils';
 import { useQAStore } from '@/store/qa-store';
+import type { TestStatus } from '@/lib/types';
 
 // Import actual data to get real counts
 import { dishUseCases } from '@/features/dish/data/use-cases';
@@ -460,7 +461,12 @@ export function HomePage() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [progressView, setProgressView] = useState<ProgressView>('all');
   const [tagsExpanded, setTagsExpanded] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const getProgress = useQAStore((state) => state.getProgress);
+  const testResults = useQAStore((state) => state.testResults);
+  const updateTestStatus = useQAStore((state) => state.updateTestStatus);
+  const updateTestNotes = useQAStore((state) => state.updateTestNotes);
 
   const allTags = Array.from(new Set(features.flatMap(f => f.tags)));
   const totalUseCases = features.reduce((acc, f) => acc + f.useCases, 0);
@@ -515,6 +521,182 @@ export function HomePage() {
   };
 
   const displayedFeatures = getFeaturesForView(progressView);
+
+  const handleExportAllJSON = () => {
+    const allTestData: Array<{ feature: string; testId: string; title: string; status: string; notes: string; lastTested?: string; testedBy?: string }> = [];
+    
+    features.forEach(feature => {
+      const testCases = featureTestCasesMap[feature.id] || [];
+      testCases.forEach(tc => {
+        const result = testResults[tc.id];
+        if (result) {
+          allTestData.push({
+            feature: feature.name,
+            testId: tc.id,
+            title: tc.title,
+            status: result.status,
+            notes: result.notes || '',
+            lastTested: result.lastTested,
+            testedBy: result.testedBy,
+          });
+        }
+      });
+    });
+
+    exportToJSON(allTestData, 'all-features-qa-results');
+  };
+
+  const handleExportAllCSV = () => {
+    const allTestData: Array<{ feature: string; testId: string; title: string; status: string; notes: string; lastTested?: string; testedBy?: string }> = [];
+    
+    features.forEach(feature => {
+      const testCases = featureTestCasesMap[feature.id] || [];
+      testCases.forEach(tc => {
+        const result = testResults[tc.id];
+        if (result) {
+          allTestData.push({
+            feature: feature.name,
+            testId: tc.id,
+            title: tc.title,
+            status: result.status,
+            notes: result.notes || '',
+            lastTested: result.lastTested,
+            testedBy: result.testedBy,
+          });
+        }
+      });
+    });
+
+    exportToCSV(allTestData, 'all-features-qa-results');
+  };
+
+  const handleImportAllClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportAll = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setImportError(null);
+
+    try {
+      let importedData: unknown;
+
+      if (file.name.endsWith('.json')) {
+        importedData = await readJSONFile(file);
+      } else if (file.name.endsWith('.csv')) {
+        importedData = await readCSVFile(file);
+      } else {
+        setImportError('Unsupported file type. Please use JSON or CSV files.');
+        return;
+      }
+
+      const statusOptions: TestStatus[] = ['Not Started', 'In Progress', 'Pass', 'Fail', 'Blocked', 'Skip'];
+      let importedCount = 0;
+
+      // Process imported data
+      if (Array.isArray(importedData)) {
+        // CSV or JSON array format
+        importedData.forEach((item: any) => {
+          const testId = item.testId || item.id;
+          if (testId) {
+            // Check if this test ID exists in any feature
+            let testExists = false;
+            for (const feature of features) {
+              const testCases = featureTestCasesMap[feature.id] || [];
+              if (testCases.some(tc => tc.id === testId)) {
+                testExists = true;
+                break;
+              }
+            }
+
+            if (testExists) {
+              // Update status if provided and valid
+              if (item.status && statusOptions.includes(item.status as TestStatus)) {
+                updateTestStatus(testId, item.status as TestStatus);
+              }
+              // Update notes if provided
+              if (item.notes !== undefined) {
+                updateTestNotes(testId, String(item.notes || ''));
+              }
+              importedCount++;
+            }
+          }
+        });
+      } else if (typeof importedData === 'object' && importedData !== null) {
+        // JSON object format
+        const data = importedData as Record<string, any>;
+        
+        // Check if it's a testResults object format
+        if (data.testResults && typeof data.testResults === 'object') {
+          Object.entries(data.testResults).forEach(([testId, result]: [string, any]) => {
+            // Check if this test ID exists in any feature
+            let testExists = false;
+            for (const feature of features) {
+              const testCases = featureTestCasesMap[feature.id] || [];
+              if (testCases.some(tc => tc.id === testId)) {
+                testExists = true;
+                break;
+              }
+            }
+
+            if (testExists) {
+              if (result.status && statusOptions.includes(result.status as TestStatus)) {
+                updateTestStatus(testId, result.status as TestStatus);
+              }
+              if (result.notes !== undefined) {
+                updateTestNotes(testId, String(result.notes || ''));
+              }
+              importedCount++;
+            }
+          });
+        } else {
+          // Try to treat as array of test cases
+          const items = Object.values(data);
+          items.forEach((item: any) => {
+            const testId = item.testId || item.id;
+            if (testId) {
+              let testExists = false;
+              for (const feature of features) {
+                const testCases = featureTestCasesMap[feature.id] || [];
+                if (testCases.some(tc => tc.id === testId)) {
+                  testExists = true;
+                  break;
+                }
+              }
+
+              if (testExists) {
+                if (item.status && statusOptions.includes(item.status as TestStatus)) {
+                  updateTestStatus(testId, item.status as TestStatus);
+                }
+                if (item.notes !== undefined) {
+                  updateTestNotes(testId, String(item.notes || ''));
+                }
+                importedCount++;
+              }
+            }
+          });
+        }
+      } else {
+        setImportError('Invalid file format.');
+        return;
+      }
+
+      if (importedCount === 0) {
+        setImportError('No matching test cases found in the imported file.');
+      } else {
+        alert(`Successfully imported ${importedCount} test result(s) from all features.`);
+      }
+
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      setImportError(error instanceof Error ? error.message : 'Failed to import file.');
+    }
+  };
 
   return (
     <div className="space-y-12">
@@ -653,11 +835,53 @@ export function HomePage() {
 
       {/* Progress Navigation Tabs */}
       <section className="bg-[var(--color-bg-secondary)] rounded-xl border border-[var(--color-border)] p-6">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json,.csv"
+          onChange={handleImportAll}
+          className="hidden"
+        />
+        {importError && (
+          <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+            {importError}
+          </div>
+        )}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
             Features by Progress
           </h2>
           <div className="flex flex-wrap gap-3 ml-auto">
+            <button
+              onClick={handleImportAllClick}
+              className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
+              style={{ padding: '12px 24px' }}
+              title="Import JSON or CSV file with QA test results for all features"
+            >
+              <Download className="w-4 h-4" />
+              <span>Import All</span>
+            </button>
+            <button
+              onClick={handleExportAllJSON}
+              className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
+              style={{ padding: '12px 24px' }}
+              title="Export all QA test results as JSON"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Export All JSON</span>
+            </button>
+            <button
+              onClick={handleExportAllCSV}
+              className="text-base font-medium text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-all flex items-center gap-2"
+              style={{ padding: '12px 24px' }}
+              title="Export all QA test results as CSV"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Export All CSV</span>
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-3 mb-6">
             <button
               onClick={() => setProgressView('all')}
               className={cn(
@@ -710,7 +934,6 @@ export function HomePage() {
               <CheckCircle2 className="w-5 h-5" />
               Done ({groupedFeatures.done.length})
             </button>
-          </div>
         </div>
 
         {/* Features Grid */}
